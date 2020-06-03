@@ -17,7 +17,7 @@
                                 @Html.DropDownListFor(model => model.AgentDetails.FirstOrDefault().AgentCode, Model._agentuser as IEnumerable<SelectListItem>, "Select")
                                 @Html.ValidationMessageFor(model => model.AgentDetails.FirstOrDefault().AgentCode, "", new { @class = "text-danger" })
                                 <span class="input-group-append">
-                                   <button type="button" onclick="CreateView()" href="javascript:void(0)" class="btn btn-info btn-flat">Create New </button>
+                                   <button type="button" onclick="CreateView()" href="javascript:void(0)" class="btn btn-info btn-flat" style="background-color:mediumseagreen;" >Create New </button>
                                 </span>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
 
-                                <tr >
+                                <tr style="background-color:mediumseagreen;" >
                                     <th>
                                         <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> @Html.DisplayNameFor(model => model.AgentDetails.FirstOrDefault().Name)</a>
 
@@ -108,7 +108,7 @@
     <!-- /.row -->
 </section>
 <section>
-    <div>
+    <div style="background-color:mediumseagreen;" >
         <div id="CDiv" class="col-md-6">
 
         </div>

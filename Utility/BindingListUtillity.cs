@@ -30,7 +30,7 @@ namespace SALEERP.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.AgentId.ToString(),
+                    Value = item.AgentCode.ToString(),
                     Text = item.AgentType
                 });
             }

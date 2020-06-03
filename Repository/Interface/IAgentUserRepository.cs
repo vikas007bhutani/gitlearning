@@ -11,5 +11,6 @@ namespace SALEERP.Repository.Interface
         bool DeleteAgent(int pid);
         bool UpdateAgent(AgentUserVM _agent, int uid);
         AgentUserVM EditAgent(int uid);
+        AgentUserVM CreateAgent(string uid);
     }
 }

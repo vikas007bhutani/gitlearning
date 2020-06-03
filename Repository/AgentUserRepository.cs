@@ -151,6 +151,27 @@ namespace SALEERP.Repository
             }
             return _agentdetails;
         }
+        public AgentUserVM CreateAgent(string uid)
+        {
+            AgentUserVM _agentdetails = new AgentUserVM();
+            try
+            {
+                AgentUser var = this._DBERP.AgentUser.Include("AgentContact").Where(c => c.IsActive == true).Include("BankDetails").Where(c => c.IsActive == true).SingleOrDefault(a => a.AgentCode == uid && a.IsActive == true);
+
+                _agentdetails.Name = var.Name;
+                _agentdetails.Address = var.Address;
+                _agentdetails.AgentId = var.AgentId;
+                _agentdetails.AgentContact = var.AgentContact.Where(g => g.IsActive == true).ToList();
+                _agentdetails.BankDetails = var.BankDetails.Where(g => g.IsActive == true).ToList();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return _agentdetails;
+        }
 
         public AgentDetailsVM getAllAgentUsers()
         {

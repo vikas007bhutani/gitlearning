@@ -10,7 +10,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <a onclick="CreateView()" href="javascript:void(0)">Create New</a>
+                    <button type="button" onclick="CreateView()" href="javascript:void(0)" class="btn btn-info btn-flat" style="background-color:indianred;">Create New </button>
                     @*<h3 class="card-title">DataTable with minimal features & hover style</h3>*@
                 </div>
 
@@ -35,7 +35,7 @@
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
 
-                            <tr>
+                            <tr style="background-color:indianred;">
                                 <th>
                                     <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> @Html.DisplayNameFor(model => model.AgentType)</a>
 
@@ -82,7 +82,7 @@
     <!-- /.row -->
 </section>
 <section>
-    <div>
+    <div style="background-color:indianred;">
         <div id="CDiv" class="col-md-6">
 
         </div>

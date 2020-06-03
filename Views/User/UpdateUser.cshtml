@@ -6,17 +6,16 @@
         this.ViewContext.FormContext = new FormContext();
     }
 }
-
-<h2>AddUser</h2>
-
+    
+        <h2>Update Login User</h2>
+   
 
 @using (Html.BeginForm("Update", "User"))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Staff</h4>
-        <hr />
+       
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
