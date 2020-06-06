@@ -191,8 +191,8 @@ namespace SALEERP.Repository
             bool result = false;
             try
             {
-                using (var dbusertrans = this._DBERP.Database.BeginTransaction())
-                {
+                    using (var dbusertrans = this._DBERP.Database.BeginTransaction())
+                    {
 
                     int innerresult = 0;
                     var entity = _DBERP.AgentUser.FirstOrDefault(item => item.AgentId == _agent.AgentId);

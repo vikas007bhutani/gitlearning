@@ -41,10 +41,13 @@ namespace SALEERP.Repository
                                join au in this._DBERP.AgentUser
                                on ma.Agentid equals au.AgentId
                                join c in this._DBERP.AgentContact
-                               on au.AgentId equals c.AgentId into contactdetails
-                               from d in contactdetails.DefaultIfEmpty()
+                               on ma.Agentid equals c.AgentId into contactdetails
+                               from d in contactdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
+                               join v in this._DBERP.VehicleDetails
+                               on ma.Agentid equals v.AgentId into vehicledetails
+                               from vh in vehicledetails.Where(f => f.IsActive == true).DefaultIfEmpty()
 
-                                where ma.IsActive == true
+                               where ma.IsActive == true
                                select new MirrorDetailVM
                                {
                                    mirrorid = m.MirrorId,
@@ -131,6 +134,7 @@ namespace SALEERP.Repository
                     Pax = _mirror.Pax,
                     Countryid = _mirror.Countryid,
                     Languageid = _mirror.Languageid,
+                    SeriesId=_mirror.SeriesId,
                     Createdby = userid,
                     Createddatetime = DateTime.Now
 
@@ -466,8 +470,9 @@ namespace SALEERP.Repository
         {
             bool result = false, innerresult = false, innerresultvehicle = false, innerresultcontact = false;
             bool innerresultpagent = false, innerresulteagnet = false, innerresultguide = false, innerresultleader = false, innerresultescort = false, innerresultdemo = false;
-           
 
+            using (var dbusertrans = this._DBERP.Database.BeginTransaction())
+            {
                 var entitymirror = _DBERP.MirrorDetails.Where(item => item.MirrorId == _mirror.MirrorId);
                 if (entitymirror != null)
                 {
@@ -478,14 +483,13 @@ namespace SALEERP.Repository
                         r.Countryid = _mirror.Countryid;
                         r.Languageid = _mirror.Languageid;
                         r.Createdby = userid;
+                        r.SeriesId = _mirror.SeriesId;
                         r.Updateddatetime = DateTime.Now;
                     }
                     result = this._DBERP.SaveChanges() > 0;
                 }
-               
 
-                
-                if (_mirror.Mirrors !=null)
+                if (_mirror.Mirrors != null)
                 {
                     Int64 mid = _mirror.MirrorId;
                     foreach (var item in _mirror.Mirrors)
@@ -497,8 +501,6 @@ namespace SALEERP.Repository
 
                                 if (driver != null)
                                 {
-
-
 
                                     if (driver.agentid == 0)
                                     {
@@ -528,7 +530,7 @@ namespace SALEERP.Repository
                                             if (entitycontactnew.AgentId != driver.agentid)
                                             {
                                                 result = false;
-                                              
+
                                                 return result;
 
                                             }
@@ -562,7 +564,7 @@ namespace SALEERP.Repository
                                             if (entitycontact.AgentId != driver.agentid)
                                             {
                                                 result = false;
-                                                
+
                                                 return result;
 
                                             }
@@ -619,7 +621,7 @@ namespace SALEERP.Repository
                                         {
 
                                             result = false;
-                                           
+
                                             return result;
 
                                         }
@@ -673,7 +675,7 @@ namespace SALEERP.Repository
                                             {
 
                                                 result = false;
-                                              
+
                                                 return result;
 
                                             }
@@ -725,7 +727,7 @@ namespace SALEERP.Repository
                                         {
 
                                             result = false;
-                                         
+
                                             return result;
 
                                         }
@@ -774,7 +776,7 @@ namespace SALEERP.Repository
                                         {
 
                                             result = false;
-                                           
+
                                             return result;
 
                                         }
@@ -823,7 +825,7 @@ namespace SALEERP.Repository
                                         {
 
                                             result = false;
-                                          
+
                                             return result;
 
                                         }
@@ -872,7 +874,7 @@ namespace SALEERP.Repository
                                         {
 
                                             result = false;
-                                          
+
                                             return result;
 
                                         }
@@ -891,13 +893,21 @@ namespace SALEERP.Repository
 
 
 
-                result = true;
+                    result = true;
 
 
                 }
                 else { result = false; }
 
-            
+                if (result)
+                {
+
+                    dbusertrans.Commit();
+                }
+                else { dbusertrans.Rollback(); }
+
+            }
+          
             return result;
         }
 
@@ -948,6 +958,7 @@ namespace SALEERP.Repository
     {
         mirrorid = g.Key,
         mirrordate = g.FirstOrDefault().mirrordate,
+        Pax=g.FirstOrDefault().Pax,
         SeriesId = g.FirstOrDefault().SeriesId,
         Languageid = g.FirstOrDefault().Languageid,
         Countryid = g.FirstOrDefault().Countryid,
@@ -997,7 +1008,7 @@ namespace SALEERP.Repository
                                 r.Updateddatetime = DateTime.Now;
                             }
                             result = this._DBERP.SaveChanges() > 0;
-                        }
+                        } 
 
 
                         foreach (var _mir in _mirror.Mirrors)
@@ -1175,15 +1186,11 @@ namespace SALEERP.Repository
                     }
                     if (result)
                     {
+                        dbusertrans.Commit();
                         bool resultinner;
                        resultinner= afterupdateMirror(_mirror, uid);
 
-                        if (resultinner)
-                        {
-
-                            dbusertrans.Commit();
-                        }
-                        else { dbusertrans.Rollback(); }
+                       
 
                     }
                     else { dbusertrans.Rollback(); }

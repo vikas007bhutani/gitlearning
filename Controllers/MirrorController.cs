@@ -80,7 +80,7 @@ namespace SALEERP.Controllers
             {
                 string term = HttpContext.Request.Query["term"].ToString();
                 // var result = _srch.Driver_Search(term);
-                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "dr").Select(a => new { label = a.Name+"mob:-"+a.AgentContact.FirstOrDefault().Mobile, id = a.AgentId }).ToListAsync();
+                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "dr").Select(a => new { label = a.Name+"("+a.AgentContact.FirstOrDefault().Mobile+")", id = a.AgentId }).ToListAsync();
                 if (result.Count() == 0)
                 {
                     newuser.Add(new SearchVM { label = (term + GenerateRandomNo()), id = 0 });
