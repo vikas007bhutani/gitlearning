@@ -8,7 +8,7 @@ namespace SALEERP.ViewModel
     public class MirrorDetailVM
     {
         public long mirrorid { get; set; } = 0;
-        public long? agentid { get; set; } 
+        public int? agentid { get; set; } 
         public DateTime? mirrordate { get; set; } = null;
         public string name { get; set; } = string.Empty;
         public string mob { get; set; } = string.Empty;

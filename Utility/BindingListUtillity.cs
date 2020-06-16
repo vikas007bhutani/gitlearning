@@ -17,8 +17,8 @@ namespace SALEERP.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.RoleId.ToString(),
-                    Text = item.RoleName
+                    Value = item.Id.ToString(),
+                    Text = item.Name
                 });
             }
             return newSelectList;
@@ -30,8 +30,8 @@ namespace SALEERP.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.AgentCode.ToString(),
-                    Text = item.AgentType
+                    Value = item.Code.ToString(),
+                    Text = item.Type
                 });
             }
             return newSelectList;
@@ -43,8 +43,8 @@ namespace SALEERP.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.VehicleId.ToString(),
-                    Text = item.VehicleType
+                    Value = item.Id.ToString(),
+                    Text = item.Type
                 });
             }
             return newSelectList;
@@ -56,8 +56,8 @@ namespace SALEERP.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.Bankid.ToString(),
-                    Text = item.Bankname
+                    Value = item.Id.ToString(),
+                    Text = item.Name
                 });
             }
             return newSelectList;
@@ -69,8 +69,8 @@ namespace SALEERP.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.LanguageId.ToString(),
-                    Text = item.LanguageName
+                    Value = item.Id.ToString(),
+                    Text = item.Name
                 });
             }
             return newSelectList;
@@ -82,8 +82,8 @@ namespace SALEERP.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.CountryId.ToString(),
-                    Text = item.CountryName
+                    Value = item.Id.ToString(),
+                    Text = item.Name
                 });
             }
             return newSelectList;
@@ -95,8 +95,8 @@ namespace SALEERP.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.SeriesId.ToString(),
-                    Text = item.SeriesName
+                    Value = item.Id.ToString(),
+                    Text = item.Name
                 });
             }
             return newSelectList;

@@ -28,12 +28,12 @@ namespace SALEERP.Repository
            
                 this._DBERP.PoolMaster.Add(new PoolMaster()
                 {
-                    PoolName = _poll.PoolName,
-                    PoolDesc=_poll.PoolDesc,
-                    PoolStartDate=_poll.PoolStartDate,
-                    PoolEndDate=_poll.PoolEndDate,
-                    Createddatetime = DateTime.Now,
-                    Createdby = userid,
+                    Name = _poll.PoolName,
+                    Description=_poll.PoolDesc,
+                    StartDate=_poll.PoolStartDate,
+                    EndDate=_poll.PoolEndDate,
+                    CreatedDatetime = DateTime.Now,
+                    CreatedBy = userid,
                     IsActive = true
                 }); ;
 
@@ -47,16 +47,16 @@ namespace SALEERP.Repository
         {
             bool result = false;
             int innerresult =0;
-            var entity = _DBERP.PoolMaster.FirstOrDefault(item => item.PoolId == _poll.PoolId);
+            var entity = _DBERP.PoolMaster.FirstOrDefault(item => item.Id == _poll.PoolId);
           
             if (entity != null)
             {
                 
-                entity.PoolName = _poll.PoolName;
-                entity.PoolDesc = _poll.PoolDesc;
-                entity.PoolStartDate = _poll.PoolStartDate;
-                entity.PoolEndDate = _poll.PoolEndDate;
-                entity.Updateddatetime = DateTime.Now;
+                entity.Name = _poll.PoolName;
+                entity.Description = _poll.PoolDesc;
+                entity.StartDate = _poll.PoolStartDate;
+                entity.EndDate = _poll.PoolEndDate;
+                entity.UpdatedDatetime = DateTime.Now;
                 this._DBERP.PoolMaster.Update(entity);
                 innerresult = this._DBERP.SaveChanges();
             }
@@ -76,11 +76,11 @@ namespace SALEERP.Repository
             PoolVM _pooldetails = new PoolVM();
             // List<LoginRoles> userroles = this._DBERP.LoginRoles.ToList();
             //  _userdetails.loginroles = BindingListUtillity.GenerateSelectList(userroles);
-            _pooldetails.PoolName = pool.PoolName;
-            _pooldetails.PoolDesc = pool.PoolDesc;
-            _pooldetails.PoolStartDate = pool.PoolStartDate;
-            _pooldetails.PoolEndDate = pool.PoolEndDate;
-            _pooldetails.PoolId = pool.PoolId;
+            _pooldetails.PoolName = pool.Name;
+            _pooldetails.PoolDesc = pool.Description;
+            _pooldetails.PoolStartDate = pool.StartDate;
+            _pooldetails.PoolEndDate = pool.EndDate;
+            _pooldetails.PoolId = pool.Id;
 
             return _pooldetails;
         }
@@ -91,7 +91,7 @@ namespace SALEERP.Repository
            
 
            // var u = rolclaims.FirstOrDefault(r => r.UserId == 5).Role.RoleName;
-            IEnumerable<PoolVM> _allpooldetails = this._DBERP.PoolMaster.ToList().Where(pr=>pr.IsActive==true).Select(p => new PoolVM {PoolId=p.PoolId, PoolName=p.PoolName, PoolDesc=p.PoolDesc, PoolEndDate=p.PoolEndDate,PoolStartDate=p.PoolStartDate,IsActive=p.IsActive});
+            IEnumerable<PoolVM> _allpooldetails = this._DBERP.PoolMaster.ToList().Where(pr=>pr.IsActive==true).Select(p => new PoolVM {PoolId=p.Id, PoolName=p.Name, PoolDesc=p.Description, PoolEndDate=p.EndDate,PoolStartDate=p.StartDate,IsActive=p.IsActive});
 
             return _allpooldetails.ToList();
         }
@@ -110,13 +110,13 @@ namespace SALEERP.Repository
         {
             bool result = false;
             int innerresult = 0;
-            var entity = _DBERP.PoolMaster.FirstOrDefault(item => item.PoolId == pid);
+            var entity = _DBERP.PoolMaster.FirstOrDefault(item => item.Id == pid);
 
             if (entity != null)
             {
 
                
-                entity.Updateddatetime = DateTime.Now;
+                entity.UpdatedDatetime = DateTime.Now;
                 entity.IsActive = false;
                 this._DBERP.PoolMaster.Update(entity);
                 innerresult = this._DBERP.SaveChanges();

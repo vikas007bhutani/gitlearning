@@ -5,12 +5,20 @@ namespace SALEERP.Models
 {
     public partial class SeriesMaster
     {
-        public int SeriesId { get; set; }
-        public string SeriesName { get; set; }
-        public string SeriesCode { get; set; }
-        public DateTime? Createddatetime { get; set; }
-        public int? Createdby { get; set; }
-        public DateTime? Updateddatetime { get; set; }
+        public SeriesMaster()
+        {
+            MirrorDetails = new HashSet<MirrorDetails>();
+        }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public DateTime? CreatedDatetime { get; set; }
+        public int? CreatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
+        public DateTime? UpdatedDatetime { get; set; }
         public bool? IsActive { get; set; }
+
+        public virtual ICollection<MirrorDetails> MirrorDetails { get; set; }
     }
 }

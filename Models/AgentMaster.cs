@@ -10,12 +10,13 @@ namespace SALEERP.Models
             AgentUser = new HashSet<AgentUser>();
         }
 
-        public int AgentId { get; set; }
-        public string AgentType { get; set; }
-        public string AgentCode { get; set; }
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string Code { get; set; }
         public DateTime? CreatedDatetime { get; set; }
         public DateTime? UpdatedDatetime { get; set; }
         public int? UpdatedBy { get; set; }
+        public int? CreatedBy { get; set; }
         public bool? IsActive { get; set; }
 
         public virtual ICollection<AgentUser> AgentUser { get; set; }

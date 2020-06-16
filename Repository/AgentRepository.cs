@@ -27,8 +27,8 @@ namespace SALEERP.Repository
 
                 this._DBERP.AgentMaster.Add(new AgentMaster()
                 {
-                    AgentType = _agent.AgentType,
-                    AgentCode = _agent.AgentCode,
+                    Type = _agent.AgentType,
+                    Code = _agent.AgentCode,
                     CreatedDatetime = DateTime.Now,
                     UpdatedBy = userid,
                     IsActive = true
@@ -55,7 +55,7 @@ namespace SALEERP.Repository
 
 
                 int innerresult = 0;
-                var entity = _DBERP.AgentMaster.FirstOrDefault(item => item.AgentId == aid);
+                var entity = _DBERP.AgentMaster.FirstOrDefault(item => item.Id == aid);
 
                 if (entity != null)
                 {
@@ -94,10 +94,10 @@ namespace SALEERP.Repository
            
             // List<LoginRoles> userroles = this._DBERP.LoginRoles.ToList();
             //  _userdetails.loginroles = BindingListUtillity.GenerateSelectList(userroles);
-            _agentdetails.AgentType = agent.AgentType;
-            _agentdetails.AgentCode = agent.AgentCode;
+            _agentdetails.AgentType = agent.Type;
+            _agentdetails.AgentCode = agent.Code;
 
-            _agentdetails.AgentId = agent.AgentId;
+            _agentdetails.AgentId = agent.Id;
             }
             catch (Exception)
             {
@@ -113,7 +113,7 @@ namespace SALEERP.Repository
             IEnumerable<AgentMasterVM> _allagentdetails;
             try
             {
-                _allagentdetails = this._DBERP.AgentMaster.ToList().Where(ar => ar.IsActive == true).Select(p => new AgentMasterVM { AgentType = p.AgentType, AgentCode = p.AgentCode, AgentId = p.AgentId, IsActive = p.IsActive });
+                _allagentdetails = this._DBERP.AgentMaster.ToList().Where(ar => ar.IsActive == true).Select(p => new AgentMasterVM { AgentType = p.Type, AgentCode = p.Code, AgentId = p.Id, IsActive = p.IsActive });
             }
             catch (Exception)
             {
@@ -135,13 +135,13 @@ namespace SALEERP.Repository
 
 
                 int innerresult = 0;
-                var entity = _DBERP.AgentMaster.FirstOrDefault(item => item.AgentId == _agent.AgentId);
+                var entity = _DBERP.AgentMaster.FirstOrDefault(item => item.Id == _agent.AgentId);
 
                 if (entity != null)
                 {
 
-                    entity.AgentType = _agent.AgentType;
-                    entity.AgentCode = _agent.AgentCode;
+                    entity.Type = _agent.AgentType;
+                    entity.Code = _agent.AgentCode;
                    
                     entity.UpdatedDatetime = DateTime.Now;
                     this._DBERP.AgentMaster.Update(entity);

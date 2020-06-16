@@ -28,7 +28,7 @@ namespace SALEERP.Repository
             {
                 this._DBERP.AgentUser.Add(new AgentUser()
                 {
-                     AgentCode=_user.AgentCode,
+                     Code=_user.AgentCode,
                      Name=_user.Name,
                      Address=_user.Address,
                     IsActive = true
@@ -37,7 +37,7 @@ namespace SALEERP.Repository
                 result = this._DBERP.SaveChanges() > 0;
                 if (result)
                 {
-                    int uid = this._DBERP.AgentUser.Max(p => p.AgentId);
+                    int uid = this._DBERP.AgentUser.Max(p => p.Id);
                     foreach (var item in _user.AgentContact)
                     {
                         if (item != null)
@@ -79,12 +79,12 @@ namespace SALEERP.Repository
                 {
 
                     int innerresult = 0;
-                    var entity = _DBERP.AgentUser.FirstOrDefault(item => item.AgentId == aid);
+                    var entity = _DBERP.AgentUser.FirstOrDefault(item => item.Id == aid);
 
                     if (entity != null)
                     {
 
-                        entity.Createddatetime = DateTime.Now;
+                        entity.CreatedDatetime = DateTime.Now;
                         entity.IsActive = false;
                         // entity.UpdatedBy=
                         this._DBERP.AgentUser.Update(entity);
@@ -98,7 +98,7 @@ namespace SALEERP.Repository
                         if (entitycontact != null)
                         {
 
-                            entitycontact.Createddatetime = DateTime.Now;
+                            entitycontact.CreatedDatetime = DateTime.Now;
                             entitycontact.IsActive = false;
                             this._DBERP.AgentContact.Update(entitycontact);
                             innerresult = this._DBERP.SaveChanges();
@@ -108,7 +108,7 @@ namespace SALEERP.Repository
                         if (entitybank != null)
                         {
 
-                            entitybank.Createddatetime = DateTime.Now;
+                            entitybank.CreatedDatetime = DateTime.Now;
                             entitybank.IsActive = false;
                             this._DBERP.BankDetails.Update(entitybank);
                             innerresult = this._DBERP.SaveChanges();
@@ -135,11 +135,11 @@ namespace SALEERP.Repository
             AgentUserVM _agentdetails = new AgentUserVM();
             try
             {
-              AgentUser  var  = this._DBERP.AgentUser.Include("AgentContact").Where(c=>c.IsActive==true).Include("BankDetails").Where(c => c.IsActive == true).SingleOrDefault(a=>a.AgentId==uid && a.IsActive==true);
+              AgentUser  var  = this._DBERP.AgentUser.Include("AgentContact").Where(c=>c.IsActive==true).Include("BankDetails").Where(c => c.IsActive == true).SingleOrDefault(a=>a.Id==uid && a.IsActive==true);
 
                 _agentdetails.Name = var.Name;
                 _agentdetails.Address = var.Address;
-                _agentdetails.AgentId = var.AgentId;
+                _agentdetails.AgentId = var.Id;
                 _agentdetails.AgentContact = var.AgentContact.Where(g=>g.IsActive==true).ToList();
                 _agentdetails.BankDetails = var.BankDetails.Where(g => g.IsActive == true).ToList();
               
@@ -156,11 +156,11 @@ namespace SALEERP.Repository
             AgentUserVM _agentdetails = new AgentUserVM();
             try
             {
-                AgentUser var = this._DBERP.AgentUser.Include("AgentContact").Where(c => c.IsActive == true).Include("BankDetails").Where(c => c.IsActive == true).SingleOrDefault(a => a.AgentCode == uid && a.IsActive == true);
+                AgentUser var = this._DBERP.AgentUser.Include("AgentContact").Where(c => c.IsActive == true).Include("BankDetails").Where(c => c.IsActive == true).SingleOrDefault(a => a.Code == uid && a.IsActive == true);
 
                 _agentdetails.Name = var.Name;
                 _agentdetails.Address = var.Address;
-                _agentdetails.AgentId = var.AgentId;
+                _agentdetails.AgentId = var.Id;
                 _agentdetails.AgentContact = var.AgentContact.Where(g => g.IsActive == true).ToList();
                 _agentdetails.BankDetails = var.BankDetails.Where(g => g.IsActive == true).ToList();
 
@@ -179,7 +179,7 @@ namespace SALEERP.Repository
             List<AgentMaster> _agentmaster = this._DBERP.AgentMaster.Where(i => i.IsActive == true).ToList();
             List<VehicleMaster> _vehiclemaster = this._DBERP.VehicleMaster.Where(i => i.IsActive == true).ToList();
 
-            _allagentdetails.AgentDetails = this._DBERP.AgentUser.ToList().Where(i => i.IsActive == true).Select(u => new AgentUserVM { AgentCode=u.AgentCode, AgentId=u.AgentId, Address=u.Address, City=u.City,Name=u.Name,  BankDetails = this._DBERP.BankDetails.Where(b => b.AgentId == u.AgentId && b.IsActive == true).ToList(), AgentContact= this._DBERP.AgentContact.Where(c => c.AgentId == u.AgentId && c.IsActive == true).ToList(),vdetails= BindingListUtillity.GenerateSelectList(_vehiclemaster) }).ToList();
+            _allagentdetails.AgentDetails = this._DBERP.AgentUser.ToList().Where(i => i.IsActive == true).Select(u => new AgentUserVM { AgentCode=u.Code, AgentId=u.Id, Address=u.Address, City=u.City,Name=u.Name,  BankDetails = this._DBERP.BankDetails.Where(b => b.AgentId == u.Id && b.IsActive == true).ToList(), AgentContact= this._DBERP.AgentContact.Where(c => c.AgentId == u.Id && c.IsActive == true).ToList(),vdetails= BindingListUtillity.GenerateSelectList(_vehiclemaster) }).ToList();
             _allagentdetails._agentuser = BindingListUtillity.GenerateSelectList(_agentmaster);
             
 
@@ -195,13 +195,13 @@ namespace SALEERP.Repository
                     {
 
                     int innerresult = 0;
-                    var entity = _DBERP.AgentUser.FirstOrDefault(item => item.AgentId == _agent.AgentId);
+                    var entity = _DBERP.AgentUser.FirstOrDefault(item => item.Id == _agent.AgentId);
 
                     if (entity != null)
                     {
                         entity.Name = _agent.Name;
                         entity.Address = _agent.Address;
-                        entity.Createddatetime = DateTime.Now;
+                        entity.CreatedDatetime = DateTime.Now;
                         entity.IsActive = true;
                         this._DBERP.AgentUser.Update(entity);
                         innerresult = this._DBERP.SaveChanges();
@@ -217,7 +217,7 @@ namespace SALEERP.Repository
                                 foreach (var r in entitycontact)
                                 {
                                     r.IsActive = false;
-                                    r.Updateddatetime = DateTime.Now;
+                                    r.UpdatedDatetime = DateTime.Now;
                                 }
                                 this._DBERP.SaveChanges();
                             }
@@ -230,7 +230,7 @@ namespace SALEERP.Repository
                                     Mobile = _item.Mobile,
                                     Email = _item.Email,
                                     AgentId = _agent.AgentId,
-                                    Createddatetime = DateTime.Now,
+                                    CreatedDatetime = DateTime.Now,
                                     IsActive = true
                                 });
 
@@ -248,7 +248,7 @@ namespace SALEERP.Repository
                                 foreach (var r in entitybank)
                                 {
                                     r.IsActive = false;
-                                    r.Updateddatetime = DateTime.Now;
+                                    r.UpdatedDatetime = DateTime.Now;
                                 }
                                 this._DBERP.SaveChanges();
                                
@@ -262,8 +262,8 @@ namespace SALEERP.Repository
                                         AgentId = _agent.AgentId,
                                         BankId = _item.BankId,
                                         AccountNo = _item.AccountNo,
-                                        Createddatetime=DateTime.Now,
-                                        Createdby=uid,
+                                        CreatedDatetime=DateTime.Now,
+                                        CreatedBy=uid,
                                         IsActive = true
                                     });
 

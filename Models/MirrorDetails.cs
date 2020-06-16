@@ -11,28 +11,26 @@ namespace SALEERP.Models
             PayDetails = new HashSet<PayDetails>();
         }
 
-        public long MirrorId { get; set; }
-        public DateTime? MirrorDate { get; set; }
-        public int? PrincipleAgentId { get; set; }
-        public int? ExcursionAgentId { get; set; }
-        public int? DemoPersonId { get; set; }
-        public int? TourLeaderId { get; set; }
-        public int? TourEscortId { get; set; }
-        public int? TourGuideId { get; set; }
-        public int? DriverId { get; set; }
+        public long Id { get; set; }
+        public DateTime? Date { get; set; }
         public int? Pax { get; set; }
-        public int? Countryid { get; set; }
-        public int? Languageid { get; set; }
+        public int? CountryId { get; set; }
+        public int? LanguageId { get; set; }
         public long? PoolId { get; set; }
         public int? SeriesId { get; set; }
         public int? StatusId { get; set; }
         public string Remarks { get; set; }
-        public DateTime? Createddatetime { get; set; }
-        public DateTime? Updateddatetime { get; set; }
-        public int? Createdby { get; set; }
+        public DateTime? CreatedDatetime { get; set; }
+        public DateTime? UpdatedDatetime { get; set; }
+        public int? CreatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual UserLogin CreatedbyNavigation { get; set; }
+        public virtual CountriesMaster Country { get; set; }
+        public virtual UserLogin CreatedByNavigation { get; set; }
+        public virtual LanguagesMaster Language { get; set; }
+        public virtual PoolMaster Pool { get; set; }
+        public virtual SeriesMaster Series { get; set; }
         public virtual ICollection<MirrorAgent> MirrorAgent { get; set; }
         public virtual ICollection<PayDetails> PayDetails { get; set; }
     }

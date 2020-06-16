@@ -30,12 +30,12 @@ namespace SALEERP.Repository
             uid = 0;
             if (!string.IsNullOrWhiteSpace(_user.UserName))
             {
-                var result = this._DBERP.UserLogin.FirstOrDefault(us => us.UserName == _user.UserName && us.UserPass==_user.UserPass  && us.IsActive==true);
+                var result = this._DBERP.UserLogin.FirstOrDefault(us => us.Name == _user.UserName && us.Password==_user.UserPass  && us.IsActive==true);
 
                 if (result != null)
                 {
                     isuserauthenticated = true;
-                    uid = result.UserId;
+                    uid = result.Id;
                 }
                         
                

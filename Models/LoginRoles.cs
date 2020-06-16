@@ -10,11 +10,12 @@ namespace SALEERP.Models
             Roleclaim = new HashSet<Roleclaim>();
         }
 
-        public int RoleId { get; set; }
-        public string RoleName { get; set; }
-        public string RoleDescripton { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Descripton { get; set; }
         public DateTime? CreatedDatetime { get; set; }
         public DateTime? UpdatedDatetime { get; set; }
+        public string CreatedBy { get; set; }
         public int? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
 

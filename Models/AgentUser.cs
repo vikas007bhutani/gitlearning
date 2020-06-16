@@ -13,26 +13,26 @@ namespace SALEERP.Models
             VehicleDetails = new HashSet<VehicleDetails>();
         }
 
-        public int AgentId { get; set; }
-        public int? AgentTypeId { get; set; }
-        public string AgentCode { get; set; }
+        public int Id { get; set; }
+        public int? TypeId { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-        public string status { get; set; }
-        public DateTime? Contractstartdate { get; set; }
+        public DateTime? ContractStartdate { get; set; }
         public string Panno { get; set; }
-        public int? Parcheeid { get; set; }
+        public int? ParcheeId { get; set; }
+        public string Status { get; set; }
         public string Website { get; set; }
-        public string Contractformalities { get; set; }
-        public DateTime? Createddatetime { get; set; }
-        public int? Createdby { get; set; }
+        public string ContractFormalities { get; set; }
+        public DateTime? CreatedDatetime { get; set; }
+        public int? CreatedBy { get; set; }
         public bool? IsActive { get; set; }
-        public DateTime? Updateddatetime { get; set; }
+        public DateTime? UpdatedDatetime { get; set; }
+        public int? UpdatedBy { get; set; }
 
-        public virtual AgentMaster AgentType { get; set; }
-        public virtual UserLogin CreatedbyNavigation { get; set; }
+        public virtual AgentMaster Type { get; set; }
         public virtual ICollection<AgentContact> AgentContact { get; set; }
         public virtual ICollection<BankDetails> BankDetails { get; set; }
         public virtual ICollection<PayDetails> PayDetails { get; set; }

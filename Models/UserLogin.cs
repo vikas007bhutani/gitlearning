@@ -7,22 +7,21 @@ namespace SALEERP.Models
     {
         public UserLogin()
         {
-            AgentUser = new HashSet<AgentUser>();
             MirrorDetails = new HashSet<MirrorDetails>();
             Roleclaim = new HashSet<Roleclaim>();
         }
 
-        public int UserId { get; set; }
-        public string UserName { get; set; }
-        public string UserPass { get; set; }
-        public string UserPhone { get; set; }
-        public string UserEmail { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
         public DateTime? CreatedDatetime { get; set; }
         public DateTime? UpdatedDatetime { get; set; }
+        public int? CreatedBy { get; set; }
         public int? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual ICollection<AgentUser> AgentUser { get; set; }
         public virtual ICollection<MirrorDetails> MirrorDetails { get; set; }
         public virtual ICollection<Roleclaim> Roleclaim { get; set; }
     }

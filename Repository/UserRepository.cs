@@ -32,10 +32,10 @@ namespace SALEERP.Repository
             {
                 this._DBERP.UserLogin.Add(new UserLogin()
                 {
-                    UserName = _user.UserName,
-                    UserEmail = _user.UserEmail,
-                    UserPass = _user.UserPass,
-                    UserPhone = _user.UserPhone,
+                    Name = _user.UserName,
+                    Email = _user.UserEmail,
+                    Password = _user.UserPass,
+                    Phone = _user.UserPhone,
                     CreatedDatetime = DateTime.Now,
                     UpdatedBy=id,
                     IsActive = true
@@ -44,7 +44,7 @@ namespace SALEERP.Repository
                 result = this._DBERP.SaveChanges() > 0;
                 if (result)
                 {
-                    int userid = this._DBERP.UserLogin.Max(p => p.UserId);
+                    int userid = this._DBERP.UserLogin.Max(p => p.Id);
                     this._DBERP.Roleclaim.Add(new Roleclaim() { RoleId = _user.RoleId, UserId = userid, CreatedDatetime = DateTime.Now,UpdatedBy=id,IsActive=true });
                     innerresult = this._DBERP.SaveChanges() > 0;
                     if (innerresult)
@@ -69,15 +69,15 @@ namespace SALEERP.Repository
             using (var dbusertrans = this._DBERP.Database.BeginTransaction())
             {
                
-                var entity = _DBERP.UserLogin.FirstOrDefault(item => item.UserId == _user.UserId);
+                var entity = _DBERP.UserLogin.FirstOrDefault(item => item.Id == _user.UserId);
 
                 if (entity != null)
                 {
 
-                    entity.UserName = _user.UserName;
-                    entity.UserEmail = _user.UserEmail;
-                    entity.UserPass = _user.UserPass;
-                    entity.UserPhone = _user.UserPhone;
+                    entity.Name = _user.UserName;
+                    entity.Email = _user.UserEmail;
+                    entity.Password = _user.UserPass;
+                    entity.Phone = _user.UserPhone;
                     entity.UpdatedDatetime = DateTime.Now;
                     entity.UpdatedBy = uid;
                     entity.IsActive = true;
@@ -123,11 +123,11 @@ namespace SALEERP.Repository
             UserLoginVM _userdetails = new UserLoginVM();
             List<LoginRoles> userroles = this._DBERP.LoginRoles.ToList();
             _userdetails.loginroles = BindingListUtillity.GenerateSelectList(userroles);
-            _userdetails.UserName = user.UserName;
-            _userdetails.UserPass = user.UserPass;
-            _userdetails.UserEmail = user.UserEmail;
-            _userdetails.UserPhone = user.UserPhone;
-            _userdetails.UserId = user.UserId;
+            _userdetails.UserName = user.Name;
+            _userdetails.UserPass = user.Password;
+            _userdetails.UserEmail = user.Email;
+            _userdetails.UserPhone = user.Phone;
+            _userdetails.UserId = user.Id;
             _userdetails.RoleId = user.Roleclaim.Where(r => r.UserId == uid).FirstOrDefault()?.RoleId;
 
             return _userdetails;
@@ -145,7 +145,7 @@ namespace SALEERP.Repository
             List<Roleclaim> rolclaims = this._DBERP.Roleclaim.ToList();
 
            // var u = rolclaims.FirstOrDefault(r => r.UserId == 5).Role.RoleName;
-            IEnumerable<UserLoginVM> alluser = this._DBERP.UserLogin.ToList().Where(i=>i.IsActive==true).Select(u=>new UserLoginVM { UserId = u.UserId, UserName = u.UserName, UserEmail = u.UserEmail, UserPass = u.UserPass, loginroles = BindingListUtillity.GenerateSelectList(userroles),RoleName=(string)rolclaims.Where(r => r.UserId == u.UserId && r.IsActive==true).FirstOrDefault()?.Role.RoleName } );
+            IEnumerable<UserLoginVM> alluser = this._DBERP.UserLogin.ToList().Where(i=>i.IsActive==true).Select(u=>new UserLoginVM { UserId = u.Id, UserName = u.Name, UserEmail = u.Email, UserPass = u.Password, loginroles = BindingListUtillity.GenerateSelectList(userroles),RoleName=(string)rolclaims.Where(r => r.UserId == u.Id && r.IsActive==true).FirstOrDefault()?.Role.Name } );
            
             return alluser.ToList();
 
@@ -168,8 +168,8 @@ namespace SALEERP.Repository
             List<UserLoginVM> _alluserdetails = new List<UserLoginVM>();
             List<LoginRoles> userroles = this._DBERP.LoginRoles.ToList();
             List<Roleclaim> rolclaims = this._DBERP.Roleclaim.ToList();
-            var u = rolclaims.FirstOrDefault(r => r.UserId == 5).Role.RoleName;
-            IEnumerable<UserLoginVM> alluser = this._DBERP.UserLogin.ToList().Select(u => new UserLoginVM { UserId = u.UserId, UserName = u.UserName, UserEmail = u.UserEmail, UserPass = u.UserPass, loginroles = BindingListUtillity.GenerateSelectList(userroles), RoleName = (string)rolclaims.FirstOrDefault(r => r.UserId == u.UserId).Role.RoleName, });
+            var u = rolclaims.FirstOrDefault(r => r.UserId == 5).Role.Name;
+            IEnumerable<UserLoginVM> alluser = this._DBERP.UserLogin.ToList().Select(u => new UserLoginVM { UserId = u.Id, UserName = u.Name, UserEmail = u.Email, UserPass = u.Password, loginroles = BindingListUtillity.GenerateSelectList(userroles), RoleName = (string)rolclaims.FirstOrDefault(r => r.UserId == u.Id).Role.Name, });
 
             return alluser.ToList();
 
@@ -182,7 +182,7 @@ namespace SALEERP.Repository
             using (var dbusertrans = this._DBERP.Database.BeginTransaction())
             {
 
-                var entity = _DBERP.UserLogin.FirstOrDefault(item => item.UserId == uid);
+                var entity = _DBERP.UserLogin.FirstOrDefault(item => item.Id == uid);
 
                 if (entity != null)
                 {

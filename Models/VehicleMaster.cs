@@ -10,10 +10,11 @@ namespace SALEERP.Models
             VehicleDetails = new HashSet<VehicleDetails>();
         }
 
-        public int VehicleId { get; set; }
-        public string VehicleType { get; set; }
+        public int Id { get; set; }
+        public string Type { get; set; }
         public DateTime? CreatedDatetime { get; set; }
         public DateTime? UpdatedDatetime { get; set; }
+        public string CreatedBy { get; set; }
         public int? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
 

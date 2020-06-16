@@ -36,8 +36,15 @@
                 select: function (event, ui) {
 
                 //set tagids to save
-                    $(this).val(ui.item.value);
-                  
+                    var finalstring,mobstring;
+                    if (ui.item.value != null) {
+                        debugger;
+                        finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
+                        mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+                    }
+
+                    $(this).val(finalstring);
+                    $(this).closest('input').find("input[name='mob']").val(mobstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;

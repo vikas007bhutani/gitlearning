@@ -5,14 +5,22 @@ namespace SALEERP.Models
 {
     public partial class PoolMaster
     {
-        public long PoolId { get; set; }
-        public DateTime? PoolStartDate { get; set; }
-        public DateTime? PoolEndDate { get; set; }
-        public string PoolName { get; set; }
-        public string PoolDesc { get; set; }
-        public DateTime? Createddatetime { get; set; }
-        public int? Createdby { get; set; }
-        public DateTime? Updateddatetime { get; set; }
+        public PoolMaster()
+        {
+            MirrorDetails = new HashSet<MirrorDetails>();
+        }
+
+        public long Id { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime? CreatedDatetime { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? UpdatedDatetime { get; set; }
+        public int? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
+
+        public virtual ICollection<MirrorDetails> MirrorDetails { get; set; }
     }
 }

@@ -26,10 +26,10 @@ namespace SALEERP.Repository
 
                 this._DBERP.SeriesMaster.Add(new SeriesMaster()
                 {
-                    SeriesName = _series.SeriesName,
-                    SeriesCode = _series.SeriesCode,
-                    Createddatetime = DateTime.Now,
-                    Createdby = userid,
+                    Name = _series.SeriesName,
+                    Code = _series.SeriesCode,
+                    CreatedDatetime = DateTime.Now,
+                    CreatedBy = userid,
                     IsActive = true
                 }); ;
 
@@ -54,14 +54,14 @@ namespace SALEERP.Repository
 
 
                 int innerresult = 0;
-                var entity = _DBERP.SeriesMaster.FirstOrDefault(item => item.SeriesId == sid);
+                var entity = _DBERP.SeriesMaster.FirstOrDefault(item => item.Id == sid);
 
                 if (entity != null)
                 {
 
 
 
-                    entity.Updateddatetime = DateTime.Now;
+                    entity.UpdatedDatetime = DateTime.Now;
                     entity.IsActive = false;
                     // entity.UpdatedBy=
                     this._DBERP.SeriesMaster.Update(entity);
@@ -91,10 +91,10 @@ namespace SALEERP.Repository
 
                 // List<LoginRoles> userroles = this._DBERP.LoginRoles.ToList();
                 //  _userdetails.loginroles = BindingListUtillity.GenerateSelectList(userroles);
-                _serdetails.SeriesName = ser.SeriesName;
-                _serdetails.SeriesCode = ser.SeriesCode;
+                _serdetails.SeriesName = ser.Name;
+                _serdetails.SeriesCode = ser.Code;
 
-                _serdetails.SeriesId = ser.SeriesId;
+                _serdetails.SeriesId = ser.Id;
 
                
 
@@ -113,7 +113,7 @@ namespace SALEERP.Repository
             try
             {
 
-            _allseriesdetails = this._DBERP.SeriesMaster.ToList().Where(ar => ar.IsActive == true).Select(p => new SeriesVM { SeriesName = p.SeriesName, SeriesCode = p.SeriesCode, SeriesId = p.SeriesId, IsActive = p.IsActive });
+            _allseriesdetails = this._DBERP.SeriesMaster.ToList().Where(ar => ar.IsActive == true).Select(p => new SeriesVM { SeriesName = p.Name, SeriesCode = p.Code, SeriesId = p.Id, IsActive = p.IsActive });
 
             }
             catch (Exception)
@@ -133,15 +133,15 @@ namespace SALEERP.Repository
 
 
                 int innerresult = 0;
-                var entity = _DBERP.SeriesMaster.FirstOrDefault(item => item.SeriesId == _ser.SeriesId);
+                var entity = _DBERP.SeriesMaster.FirstOrDefault(item => item.Id == _ser.SeriesId);
 
                 if (entity != null)
                 {
 
-                    entity.SeriesName = _ser.SeriesName;
-                    entity.SeriesCode = _ser.SeriesCode;
+                    entity.Name = _ser.SeriesName;
+                    entity.Code = _ser.SeriesCode;
 
-                    entity.Updateddatetime = DateTime.Now;
+                    entity.UpdatedDatetime = DateTime.Now;
                     this._DBERP.SeriesMaster.Update(entity);
                     innerresult = this._DBERP.SaveChanges();
                 }

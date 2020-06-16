@@ -81,7 +81,7 @@ namespace SALEERP.ViewModel
     public class multiagent
     {
         public string agentname { get; set; }
-        public Int64 agentid { get; set; }
+        public int? agentid { get; set; }
 
     }
    

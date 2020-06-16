@@ -80,7 +80,7 @@ namespace SALEERP.Controllers
             {
                 string term = HttpContext.Request.Query["term"].ToString();
                 // var result = _srch.Driver_Search(term);
-                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "dr").Select(a => new { label = a.Name+"("+a.AgentContact.FirstOrDefault().Mobile+")", id = a.AgentId }).ToListAsync();
+                var result = await _DBERP.AgentUser.Where(c => c.IsActive==true &&( c.Name.StartsWith(term)  || c.AgentContact.Select(c=>c.Mobile==term).FirstOrDefault()) && c.Code == "dr" ).Select(a => new { label = a.Name+"("+a.AgentContact.FirstOrDefault().Mobile+")", id = a.Id }).ToListAsync();
                 if (result.Count() == 0)
                 {
                     newuser.Add(new SearchVM { label = (term + GenerateRandomNo()), id = 0 });
@@ -104,7 +104,7 @@ namespace SALEERP.Controllers
                // var result1 = null;
                 string term = HttpContext.Request.Query["term"].ToString();
                 // var result = _srch.Driver_Search(term);
-                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "pi").Select(a => new { label = a.Name, id = a.AgentId }).ToListAsync();
+                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.Code == "pi").Select(a => new { label = a.Name, id = a.Id }).ToListAsync();
                 if(result.Count() ==0)
                 {
                    newuser.Add(new SearchVM { label = (term + GenerateRandomNo()), id = 0 });
@@ -131,7 +131,7 @@ namespace SALEERP.Controllers
                 // var result1 = null;
                 string term = HttpContext.Request.Query["term"].ToString();
                 // var result = _srch.Driver_Search(term);
-                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "ex").Select(a => new { label = a.Name, id = a.AgentId }).ToListAsync();
+                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.Code == "ex").Select(a => new { label = a.Name, id = a.Id }).ToListAsync();
                 if (result.Count() == 0)
                 {
                     newuser.Add(new SearchVM { label = (term + GenerateRandomNo()), id = 0 });
@@ -158,7 +158,7 @@ namespace SALEERP.Controllers
                 // var result1 = null;
                 string term = HttpContext.Request.Query["term"].ToString();
                 // var result = _srch.Driver_Search(term);
-                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "gu").Select(a => new { label = a.Name, id = a.AgentId }).ToListAsync();
+                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.Code == "gu").Select(a => new { label = a.Name, id = a.Id }).ToListAsync();
                 if (result.Count() == 0)
                 {
                     newuser.Add(new SearchVM { label = (term + GenerateRandomNo()), id = 0 });
@@ -185,7 +185,7 @@ namespace SALEERP.Controllers
                 // var result1 = null;
                 string term = HttpContext.Request.Query["term"].ToString();
                 // var result = _srch.Driver_Search(term);
-                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "le").Select(a => new { label = a.Name, id = a.AgentId }).ToListAsync();
+                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.Code == "le").Select(a => new { label = a.Name, id = a.Id }).ToListAsync();
                 if (result.Count() == 0)
                 {
                     newuser.Add(new SearchVM { label = (term + GenerateRandomNo()), id = 0 });
@@ -212,7 +212,7 @@ namespace SALEERP.Controllers
                 // var result1 = null;
                 string term = HttpContext.Request.Query["term"].ToString();
                 // var result = _srch.Driver_Search(term);
-                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "ec").Select(a => new { label = a.Name, id = a.AgentId }).ToListAsync();
+                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.Code == "ec").Select(a => new { label = a.Name, id = a.Id }).ToListAsync();
                 if (result.Count() == 0)
                 {
                     newuser.Add(new SearchVM { label = (term + GenerateRandomNo()), id = 0 });
@@ -239,7 +239,7 @@ namespace SALEERP.Controllers
                 // var result1 = null;
                 string term = HttpContext.Request.Query["term"].ToString();
                 // var result = _srch.Driver_Search(term);
-                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.AgentCode == "dm").Select(a => new { label = a.Name, id = a.AgentId }).ToListAsync();
+                var result = await _DBERP.AgentUser.Where(c => c.Name.StartsWith(term) && c.Code == "dm").Select(a => new { label = a.Name, id = a.Id }).ToListAsync();
                 if (result.Count() == 0)
                 {
                     newuser.Add(new SearchVM { label = (term + GenerateRandomNo()), id = 0 });

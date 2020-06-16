@@ -8,10 +8,12 @@ namespace SALEERP.Models
         public int Id { get; set; }
         public int? AgentId { get; set; }
         public int? BankId { get; set; }
+        public string Description { get; set; }
         public string AccountNo { get; set; }
-        public DateTime? Createddatetime { get; set; }
-        public int? Createdby { get; set; }
-        public DateTime? Updateddatetime { get; set; }
+        public DateTime? CreatedDatetime { get; set; }
+        public int? CreatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
+        public DateTime? UpdatedDatetime { get; set; }
         public bool? IsActive { get; set; }
 
         public virtual AgentUser Agent { get; set; }

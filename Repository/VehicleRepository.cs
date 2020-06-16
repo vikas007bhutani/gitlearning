@@ -26,7 +26,7 @@ namespace SALEERP.Repository
 
                 this._DBERP.VehicleMaster.Add(new VehicleMaster()
                 {
-                    VehicleType = _vehicle.VehicleType,
+                    Type = _vehicle.VehicleType,
                     CreatedDatetime = DateTime.Now,
                     UpdatedBy = userid,
                     IsActive = true
@@ -53,7 +53,7 @@ namespace SALEERP.Repository
 
 
                 int innerresult = 0;
-                var entity = _DBERP.VehicleMaster.FirstOrDefault(item => item.VehicleId == vid);
+                var entity = _DBERP.VehicleMaster.FirstOrDefault(item => item.Id == vid);
 
                 if (entity != null)
                 {
@@ -92,10 +92,10 @@ namespace SALEERP.Repository
 
                 // List<LoginRoles> userroles = this._DBERP.LoginRoles.ToList();
                 //  _userdetails.loginroles = BindingListUtillity.GenerateSelectList(userroles);
-                _vehicledetails.VehicleType = vehicle.VehicleType;
+                _vehicledetails.VehicleType = vehicle.Type;
 
 
-                _vehicledetails.VehicleId = vehicle.VehicleId;
+                _vehicledetails.VehicleId = vehicle.Id;
             }
             catch (Exception)
             {
@@ -110,7 +110,7 @@ namespace SALEERP.Repository
             IEnumerable<VehicleVM> _allvehicledetails;
             try
             {
-                _allvehicledetails = this._DBERP.VehicleMaster.ToList().Where(ar => ar.IsActive == true).Select(v => new VehicleVM { VehicleType = v.VehicleType, VehicleId = v.VehicleId, IsActive = v.IsActive });
+                _allvehicledetails = this._DBERP.VehicleMaster.ToList().Where(ar => ar.IsActive == true).Select(v => new VehicleVM { VehicleType = v.Type, VehicleId = v.Id, IsActive = v.IsActive });
             }
             catch (Exception)
             {
@@ -132,12 +132,12 @@ namespace SALEERP.Repository
 
 
                 int innerresult = 0;
-                var entity = _DBERP.VehicleMaster.FirstOrDefault(item => item.VehicleId == _vechicle.VehicleId);
+                var entity = _DBERP.VehicleMaster.FirstOrDefault(item => item.Id == _vechicle.VehicleId);
 
                 if (entity != null)
                 {
 
-                    entity.VehicleType = _vechicle.VehicleType;
+                    entity.Type = _vechicle.VehicleType;
                   
                     entity.UpdatedDatetime = DateTime.Now;
                     this._DBERP.VehicleMaster.Update(entity);
