@@ -15,7 +15,7 @@ namespace SALEERP.Models
         public long? MirrorId { get; set; }
         public int? AgentId { get; set; }
         public long? SaleId { get; set; }
-        public int? Pecentage { get; set; }
+        public decimal? Pecentage { get; set; }
         public decimal? Amount { get; set; }
         public DateTime? CreatedDatetime { get; set; }
         public int? CreatedBy { get; set; }

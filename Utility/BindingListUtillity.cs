@@ -101,6 +101,33 @@ namespace SALEERP.Utility
             }
             return newSelectList;
         }
+        public static List<SelectListItem> GenerateSelectList(List<UnitMaster> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.unitid.ToString(),
+                    Text = item.unitname
+                });
+            }
+            return newSelectList;
+        }
+        public static List<SelectListItem> GenerateSelectList(List<PayMode> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.Id.ToString(),
+                    Text = item.Mode
+                });
+            }
+            return newSelectList;
+        }
+
 
     }
 }

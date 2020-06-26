@@ -42,6 +42,17 @@ namespace SALEERP.Repository
             _ag_bank = BindingListUtillity.GenerateSelectList(_bankmaster);
             return _ag_bank;
         }
+        public List<SelectListItem> getunits()
+        {
+            List<SelectListItem> _ag_unit = new List<SelectListItem>();
+            List<UnitMaster> _unitmaster = new List<UnitMaster>();
+            _unitmaster.Add(new UnitMaster { unitid = 1, unitname = "UNIT-1" });
+            _unitmaster.Add(new UnitMaster { unitid = 2, unitname = "UNIT-2" });
+
+            _ag_unit = BindingListUtillity.GenerateSelectList(_unitmaster);
+            return _ag_unit;
+        }
+       
 
     }
 }

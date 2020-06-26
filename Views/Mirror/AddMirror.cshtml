@@ -285,20 +285,24 @@
                                     <td class="">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            @Html.HiddenFor(model => model.PAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.HiddenFor(model => model.PAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                             <label>Principle Agent</label>
-                                            @Html.EditorFor(model => model.PAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.EditorFor(model => model.PAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                             @Html.ValidationMessageFor(model => model.PAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(model => model.PAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                            @Html.ValidationMessageFor(model => model.PAgentID_List[0].Mob, "", new { @class = "text-danger" })
                                         </div>
                                     </td>
 
                                     <td class="">
                                         <div class="form-group">
 
-                                            @Html.HiddenFor(model => model.EAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.HiddenFor(model => model.EAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                             <label>Excursion Agent</label>
-                                            @Html.EditorFor(model => model.EAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.EditorFor(model => model.EAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                             @Html.ValidationMessageFor(model => model.EAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                            @Html.EditorFor(model => model.EAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                            @Html.ValidationMessageFor(model => model.EAgentID_List[0].Mob, "", new { @class = "text-danger" })
                                         </div>
                                     </td>
                                     <td></td>
@@ -339,9 +343,10 @@
 
 
 
-                                                @Html.EditorFor(model => model.GuideAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.EditorFor(model => model.GuideAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter  Name..." } })
                                                 @Html.ValidationMessageFor(model => model.GuideAgentID_List[0].agentname, "", new { @class = "text-danger" })
-
+                                                @Html.EditorFor(model => model.GuideAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                @Html.ValidationMessageFor(model => model.GuideAgentID_List[0].Mob, "", new { @class = "text-danger" })
 
                                             </div>
                                         </td>
@@ -363,8 +368,10 @@
 
 
 
-                                                    @Html.EditorFor(model => model.LeaderAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                    @Html.EditorFor(model => model.LeaderAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                                     @Html.ValidationMessageFor(model => model.LeaderAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                                    @Html.EditorFor(model => model.LeaderAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                    @Html.ValidationMessageFor(model => model.LeaderAgentID_List[0].Mob, "", new { @class = "text-danger" })
 
                                                 </div>
                                             </td>
@@ -382,13 +389,15 @@
                                         <td class="">
                                             <div class="form-group">
 
-                                                @Html.HiddenFor(model => model.EscortAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.HiddenFor(model => model.EscortAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required"} })
                                                 <label>Tour Escort</label>
 
 
 
-                                                @Html.EditorFor(model => model.EscortAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.EditorFor(model => model.EscortAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                                 @Html.ValidationMessageFor(model => model.EscortAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                                @Html.EditorFor(model => model.EscortAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                @Html.ValidationMessageFor(model => model.EscortAgentID_List[0].Mob, "", new { @class = "text-danger" })
 
                                             </div>
                                         </td>
@@ -449,13 +458,15 @@
                                             <tr>
                                                 <td class="col-sm-2">
                                                     <div class="form-group">
-                                                        @Html.HiddenFor(model => model.DemoAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.HiddenFor(model => model.DemoAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required"} })
                                                         <label>Tour Escort</label>
 
 
 
-                                                        @Html.EditorFor(model => model.DemoAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.EditorFor(model => model.DemoAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                                         @Html.ValidationMessageFor(model => model.DemoAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                                        @Html.EditorFor(model => model.DemoAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                        @Html.ValidationMessageFor(model => model.DemoAgentID_List[0].Mob, "", new { @class = "text-danger" })
 
                                                     </div>
                                                 </td>

@@ -12,5 +12,6 @@ namespace SALEERP.Repository.Interface
         UserLoginVM getroles();
         List<SelectListItem> getvehicles();
         List<SelectListItem> getBanks();
+        List<SelectListItem> getunits();
     }
 }

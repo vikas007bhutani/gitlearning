@@ -413,7 +413,6 @@ G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Agent\Index.
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Agent\ManageAgent.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Agent\UpdateAgent.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Commission\Index.cshtml.g.cs
-G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Commission\PayIndex.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\DashBoard\AddUser.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\DashBoard\Index.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
@@ -448,3 +447,6 @@ G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\SALEERP.dll
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\SALEERP.pdb
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\SALEERP.genruntimeconfig.cache
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\SALEERP.csprojAssemblyReference.cache
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Commission\AddCommission.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Commission\PayIndex.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Commission\PayCommission.cshtml.g.cs

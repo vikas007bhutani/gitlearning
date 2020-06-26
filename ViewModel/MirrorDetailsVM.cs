@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ namespace SALEERP.ViewModel
     {
 
         public long MirrorId { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm}")]
         public DateTime? MirrorDate { get; set; }
         public int? PrincipleAgentId { get; set; }
         public List<multiagent> PAgentID_List { get; set; }
@@ -82,6 +84,7 @@ namespace SALEERP.ViewModel
     {
         public string agentname { get; set; }
         public int? agentid { get; set; }
+        public string Mob { get; set; }
 
     }
    

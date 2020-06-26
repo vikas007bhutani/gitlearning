@@ -11,6 +11,10 @@ namespace SALEERP.Models
         public long? MirrorId { get; set; }
         public decimal? Amount { get; set; }
         public long? CommId { get; set; }
+
+        public string payment_by { get; set; }
+
+        public int? pay_mode { get; set; }
         public DateTime? CreatedDatetime { get; set; }
         public int? CreatedBy { get; set; }
         public int? UpdatedBy { get; set; }

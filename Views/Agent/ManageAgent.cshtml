@@ -8,7 +8,7 @@
 }
 
 
-@using (Html.BeginForm("Index", "Agent"))
+@using (Html.BeginForm("Index", "Agent",FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 

@@ -140,7 +140,7 @@
 <script type="text/javascript">
     function CreateView() {
       
-        console.log($("#AgentCode option:selected").val());
+       // console.log($("#AgentCode option:selected").val());
         if ($("#AgentCode option:selected").val() == 'dr') {
             $.post("@Url.Action("Driver", "AgentUser")", { agentid: $("#AgentCode option:selected").val() }, function (data) {
                 if (data) {

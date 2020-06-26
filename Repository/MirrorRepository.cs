@@ -8,8 +8,6 @@ using SALEERP.Models;
 using SALEERP.Utility;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Web.Http.ModelBinding;
 
 namespace SALEERP.Repository
 {
@@ -34,10 +32,10 @@ namespace SALEERP.Repository
             List<CountriesMaster> _countrymaster = this._DBERP.CountriesMaster.Where(i => i.IsActive == true).ToList();
             List<VehicleMaster> _vehiclemaster = this._DBERP.VehicleMaster.Where(i => i.IsActive == true).ToList();
             List<SeriesMaster> _seriesmaster = this._DBERP.SeriesMaster.Where(i => i.IsActive == true).ToList();
-
+            _mirror.MirrorDate=Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy hh: mm"));
             _mirror.Mirrors = (from m in this._DBERP.MirrorDetails
                                join ma in this._DBERP.MirrorAgent
-                               on m.Id equals ma.Id
+                               on m.Id equals ma.MirrorId
                                join au in this._DBERP.AgentUser
                                on ma.AgentId equals au.Id
                                join c in this._DBERP.AgentContact
@@ -171,7 +169,7 @@ namespace SALEERP.Repository
                                 innerresult = this._DBERP.SaveChanges() > 0;
                                 this._DBERP.VehicleDetails.Add(new VehicleDetails() { AgentId = New_uid, VehicleId = item.vehicletypeid, Number = item.vehicleNo, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
                                 innerresultvehicle = this._DBERP.SaveChanges() > 0;
-                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob);
+                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive==true);
                                 if (entitycontactnew != null)
                                 {
                                     if (entitycontactnew.AgentId != item.agentId)
@@ -205,7 +203,7 @@ namespace SALEERP.Repository
 
 
 
-                                var entitycontact = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob);
+                                var entitycontact = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive == true);
                                 if (entitycontact != null)
                                 {
                                     if (entitycontact.AgentId != item.agentId)
@@ -252,9 +250,35 @@ namespace SALEERP.Repository
 
 
                                 this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive==true);
+                                if (entitycontactnew != null)
+                                {
+                                    if (entitycontactnew.AgentId != item.agentid)
+                                    {
+                                        result = false;
+                                        dbusertrans.Rollback();
+                                        return result;
+
+                                    }
+
+                                }
+                                else
+                                {
+
+                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                }
+
+
+
+
+
                             }
                             else
                             {
+
+                              
 
                                 result = false;
                                 dbusertrans.Rollback();
@@ -262,7 +286,34 @@ namespace SALEERP.Repository
 
                             }
                         }
-                        else { this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }); }
+                        else { 
+                            
+                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive==true);
+                            if (entitycontactnew != null)
+                            {
+                                if (entitycontactnew.AgentId != item.agentid)
+                                {
+                                    result = false;
+                                    dbusertrans.Rollback();
+                                    return result;
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                            }
+
+
+
+
+
+                        }
                         innerresultpagent = this._DBERP.SaveChanges() > 0;
                     }
                     foreach (var item in _mirror.EAgentID_List)
@@ -285,6 +336,28 @@ namespace SALEERP.Repository
                             {
                                 New_uid = this._DBERP.AgentUser.Max(p => p.Id);
 
+                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive == true);
+                                if (entitycontactnew != null)
+                                {
+                                    if (entitycontactnew.AgentId != item.agentid)
+                                    {
+                                        result = false;
+                                        dbusertrans.Rollback();
+                                        return result;
+
+                                    }
+
+                                }
+                                else
+                                {
+
+                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                }
+
+
+
+
 
                                 this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
                             }
@@ -299,7 +372,28 @@ namespace SALEERP.Repository
                         }
                         else
                         {
-                            this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                            // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive == true);
+                            if (entitycontactnew != null)
+                            {
+                                if (entitycontactnew.AgentId != item.agentid)
+                                {
+                                    result = false;
+                                    dbusertrans.Rollback();
+                                    return result;
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                            }
+
+
+
                         }
                         innerresulteagnet = this._DBERP.SaveChanges() > 0;
                     }
@@ -323,6 +417,28 @@ namespace SALEERP.Repository
                             {
                                 New_uid = this._DBERP.AgentUser.Max(p => p.Id);
 
+                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive == true);
+                                if (entitycontactnew != null)
+                                {
+                                    if (entitycontactnew.AgentId != item.agentid)
+                                    {
+                                        result = false;
+                                        dbusertrans.Rollback();
+                                        return result;
+
+                                    }
+
+                                }
+                                else
+                                {
+
+                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                }
+
+
+
+
 
                                 this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
                             }
@@ -337,7 +453,29 @@ namespace SALEERP.Repository
                         }
                         else
                         {
-                            this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+
+                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive == true);
+                            if (entitycontactnew != null)
+                            {
+                                if (entitycontactnew.AgentId != item.agentid)
+                                {
+                                    result = false;
+                                    dbusertrans.Rollback();
+                                    return result;
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                            }
+
                         }
                         innerresultescort = this._DBERP.SaveChanges() > 0;
                     }
@@ -360,6 +498,24 @@ namespace SALEERP.Repository
                             if (resultnewuser)
                             {
                                 New_uid = this._DBERP.AgentUser.Max(p => p.Id);
+                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive==true);
+                                if (entitycontactnew != null)
+                                {
+                                    if (entitycontactnew.AgentId != item.agentid)
+                                    {
+                                        result = false;
+                                        dbusertrans.Rollback();
+                                        return result;
+
+                                    }
+
+                                }
+                                else
+                                {
+
+                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                }
 
 
                                 this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
@@ -375,7 +531,27 @@ namespace SALEERP.Repository
                         }
                         else
                         {
-                            this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive == true);
+                            if (entitycontactnew != null)
+                            {
+                                if (entitycontactnew.AgentId != item.agentid)
+                                {
+                                    result = false;
+                                    dbusertrans.Rollback();
+                                    return result;
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                            }
+
+
                         }
                         innerresultguide = this._DBERP.SaveChanges() > 0;
                     }
@@ -398,6 +574,24 @@ namespace SALEERP.Repository
                             if (resultnewuser)
                             {
                                 New_uid = this._DBERP.AgentUser.Max(p => p.Id);
+                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive==true);
+                                if (entitycontactnew != null)
+                                {
+                                    if (entitycontactnew.AgentId != item.agentid)
+                                    {
+                                        result = false;
+                                        dbusertrans.Rollback();
+                                        return result;
+
+                                    }
+
+                                }
+                                else
+                                {
+
+                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                }
 
 
                                 this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
@@ -413,7 +607,28 @@ namespace SALEERP.Repository
                         }
                         else
                         {
-                            this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive==true);
+                            if (entitycontactnew != null)
+                            {
+                                if (entitycontactnew.AgentId != item.agentid)
+                                {
+                                    result = false;
+                                    dbusertrans.Rollback();
+                                    return result;
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                            }
+
+
                         }
                         innerresultleader = this._DBERP.SaveChanges() > 0;
                     }
@@ -437,6 +652,24 @@ namespace SALEERP.Repository
                             {
                                 New_uid = this._DBERP.AgentUser.Max(p => p.Id);
 
+                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive==true);
+                                if (entitycontactnew != null)
+                                {
+                                    if (entitycontactnew.AgentId != item.agentid)
+                                    {
+                                        result = false;
+                                        dbusertrans.Rollback();
+                                        return result;
+
+                                    }
+
+                                }
+                                else
+                                {
+
+                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                }
 
                                 this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
                             }
@@ -451,7 +684,27 @@ namespace SALEERP.Repository
                         }
                         else
                         {
-                            this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.Mob && i.IsActive==true);
+                            if (entitycontactnew != null)
+                            {
+                                if (entitycontactnew.AgentId != item.agentid)
+                                {
+                                    result = false;
+                                    dbusertrans.Rollback();
+                                    return result;
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                            }
+
+                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
                         }
                         innerresultdemo = this._DBERP.SaveChanges() > 0;
                     }
@@ -548,7 +801,21 @@ namespace SALEERP.Repository
 
                                     else
                                     {
+                                        var entityagentuser = _DBERP.AgentUser.FirstOrDefault(i => i.Id == driver.agentid);
+                                        if (entityagentuser != null)
+                                        {
 
+                                            entityagentuser.IsActive = true;
+                                            entityagentuser.UpdatedDatetime = DateTime.Now;
+                                            entityagentuser.UpdatedBy = userid;
+                                            entityagentuser.Name = driver.name;
+                                            entityagentuser.Code = "dr";
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                      //  var resultnewuser = this._DBERP.SaveChanges() > 0;
 
                                         this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = driver.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now, ParchiAmount = 50, IsParchi = driver.Isparchi });
                                         innerresult = this._DBERP.SaveChanges() > 0;
@@ -568,12 +835,21 @@ namespace SALEERP.Repository
                                                 return result;
 
                                             }
+                                            else
+                                            {
+
+                                                entitycontact.IsActive = true;
+                                                entitycontact.UpdatedDatetime = DateTime.Now;
+                                                entitycontact.UpdatedBy = userid;
+                                                entitycontact.Mobile = driver.mob;
+
+                                            }
 
                                         }
                                         else
                                         {
 
-                                            this._DBERP.AgentContact.Add(new AgentContact() { AgentId = (int)driver.agentid, Mobile = driver.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                            this._DBERP.AgentContact.Add(new AgentContact() { AgentId = (int)driver.agentid, Mobile = driver.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now,UpdatedDatetime=DateTime.Now,UpdatedBy=userid });
                                             innerresultcontact = this._DBERP.SaveChanges() > 0;
                                         }
 
@@ -616,6 +892,34 @@ namespace SALEERP.Repository
 
 
                                             this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == item.mob);
+                                            if (entitycontactnew != null)
+                                            {
+                                                if (entitycontactnew.AgentId != pi.agentid)
+                                                {
+                                                    result = false;
+                                                    //dbusertrans.Rollback();
+                                                    //return result;
+
+                                                }
+                                                else
+                                                {
+                                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = pi.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                                }
+
+                                            }
+                                            else
+                                            {
+
+                                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = pi.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+
+
+
+
                                         }
                                         else
                                         {
@@ -626,7 +930,73 @@ namespace SALEERP.Repository
 
                                         }
                                     }
-                                    else { this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }); }
+                                    else
+                                    {
+                                        var entityagentuser = _DBERP.AgentUser.FirstOrDefault(i => i.Id == pi.agentid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentuser != null)
+                                        {
+
+                                            entityagentuser.IsActive = true;
+                                            entityagentuser.UpdatedDatetime = DateTime.Now;
+                                            entityagentuser.UpdatedBy = userid;
+                                            entityagentuser.Name = pi.name;
+                                            entityagentuser.Code = "pi";
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                        var entityagentmirror = _DBERP.MirrorAgent.FirstOrDefault(i => i.AgentId == pi.agentid && i.MirrorId == mid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentmirror != null)
+                                        {
+
+                                            entityagentmirror.IsActive = true;
+                                            entityagentmirror.UpdatedDatetime = DateTime.Now;
+                                            entityagentmirror.UpdatedBy = userid;
+                                          
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+                                        var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == pi.mob);
+                                        if (entitycontactnew != null)
+                                        {
+                                            if (entitycontactnew.AgentId != pi.agentid)
+                                            {
+                                                result = false;
+                                                //dbusertrans.Rollback();
+                                                //return result;
+
+                                            }
+                                            else
+                                            {
+                                                entitycontactnew.IsActive = true;
+                                                entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                                entitycontactnew.UpdatedBy = userid;
+                                                entitycontactnew.Mobile = pi.mob;
+
+                                                result = this._DBERP.SaveChanges() > 0;
+                                              
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            //entitycontactnew.IsActive = true;
+                                            //entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                            //entitycontactnew.UpdatedBy = userid;
+                                            //entitycontactnew.Mobile = pi.mob;
+
+                                         //    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = ex.agentid, Mobile = ex.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                          //  innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                             this._DBERP.AgentContact.Add(new AgentContact() { AgentId = pi.agentid, Mobile = pi.mob, IsActive = true, CreatedBy = userid, UpdatedDatetime = DateTime.Now, UpdatedBy = userid });
+                                            innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                        }
+
+
+                                    }
                                     innerresultpagent = this._DBERP.SaveChanges() > 0;
 
 
@@ -670,6 +1040,33 @@ namespace SALEERP.Repository
 
 
                                                 this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                                                var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == ex.mob);
+                                                if (entitycontactnew != null)
+                                                {
+                                                    if (entitycontactnew.AgentId != ex.agentid)
+                                                    {
+                                                        result = false;
+                                                        //dbusertrans.Rollback();
+                                                        //return result;
+
+                                                    }
+                                                    else
+                                                    {
+                                                        this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = ex.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                        innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                                    }
+
+                                                }
+                                                else
+                                                {
+
+                                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = ex.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                                }
+
+
+
                                             }
                                             else
                                             {
@@ -680,7 +1077,79 @@ namespace SALEERP.Repository
 
                                             }
                                         }
-                                        else { this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = ex.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }); }
+                                        else
+                                        {
+
+
+                                            var entityagentuser = _DBERP.AgentUser.FirstOrDefault(i => i.Id == ex.agentid);
+                                            // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                            if (entityagentuser != null)
+                                            {
+
+                                                entityagentuser.IsActive = true;
+                                                entityagentuser.UpdatedDatetime = DateTime.Now;
+                                                entityagentuser.UpdatedBy = userid;
+                                                entityagentuser.Name = ex.name;
+                                                entityagentuser.Code = "ex";
+
+
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
+
+                                            var entityagentmirror = _DBERP.MirrorAgent.FirstOrDefault(i => i.AgentId == ex.agentid && i.MirrorId == mid);
+                                            // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                            if (entityagentmirror != null)
+                                            {
+
+                                                entityagentmirror.IsActive = true;
+                                                entityagentmirror.UpdatedDatetime = DateTime.Now;
+                                                entityagentmirror.UpdatedBy = userid;
+
+
+
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
+
+
+
+
+                                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == ex.mob);
+                                            if (entitycontactnew != null)
+                                            {
+                                                if (entitycontactnew.AgentId != ex.agentid)
+                                                {
+                                                    result = false;
+                                                    //dbusertrans.Rollback();
+                                                    //return result;
+
+                                                }
+                                                else
+                                                {
+                                                    entitycontactnew.IsActive = true;
+                                                    entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                                    entitycontactnew.UpdatedBy = userid;
+                                                    entitycontactnew.Mobile = ex.mob;
+
+                                                   // this._DBERP.AgentContact.Add(new AgentContact() { AgentId = ex.agentid, Mobile = ex.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                //entitycontactnew.IsActive = true;
+                                                //entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                                //entitycontactnew.UpdatedBy = userid;
+                                                //entitycontactnew.Mobile = ex.mob;
+
+                                                 this._DBERP.AgentContact.Add(new AgentContact() { AgentId = ex.agentid, Mobile = ex.mob, IsActive = true, CreatedBy = userid, UpdatedDatetime = DateTime.Now, UpdatedBy = userid });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+
+                                                //  this._DBERP.AgentContact.Add(new AgentContact() { AgentId = ex.agentid, Mobile = ex.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                              //  innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+                                        }
                                         innerresultpagent = this._DBERP.SaveChanges() > 0;
 
 
@@ -722,6 +1191,36 @@ namespace SALEERP.Repository
 
 
                                             this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+
+                                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == ec.mob);
+                                            if (entitycontactnew != null)
+                                            {
+                                                if (entitycontactnew.AgentId != ec.agentid)
+                                                {
+                                                    result = false;
+                                                    //dbusertrans.Rollback();
+                                                    //return result;
+
+                                                }
+                                                else
+                                                {
+
+                                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = ec.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                                }
+
+                                            }
+                                            else
+                                            {
+
+                                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = ec.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+
+
+
                                         }
                                         else
                                         {
@@ -732,7 +1231,72 @@ namespace SALEERP.Repository
 
                                         }
                                     }
-                                    else { this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = ec.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }); }
+                                    else
+                                    {
+                                        var entityagentuser = _DBERP.AgentUser.FirstOrDefault(i => i.Id == ec.agentid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentuser != null)
+                                        {
+
+                                            entityagentuser.IsActive = true;
+                                            entityagentuser.UpdatedDatetime = DateTime.Now;
+                                            entityagentuser.UpdatedBy = userid;
+                                            entityagentuser.Name = ec.name;
+                                            entityagentuser.Code = "ec";
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                        var entityagentmirror = _DBERP.MirrorAgent.FirstOrDefault(i => i.AgentId == ec.agentid && i.MirrorId == mid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentmirror != null)
+                                        {
+
+                                            entityagentmirror.IsActive = true;
+                                            entityagentmirror.UpdatedDatetime = DateTime.Now;
+                                            entityagentmirror.UpdatedBy = userid;
+
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+
+
+                                        var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == ec.mob);
+                                        if (entitycontactnew != null)
+                                        {
+                                            if (entitycontactnew.AgentId != ec.agentid)
+                                            {
+                                                result = false;
+                                                //dbusertrans.Rollback();
+                                                //return result;
+
+                                            }
+                                            else
+                                            {
+
+                                                //  this._DBERP.AgentContact.Add(new AgentContact() { AgentId = ec.agentid, Mobile = ec.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                entitycontactnew.IsActive = true;
+                                                entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                                entitycontactnew.UpdatedBy = userid;
+                                                entitycontactnew.Mobile = ec.mob;
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            //entitycontactnew.IsActive = true;
+                                            //entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                            //entitycontactnew.UpdatedBy = userid;
+                                            //entitycontactnew.Mobile = ec.mob;
+                                             this._DBERP.AgentContact.Add(new AgentContact() { AgentId = ec.agentid, Mobile = ec.mob, IsActive = true, CreatedBy = userid, UpdatedDatetime = DateTime.Now, UpdatedBy = userid });
+                                            innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                    }
                                     innerresultpagent = this._DBERP.SaveChanges() > 0;
 
 
@@ -771,6 +1335,34 @@ namespace SALEERP.Repository
 
 
                                             this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == te.mob);
+                                            if (entitycontactnew != null)
+                                            {
+                                                if (entitycontactnew.AgentId != te.agentid)
+                                                {
+                                                    result = false;
+                                                    //dbusertrans.Rollback();
+                                                    //return result;
+
+                                                }
+                                                else
+                                                {
+
+                                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = te.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                                }
+
+                                            }
+                                            else
+                                            {
+
+                                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = te.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+
+
                                         }
                                         else
                                         {
@@ -781,7 +1373,76 @@ namespace SALEERP.Repository
 
                                         }
                                     }
-                                    else { this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = te.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }); }
+                                    else
+                                    {
+
+                                        var entityagentuser = _DBERP.AgentUser.FirstOrDefault(i => i.Id == te.agentid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentuser != null)
+                                        {
+
+                                            entityagentuser.IsActive = true;
+                                            entityagentuser.UpdatedDatetime = DateTime.Now;
+                                            entityagentuser.UpdatedBy = userid;
+                                            entityagentuser.Name = te.name;
+                                            entityagentuser.Code = "te";
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                        var entityagentmirror = _DBERP.MirrorAgent.FirstOrDefault(i => i.AgentId == te.agentid && i.MirrorId == mid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentmirror != null)
+                                        {
+
+                                            entityagentmirror.IsActive = true;
+                                            entityagentmirror.UpdatedDatetime = DateTime.Now;
+                                            entityagentmirror.UpdatedBy = userid;
+
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+
+
+
+                                        var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == te.mob);
+                                        if (entitycontactnew != null)
+                                        {
+                                            if (entitycontactnew.AgentId != te.agentid)
+                                            {
+                                                result = false;
+                                                //dbusertrans.Rollback();
+                                                //return result;
+
+                                            }
+                                            else
+                                            {
+
+                                                entitycontactnew.IsActive = true;
+                                                entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                                entitycontactnew.UpdatedBy = userid;
+                                                entitycontactnew.Mobile = te.mob;
+
+                                                // this._DBERP.AgentContact.Add(new AgentContact() { AgentId = te.agentid, Mobile = te.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            //entitycontactnew.IsActive = true;
+                                            //entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                            //entitycontactnew.UpdatedBy = userid;
+                                            //entitycontactnew.Mobile = te.mob;
+
+                                              this._DBERP.AgentContact.Add(new AgentContact() { AgentId = te.agentid, Mobile = te.mob, IsActive = true, CreatedBy = userid, UpdatedDatetime = DateTime.Now,UpdatedBy=userid });
+                                            innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                    }
                                     innerresultpagent = this._DBERP.SaveChanges() > 0;
 
 
@@ -789,7 +1450,7 @@ namespace SALEERP.Repository
 
 
                             }
-                        }
+                            }
                         if (item.guide != null)
                         {
                             foreach (var gu in item.guide)
@@ -797,9 +1458,6 @@ namespace SALEERP.Repository
 
                                 if (gu != null)
                                 {
-
-
-
                                     if (gu.agentid == 0 || gu.agentid == null)
                                     {
                                         this._DBERP.AgentUser.Add(new AgentUser()
@@ -820,6 +1478,32 @@ namespace SALEERP.Repository
 
 
                                             this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == gu.mob);
+                                            if (entitycontactnew != null)
+                                            {
+                                                if (entitycontactnew.AgentId != gu.agentid)
+                                                {
+                                                    result = false;
+                                                    //dbusertrans.Rollback();
+                                                    //return result;
+
+                                                }
+                                                else
+                                                {
+
+                                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = gu.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                                }
+
+                                            }
+                                            else
+                                            {
+
+                                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = gu.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
                                         }
                                         else
                                         {
@@ -830,7 +1514,76 @@ namespace SALEERP.Repository
 
                                         }
                                     }
-                                    else { this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = gu.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }); }
+                                    else
+                                    {
+
+
+                                        var entityagentuser = _DBERP.AgentUser.FirstOrDefault(i => i.Id == gu.agentid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentuser != null)
+                                        {
+
+                                            entityagentuser.IsActive = true;
+                                            entityagentuser.UpdatedDatetime = DateTime.Now;
+                                            entityagentuser.UpdatedBy = userid;
+                                            entityagentuser.Name = gu.name;
+                                            entityagentuser.Code = "gu";
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                        var entityagentmirror = _DBERP.MirrorAgent.FirstOrDefault(i => i.AgentId == gu.agentid && i.MirrorId == mid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentmirror != null)
+                                        {
+
+                                            entityagentmirror.IsActive = true;
+                                            entityagentmirror.UpdatedDatetime = DateTime.Now;
+                                            entityagentmirror.UpdatedBy = userid;
+
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                        //   this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = gu.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }); 
+                                        var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == gu.mob);
+                                        if (entitycontactnew != null)
+                                        {
+                                            if (entitycontactnew.AgentId != gu.agentid)
+                                            {
+                                                result = false;
+                                                //dbusertrans.Rollback();
+                                                //return result;
+
+                                            }
+                                            else
+                                            {
+                                                entitycontactnew.IsActive = true;
+                                                entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                                entitycontactnew.UpdatedBy = userid;
+                                                entitycontactnew.Mobile = gu.mob;
+
+
+                                                // this._DBERP.AgentContact.Add(new AgentContact() { AgentId = gu.agentid, Mobile = gu.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            //entitycontactnew.IsActive = true;
+                                            //entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                            //entitycontactnew.UpdatedBy = userid;
+                                            //entitycontactnew.Mobile = gu.mob;
+
+
+                                             this._DBERP.AgentContact.Add(new AgentContact() { AgentId = gu.agentid, Mobile = gu.mob, IsActive = true, CreatedBy = userid, UpdatedDatetime = DateTime.Now, UpdatedBy = userid });
+                                            innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                    }
                                     innerresultpagent = this._DBERP.SaveChanges() > 0;
 
 
@@ -869,6 +1622,35 @@ namespace SALEERP.Repository
 
 
                                             this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = New_uid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+
+                                            var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == de.mob);
+                                            if (entitycontactnew != null)
+                                            {
+                                                if (entitycontactnew.AgentId != de.agentid)
+                                                {
+                                                    result = false;
+                                                    //dbusertrans.Rollback();
+                                                    //return result;
+
+                                                }
+                                                else
+                                                {
+
+                                                    this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = de.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                    innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                                }
+
+                                            }
+                                            else
+                                            {
+
+                                                this._DBERP.AgentContact.Add(new AgentContact() { AgentId = New_uid, Mobile = de.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+
+
                                         }
                                         else
                                         {
@@ -879,7 +1661,75 @@ namespace SALEERP.Repository
 
                                         }
                                     }
-                                    else { this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = de.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }); }
+                                    else
+                                    {
+
+                                        var entityagentuser = _DBERP.AgentUser.FirstOrDefault(i => i.Id == de.agentid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentuser != null)
+                                        {
+
+                                            entityagentuser.IsActive = true;
+                                            entityagentuser.UpdatedDatetime = DateTime.Now;
+                                            entityagentuser.UpdatedBy = userid;
+                                            entityagentuser.Name = de.name;
+                                            entityagentuser.Code = "de";
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+                                        var entityagentmirror = _DBERP.MirrorAgent.FirstOrDefault(i => i.AgentId == de.agentid && i.MirrorId == mid);
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = pi.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        if (entityagentmirror != null)
+                                        {
+
+                                            entityagentmirror.IsActive = true;
+                                            entityagentmirror.UpdatedDatetime = DateTime.Now;
+                                            entityagentmirror.UpdatedBy = userid;
+
+
+
+                                            result = this._DBERP.SaveChanges() > 0;
+                                        }
+
+
+                                        // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = de.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                        var entitycontactnew = _DBERP.AgentContact.FirstOrDefault(i => i.Mobile == de.mob);
+                                        if (entitycontactnew != null)
+                                        {
+                                            if (entitycontactnew.AgentId != de.agentid)
+                                            {
+                                                result = false;
+                                                //dbusertrans.Rollback();
+                                                //return result;
+
+                                            }
+                                            else
+                                            {
+
+                                                entitycontactnew.IsActive = true;
+                                                entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                                entitycontactnew.UpdatedBy = userid;
+                                                entitycontactnew.Mobile = de.mob;
+
+                                                //  this._DBERP.AgentContact.Add(new AgentContact() { AgentId = de.agentid, Mobile = de.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                                innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            //entitycontactnew.IsActive = true;
+                                            //entitycontactnew.UpdatedDatetime = DateTime.Now;
+                                            //entitycontactnew.UpdatedBy = userid;
+                                            //entitycontactnew.Mobile = de.mob;
+                                             this._DBERP.AgentContact.Add(new AgentContact() { AgentId = de.agentid, Mobile = de.mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                            innerresultcontact = this._DBERP.SaveChanges() > 0;
+                                        }
+
+
+                                    }
                                     innerresultpagent = this._DBERP.SaveChanges() > 0;
 
 
@@ -890,11 +1740,7 @@ namespace SALEERP.Repository
                         }
                     }
 
-
-
-
                     result = true;
-
 
                 }
                 else { result = false; }
@@ -1024,8 +1870,8 @@ namespace SALEERP.Repository
 
 
                                           //  var agentUsers = _DBERP.AgentUser.Where(item => item.AgentId == d.agentid);
-                                            var agentcontact = _DBERP.AgentContact.Where(item => item.AgentId == d.agentid);
-                                            var agentvehicle = _DBERP.VehicleDetails.Where(item => item.AgentId == d.agentid);
+                                            var agentcontact = _DBERP.AgentContact.Where(item => item.AgentId == d.agentid && item.IsActive==true);
+                                            var agentvehicle = _DBERP.VehicleDetails.Where(item => item.AgentId == d.agentid && item.IsActive == true);
                                             //if (agentUsers != null)
                                             //{
                                             //    foreach (var r in agentUsers)
@@ -1058,126 +1904,187 @@ namespace SALEERP.Repository
                                         }
                                     }
                                 }
-                                //if (_mir.principle != null)
-                                //{
-                                //    foreach (var d in _mir.principle)
-                                //    {
-                                //        if (d != null)
-                                //        {
-                                //            var agentUsers = _DBERP.AgentUser.Where(item => item.AgentId == d.agentid);
-                                //            if (agentUsers != null)
-                                //            {
-                                //                foreach (var r in agentUsers)
-                                //                {
-                                //                    r.IsActive = false;
-                                //                    r.Updateddatetime = DateTime.Now;
-                                //                }
-                                //                result = this._DBERP.SaveChanges() > 0;
-                                //            }
+                                if (_mir.principle != null)
+                                {
+                                    foreach (var d in _mir.principle)
+                                    {
+                                        if (d != null)
+                                        {
+                                            var agentUsers = _DBERP.AgentUser.Where(item => item.Id == d.agentid);
+                                            if (agentUsers != null)
+                                            {
+                                                foreach (var r in agentUsers)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
+                                            var agentcontact = _DBERP.AgentContact.Where(item => item.AgentId == d.agentid && item.IsActive == true);
+                                            if (agentcontact != null)
+                                            {
+                                                foreach (var r in agentcontact)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
 
-                                //        }
-                                //    }
-                                //}
-                                //if (_mir.excursion != null)
-                                //{
-                                //    foreach (var d in _mir.excursion)
-                                //    {
-                                //        if (d != null)
-                                //        {
-                                //            var agentUsers = _DBERP.AgentUser.Where(item => item.AgentId == d.agentid);
-                                //            if (agentUsers != null)
-                                //            {
-                                //                foreach (var r in agentUsers)
-                                //                {
-                                //                    r.IsActive = false;
-                                //                    r.Updateddatetime = DateTime.Now;
-                                //                }
-                                //                result = this._DBERP.SaveChanges() > 0;
-                                //            }
+                                        }
+                                    }
+                                }
+                                if (_mir.excursion != null)
+                                {
+                                    foreach (var d in _mir.excursion)
+                                    {
+                                        if (d != null)
+                                        {
+                                            var agentUsers = _DBERP.AgentUser.Where(item => item.Id == d.agentid);
+                                            if (agentUsers != null)
+                                            {
+                                                foreach (var r in agentUsers)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
+                                            var agentcontact = _DBERP.AgentContact.Where(item => item.AgentId == d.agentid && item.IsActive == true);
+                                            if (agentcontact != null)
+                                            {
+                                                foreach (var r in agentcontact)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
 
-                                //        }
-                                //    }
-                                //}
-                                //if (_mir.teamescort != null)
-                                //{
-                                //    foreach (var d in _mir.teamescort)
-                                //    {
-                                //        if (d != null)
-                                //        {
-                                //            var agentUsers = _DBERP.AgentUser.Where(item => item.AgentId == d.agentid);
-                                //            if (agentUsers != null)
-                                //            {
-                                //                foreach (var r in agentUsers)
-                                //                {
-                                //                    r.IsActive = false;
-                                //                    r.Updateddatetime = DateTime.Now;
-                                //                }
-                                //                result = this._DBERP.SaveChanges() > 0;
-                                //            }
+                                        }
+                                    }
+                                }
+                                if (_mir.teamescort != null)
+                                {
+                                    foreach (var d in _mir.teamescort)
+                                    {
+                                        if (d != null)
+                                        {
+                                            var agentUsers = _DBERP.AgentUser.Where(item => item.Id == d.agentid);
+                                            if (agentUsers != null)
+                                            {
+                                                foreach (var r in agentUsers)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
 
-                                //        }
-                                //    }
-                                //}
-                                //if (_mir.guide != null)
-                                //{
-                                //    foreach (var d in _mir.guide)
-                                //    {
-                                //        if (d != null)
-                                //        {
-                                //            var agentUsers = _DBERP.AgentUser.Where(item => item.AgentId == d.agentid);
-                                //            if (agentUsers != null)
-                                //            {
-                                //                foreach (var r in agentUsers)
-                                //                {
-                                //                    r.IsActive = false;
-                                //                    r.Updateddatetime = DateTime.Now;
-                                //                }
-                                //                result = this._DBERP.SaveChanges() > 0;
-                                //            }
+                                            var agentcontact = _DBERP.AgentContact.Where(item => item.AgentId == d.agentid && item.IsActive == true);
+                                            if (agentcontact != null)
+                                            {
+                                                foreach (var r in agentcontact)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
 
-                                //        }
-                                //    }
-                                //}
-                                //if (_mir.teamlead != null)
-                                //{
-                                //    foreach (var d in _mir.teamlead)
-                                //    {
-                                //        if (d != null)
-                                //        {
-                                //            var agentUsers = _DBERP.AgentUser.Where(item => item.AgentId == d.agentid);
-                                //            if (agentUsers != null)
-                                //            {
-                                //                foreach (var r in agentUsers)
-                                //                {
-                                //                    r.IsActive = false;
-                                //                    r.Updateddatetime = DateTime.Now;
-                                //                }
-                                //                result = this._DBERP.SaveChanges() > 0;
-                                //            }
+                                        }
+                                    }
+                                }
+                                if (_mir.guide != null)
+                                {
+                                    foreach (var d in _mir.guide)
+                                    {
+                                        if (d != null)
+                                        {
+                                            var agentUsers = _DBERP.AgentUser.Where(item => item.Id == d.agentid);
+                                            if (agentUsers != null)
+                                            {
+                                                foreach (var r in agentUsers)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
+                                            var agentcontact = _DBERP.AgentContact.Where(item => item.AgentId == d.agentid && item.IsActive == true);
+                                            if (agentcontact != null)
+                                            {
+                                                foreach (var r in agentcontact)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
 
-                                //        }
-                                //    }
-                                //}
-                                //if (_mir.demo != null)
-                                //{
-                                //    foreach (var d in _mir.demo)
-                                //    {
-                                //        if (d != null)
-                                //        {
-                                //            var agentUsers = _DBERP.AgentUser.Where(item => item.AgentId == d.agentid);
-                                //            if (agentUsers != null)
-                                //            {
-                                //                foreach (var r in agentUsers)
-                                //                {
-                                //                    r.IsActive = false;
-                                //                    r.Updateddatetime = DateTime.Now;
-                                //                }
-                                //                result = this._DBERP.SaveChanges() > 0;
-                                //            }
+                                        }
+                                    }
+                                }
+                                if (_mir.teamlead != null)
+                                {
+                                    foreach (var d in _mir.teamlead)
+                                    {
+                                        if (d != null)
+                                        {
+                                            var agentUsers = _DBERP.AgentUser.Where(item => item.Id == d.agentid);
+                                            if (agentUsers != null)
+                                            {
+                                                foreach (var r in agentUsers)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
+                                            var agentcontact = _DBERP.AgentContact.Where(item => item.AgentId == d.agentid && item.IsActive == true);
+                                            if (agentcontact != null)
+                                            {
+                                                foreach (var r in agentcontact)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
 
-                                //        }
-                                //    }
-                                //}
+                                        }
+                                    }
+                                }
+                                if (_mir.demo != null)
+                                {
+                                    foreach (var d in _mir.demo)
+                                    {
+                                        if (d != null)
+                                        {
+                                            var agentUsers = _DBERP.AgentUser.Where(item => item.Id == d.agentid);
+                                            if (agentUsers != null)
+                                            {
+                                                foreach (var r in agentUsers)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
+                                            var agentcontact = _DBERP.AgentContact.Where(item => item.AgentId == d.agentid && item.IsActive == true);
+                                            if (agentcontact != null)
+                                            {
+                                                foreach (var r in agentcontact)
+                                                {
+                                                    r.IsActive = false;
+                                                    r.UpdatedDatetime = DateTime.Now;
+                                                }
+                                                result = this._DBERP.SaveChanges() > 0;
+                                            }
+
+                                        }
+                                    }
+                                }
 
                             }
                         }

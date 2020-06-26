@@ -57,7 +57,7 @@ namespace SALEERP.Controllers
             ViewBag.Paging = Set_Paging(pn, 10, _alluser.AgentDetails.Count(), "activeLink", Url.Action("Index", "User"), "disableLink");
 
 
-            return View(_alluser);
+            return View("Index",_alluser);
             //return View();
         }
 
@@ -77,7 +77,7 @@ namespace SALEERP.Controllers
             _agntusr.AddUser(_details, Convert.ToInt32(userid));
             
             _alluser = _agntusr.getAllAgentUsers();
-            return RedirectToAction("Index", _alluser);
+            return RedirectToAction("Index");
         }
         public ActionResult GetAgentDeleted(int id)
         {
@@ -123,7 +123,7 @@ namespace SALEERP.Controllers
 
             }
             // return View("Index", _allPools);
-            return RedirectToAction("Index", _agntusr.getAllAgentUsers());
+            return RedirectToAction("Index");
 
         }
         public string Set_Paging(int PageNumber, int PageSize, Int64 TotalRecords, string ClassName, string PageUrl, string DisableClassName)

@@ -8,7 +8,7 @@
 }
 
 
-@using (Html.BeginForm("Index", "Pool"))
+@using (Html.BeginForm("Index", "Pool",FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 

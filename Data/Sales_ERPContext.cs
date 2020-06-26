@@ -34,6 +34,7 @@ namespace SALEERP.Data
         public virtual DbSet<OrderMaster> OrderMaster { get; set; }
         public virtual DbSet<OrderPayment> OrderPayment { get; set; }
         public virtual DbSet<PayDetails> PayDetails { get; set; }
+        public virtual DbSet<PayMode> PayMode { get; set; }
         public virtual DbSet<PoolMaster> PoolMaster { get; set; }
         public virtual DbSet<Roleclaim> Roleclaim { get; set; }
         public virtual DbSet<SeriesMaster> SeriesMaster { get; set; }
@@ -330,7 +331,7 @@ namespace SALEERP.Data
 
                 entity.Property(e => e.MirrorId).HasColumnName("mirror_id");
 
-                entity.Property(e => e.Pecentage).HasColumnName("pecentage");
+                entity.Property(e => e.Pecentage).HasColumnName("pecentage").HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.SaleId).HasColumnName("sale_id");
 
@@ -956,6 +957,14 @@ namespace SALEERP.Data
                     .HasColumnName("created_by")
                     .HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.pay_mode)
+                    .HasColumnName("pay_mode")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.payment_by)
+                  .HasColumnName("payment_by")
+                  .HasMaxLength(50);
+
                 entity.Property(e => e.CreatedDatetime)
                     .HasColumnName("created_datetime")
                     .HasColumnType("datetime")
@@ -995,7 +1004,38 @@ namespace SALEERP.Data
                     .HasForeignKey(d => d.MirrorId)
                     .HasConstraintName("FK_Pay_Details_Mirror");
             });
+            modelBuilder.Entity<PayMode>(entity =>
+            {
+                entity.ToTable("PayMode", "comm");
 
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Createddatetime)
+                    .HasColumnName("createddatetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Mode)
+                    .HasColumnName("mode")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UpdatedDatetime)
+                    .HasColumnName("updated_datetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+            });
             modelBuilder.Entity<PoolMaster>(entity =>
             {
                 entity.ToTable("PoolMaster", "mr");
