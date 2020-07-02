@@ -7,7 +7,7 @@ namespace SALEERP.Utility
 {
     public class CommonUtility
     {
-
+       
     }
     public class unitmaster
     {
@@ -15,5 +15,15 @@ namespace SALEERP.Utility
         public string unitname { get; set; }
 
 
+    }
+   
+    public enum agentStatus
+    {
+        dr,
+        pi,
+        te,
+        ec,
+        ex,
+        gu
     }
 }

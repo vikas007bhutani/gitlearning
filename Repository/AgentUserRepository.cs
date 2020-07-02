@@ -68,6 +68,54 @@ namespace SALEERP.Repository
             return result;
         }
 
+        public bool AddDemo(AgentUserVM _user, int userid)
+        {
+            bool result = false, innerresult = false;
+            using (var dbusertrans = this._DBERP.Database.BeginTransaction())
+            {
+                this._DBERP.AgentUser.Add(new AgentUser()
+                {
+                    Code = _user.AgentCode,
+                    Name = _user.Name,
+                    Address = _user.Address,
+                    country_id=_user.countryid,
+                    IsActive = true
+                });
+
+                result = this._DBERP.SaveChanges() > 0;
+                if (result)
+                {
+                    int uid = this._DBERP.AgentUser.Max(p => p.Id);
+                    foreach (var item in _user.AgentContact)
+                    {
+                        if (item != null)
+                        {
+                            this._DBERP.AgentContact.Add(new AgentContact() { AgentId = uid, Email = item.Email, Mobile = item.Mobile, IsActive = true });
+                        }
+                    }
+                    innerresult = this._DBERP.SaveChanges() > 0;
+                    foreach (var itembank in _user.BankDetails)
+                    {
+                        if (itembank != null)
+                        {
+                            this._DBERP.BankDetails.Add(new BankDetails() { AgentId = uid, BankId = itembank.BankId, AccountNo = itembank.AccountNo, IsActive = true });
+                        }
+                    }
+                    innerresult = this._DBERP.SaveChanges() > 0;
+                    if (innerresult)
+                    {
+                        dbusertrans.Commit();
+                    }
+                    else
+                    { dbusertrans.Rollback(); result = false; }
+
+                }
+                else { dbusertrans.Rollback(); }
+
+            }
+            return result;
+        }
+
         public bool DeleteAgent(int aid)
         {
             bool result = false;
@@ -140,6 +188,7 @@ namespace SALEERP.Repository
                 _agentdetails.Name = var.Name;
                 _agentdetails.Address = var.Address;
                 _agentdetails.AgentId = var.Id;
+                _agentdetails.countryid = var.country_id;
                 _agentdetails.AgentContact = var.AgentContact.Where(g=>g.IsActive==true).ToList();
                 _agentdetails.BankDetails = var.BankDetails.Where(g => g.IsActive == true).ToList();
               

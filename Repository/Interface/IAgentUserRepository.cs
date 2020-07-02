@@ -12,5 +12,6 @@ namespace SALEERP.Repository.Interface
         bool UpdateAgent(AgentUserVM _agent, int uid);
         AgentUserVM EditAgent(int uid);
         AgentUserVM CreateAgent(string uid);
+        bool AddDemo(AgentUserVM _user, int userid);
     }
 }

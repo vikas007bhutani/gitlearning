@@ -82,7 +82,7 @@
                                         </td>
 
                                         <td>
-                                            <a onclick="getEditView(@item.AgentId)" href="javascript:void(0)">Edit</a>
+                                            <a onclick="getEditView(@item.AgentId,'@item.AgentCode')" href="javascript:void(0)">Edit</a>
                                             @*@Html.ActionLink("Edit", "Edit", new { id = item.StaffID })*@ |
 
                                             @Html.ActionLink("Delete", "GetAgentDeleted", new { id = item.AgentId })
@@ -139,7 +139,7 @@
 
 <script type="text/javascript">
     function CreateView() {
-      
+
        // console.log($("#AgentCode option:selected").val());
         if ($("#AgentCode option:selected").val() == 'dr') {
             $.post("@Url.Action("Driver", "AgentUser")", { agentid: $("#AgentCode option:selected").val() }, function (data) {
@@ -150,11 +150,58 @@
                 }
             });
         }
-
+         if ($("#AgentCode option:selected").val() == 'le') {
+            $.post("@Url.Action("Leader", "AgentUser")", { agentid: $("#AgentCode option:selected").val() }, function (data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#CDiv').append(data);
+                }
+            });
         }
 
-        function getEditView(id) {
-            $.post("@Url.Action("ShowEditPartailView", "AgentUser")", {id: id}, function(data) {
+        if ($("#AgentCode option:selected").val() == 'ec') {
+            $.post("@Url.Action("Escort", "AgentUser")", { agentid: $("#AgentCode option:selected").val() }, function (data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#CDiv').append(data);
+                }
+            });
+        }
+         if ($("#AgentCode option:selected").val() == 'de') {
+            $.post("@Url.Action("Demo", "AgentUser")", { agentid: $("#AgentCode option:selected").val() }, function (data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#CDiv').append(data);
+                }
+            });
+        }
+         if ($("#AgentCode option:selected").val() == 'ex') {
+            $.post("@Url.Action("Excursion", "AgentUser")", { agentid: $("#AgentCode option:selected").val() }, function (data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#CDiv').append(data);
+                }
+            });
+        }
+         if ($("#AgentCode option:selected").val() == 'pi') {
+            $.post("@Url.Action("principle", "AgentUser")", { agentid: $("#AgentCode option:selected").val() }, function (data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#CDiv').append(data);
+                }
+            });
+        }
+
+        }
+   
+    function getEditView(id,code) {
+        debugger;
+            $.post("@Url.Action("ShowEditAgent", "AgentUser")", { id: id,code:code }, function (data) {
                 if (data) {
                     $('#CDiv').html('');
                     $('#EditDiv').html('');
@@ -162,6 +209,9 @@
                 }
             });
         }
+    
+
+    
 </script>
 
 

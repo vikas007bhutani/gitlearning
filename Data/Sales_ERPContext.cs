@@ -166,9 +166,7 @@ namespace SALEERP.Data
                     .HasColumnName("contract_startdate")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.Country)
-                    .HasColumnName("country")
-                    .HasMaxLength(50);
+                entity.Property(e => e.country_id).HasColumnName("country_id");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("created_by");
 

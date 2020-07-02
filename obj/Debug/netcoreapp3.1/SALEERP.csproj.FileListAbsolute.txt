@@ -450,3 +450,9 @@ G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\SALEERP.csprojAssemblyRe
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Commission\AddCommission.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Commission\PayIndex.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\Commission\PayCommission.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\AgentUser\Principle.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\AgentUser\Demo.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\AgentUser\Escort.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\AgentUser\Excursion.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\AgentUser\Leader.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\obj\Debug\netcoreapp3.1\Razor\Views\AgentUser\UpdateDemo.cshtml.g.cs

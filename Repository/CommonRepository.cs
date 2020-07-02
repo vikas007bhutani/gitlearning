@@ -52,7 +52,14 @@ namespace SALEERP.Repository
             _ag_unit = BindingListUtillity.GenerateSelectList(_unitmaster);
             return _ag_unit;
         }
-       
+        public List<SelectListItem> getcountry()
+        {
+            List<SelectListItem> _ag_country = new List<SelectListItem>();
+            List<CountriesMaster> _country = this._DBERP.CountriesMaster.Where(i => i.IsActive == true).ToList();
+            _ag_country = BindingListUtillity.GenerateSelectList(_country);
+            return _ag_country;
+        }
+
 
     }
 }

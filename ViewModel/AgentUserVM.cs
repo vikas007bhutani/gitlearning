@@ -21,6 +21,7 @@ namespace SALEERP.ViewModel
         [DisplayName("PAN")]
         public string Panno { get; set; } = string.Empty;
         public int? Parcheeid { get; set; } = 0;
+        public int? countryid { get; set; } = 0;
         public string Website { get; set; }= string.Empty;
         public string Contractformalities { get; set; } = string.Empty;
         public DateTime? Createddatetime { get; set; } = DateTime.Now;
@@ -28,6 +29,7 @@ namespace SALEERP.ViewModel
         public bool? IsActive { get; set; } = false;    
         public List<AgentContact> AgentContact { get; set; }
         public List<SelectListItem> vdetails { get; set; } = new List<SelectListItem>();
+        public List<SelectListItem> countrydetails { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> bdetails { get; set; } = new List<SelectListItem>();
         public List<BankDetails> BankDetails { get; set; } 
         public List<VehicleDetails> VehicleDetails { get; set; }

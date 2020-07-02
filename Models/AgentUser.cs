@@ -19,7 +19,8 @@ namespace SALEERP.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
-        public string Country { get; set; }
+      
+        public int? country_id { get; set; }
         public DateTime? ContractStartdate { get; set; }
         public string Panno { get; set; }
         public int? ParcheeId { get; set; }

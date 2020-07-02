@@ -18,7 +18,16 @@ namespace SALEERP.Controllers
     {
         IAgentUserRepository _agntusr;
         ICommonRepository _comm;
-       
+        Dictionary<string, String> Astatus = new Dictionary<string, String>
+{
+    { "dr", "UpdateDriver" },
+     { "pi", "UpdatePrinciple" },
+     { "te", "UpdateLeader" },
+     { "ec", "UpdateEscort" },
+     { "ex", "UpdateExcursion" },
+     { "gu", "UpdateGuide" },
+
+        };
         public AgentUserController(IAgentUserRepository _agentuserrepo, ICommonRepository comm)
         {
             this._agntusr = _agentuserrepo;
@@ -69,6 +78,58 @@ namespace SALEERP.Controllers
             _agent.AgentCode = agentid;
             return PartialView("Driver", _agent);
         }
+        public PartialViewResult Principle(string agentid)
+        {
+            AgentUserVM _agent = new AgentUserVM();
+          //  _agent.vdetails = _comm.getvehicles();
+            _agent.bdetails = _comm.getBanks();
+            _agent.AgentCode = agentid;
+            return PartialView("Principle", _agent);
+        }
+        public PartialViewResult Leader(string agentid)
+        {
+            AgentUserVM _agent = new AgentUserVM();
+            //  _agent.vdetails = _comm.getvehicles();
+            _agent.bdetails = _comm.getBanks();
+            _agent.AgentCode = agentid;
+            return PartialView("Leader", _agent);
+        }
+        public PartialViewResult Escort(string agentid)
+        {
+            AgentUserVM _agent = new AgentUserVM();
+            //  _agent.vdetails = _comm.getvehicles();
+            _agent.bdetails = _comm.getBanks();
+            _agent.AgentCode = agentid;
+            return PartialView("Escort", _agent);
+        }
+        public PartialViewResult Demo(string agentid)
+        {
+            AgentUserVM _agent = new AgentUserVM();
+            //  _agent.vdetails = _comm.getvehicles();
+            _agent.bdetails = _comm.getBanks();
+            _agent.countrydetails = _comm.getcountry();
+            _agent.AgentCode = agentid;
+            return PartialView("Demo", _agent);
+        }
+
+        public IActionResult SaveDemo(AgentUserVM _details)
+        {
+            AgentDetailsVM _alluser = new AgentDetailsVM();
+            string userid = HttpContext.User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.PrimarySid)
+                  .Select(c => c.Value).SingleOrDefault();
+            _agntusr.AddDemo(_details, Convert.ToInt32(userid));
+
+            _alluser = _agntusr.getAllAgentUsers();
+            return RedirectToAction("Index");
+        }
+        public PartialViewResult Excursion(string agentid)
+        {
+            AgentUserVM _agent = new AgentUserVM();
+            //  _agent.vdetails = _comm.getvehicles();
+            _agent.bdetails = _comm.getBanks();
+            _agent.AgentCode = agentid;
+            return PartialView("Excursion", _agent);
+        }
         public IActionResult SaveDriver(AgentUserVM _details)
         {
             AgentDetailsVM _alluser = new AgentDetailsVM();
@@ -95,19 +156,36 @@ namespace SALEERP.Controllers
             return View("Index", _agntusr.getAllAgentUsers());
         }
 
-        public ActionResult ShowEditPartailView(int id)
+        public ActionResult ShowEditAgent(int id,string code)
         {
+            string ViewName = string.Empty;
             AgentUserVM result = new AgentUserVM();
             if (ModelState.IsValid)
+
             {
                 result = this._agntusr.EditAgent(id);
                 result.bdetails = _comm.getBanks();
 
 
             }
+           
+          //  ViewName=
             //return View(staff);
-            return PartialView("UpdateDriver", result);
+            return PartialView(Astatus[code], result);
         }
+        //public ActionResult ShowEditDemo(int id)
+        //{
+        //    AgentUserVM result = new AgentUserVM();
+        //    if (ModelState.IsValid)
+        //    {
+        //        result = this._agntusr.EditAgent(id);
+        //        result.bdetails = _comm.getBanks();
+
+
+        //    }
+           
+        //    return PartialView("UpdateDemo", result);
+        //}
         public ActionResult UpdateDriver(AgentUserVM _ag)
         {
             if (ModelState.IsValid)

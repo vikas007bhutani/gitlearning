@@ -13,5 +13,6 @@ namespace SALEERP.Repository.Interface
         List<SelectListItem> getvehicles();
         List<SelectListItem> getBanks();
         List<SelectListItem> getunits();
+        List<SelectListItem> getcountry();
     }
 }
