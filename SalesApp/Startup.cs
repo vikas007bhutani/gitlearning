@@ -5,9 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SALEERP.Data;
+using SalesApp.Repository;
+using SalesApp.Repository.Interface;
 
 namespace SalesApp
 {
@@ -24,6 +28,11 @@ namespace SalesApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<Sales_ERPContext>(options =>
+               options.UseSqlServer(
+                   Configuration.GetConnectionString("ERPConnection")));
+            services.AddScoped<IMirrorRepository, MirrorRepository>();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +59,7 @@ namespace SalesApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Mirror}/{action=Index}/{id?}");
             });
         }
     }
