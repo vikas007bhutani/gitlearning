@@ -20,3 +20,15 @@ F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.csproj.Cor
 F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.dll
 F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.pdb
 F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.genruntimeconfig.cache
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.deps.json
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.runtimeconfig.json
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.runtimeconfig.dev.json
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.dll
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.pdb
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.csprojAssemblyReference.cache
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.AssemblyInfoInputs.cache
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.AssemblyInfo.cs
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.csproj.CoreCompileInputs.cache
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.dll
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.pdb
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.genruntimeconfig.cache

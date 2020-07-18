@@ -31,7 +31,14 @@ namespace SalesApp
             services.AddDbContext<Sales_ERPContext>(options =>
                options.UseSqlServer(
                    Configuration.GetConnectionString("ERPConnection")));
+
+            services.AddDbContext<ExportErpDbContext>(options =>
+        options.UseSqlServer(
+            Configuration.GetConnectionString("ExportERPSQLConnection")));
+
             services.AddScoped<IMirrorRepository, MirrorRepository>();
+            services.AddScoped<ICashSaleRepository, CashSaleRepository>();
+            services.AddScoped<ICommonRepository, CommonRepository>();
             services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 

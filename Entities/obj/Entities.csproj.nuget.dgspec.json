@@ -1,24 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Kishor\\Projects\\AkbarERP\\Entities\\Entities.csproj": {}
+    "G:\\enableIT\\SALEERP_OLD\\SALEERP\\Entities\\Entities.csproj": {}
   },
   "projects": {
-    "F:\\Kishor\\Projects\\AkbarERP\\Entities\\Entities.csproj": {
+    "G:\\enableIT\\SALEERP_OLD\\SALEERP\\Entities\\Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Kishor\\Projects\\AkbarERP\\Entities\\Entities.csproj",
+        "projectUniqueName": "G:\\enableIT\\SALEERP_OLD\\SALEERP\\Entities\\Entities.csproj",
         "projectName": "Entities",
-        "projectPath": "F:\\Kishor\\Projects\\AkbarERP\\Entities\\Entities.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "F:\\Kishor\\Projects\\AkbarERP\\Entities\\obj\\",
+        "projectPath": "G:\\enableIT\\SALEERP_OLD\\SALEERP\\Entities\\Entities.csproj",
+        "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
+        "outputPath": "G:\\enableIT\\SALEERP_OLD\\SALEERP\\Entities\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
