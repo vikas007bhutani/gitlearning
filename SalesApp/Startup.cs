@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using SALEERP.Data;
 using SalesApp.Repository;
 using SalesApp.Repository.Interface;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace SalesApp
 {

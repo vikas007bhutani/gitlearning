@@ -42,9 +42,35 @@ namespace SalesApp.Controllers
         }
         public async Task<IActionResult> AddSale(CashSaleVM saleetails)
         {
+            try
+            {
+                 await _csale.AddCashSale(saleetails,1);
+            }
+            catch (Exception ex)
+            {
 
-            //return View("Index", cashdetails);
-            return null;
+                ModelState.AddModelError("Error", "Stocknotfound");
+            }
+            CashSaleVM cashdetails = new CashSaleVM();
+            cashdetails = await _csale.GetSales(10009);
+            return View("Index",cashdetails);
+           
+        }
+        public async Task<IActionResult> DeleteSale(int orderid)
+        {
+            try
+            {
+                await _csale.DeleteCashSale(orderid, 1);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError("Error", "Stocknotfound");
+            }
+            CashSaleVM cashdetails = new CashSaleVM();
+            cashdetails = await _csale.GetSales(10009);
+            return View("Index", cashdetails);
+
         }
     }
 }

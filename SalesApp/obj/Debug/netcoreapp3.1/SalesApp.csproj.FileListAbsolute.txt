@@ -862,7 +862,6 @@ G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.App
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Buffers.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Collections.Concurrent.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Collections.dll
-G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Collections.Immutable.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Collections.NonGeneric.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Collections.Specialized.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.ComponentModel.Annotations.dll
@@ -879,7 +878,6 @@ G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Dat
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Data.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Diagnostics.Contracts.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Diagnostics.Debug.dll
-G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Diagnostics.DiagnosticSource.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Diagnostics.FileVersionInfo.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Diagnostics.Process.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\refs\System.Diagnostics.StackTrace.dll
@@ -1073,14 +1071,13 @@ G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\Entities.pdb
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.csprojAssemblyReference.cache
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.AssemblyInfoInputs.cache
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.AssemblyInfo.cs
-G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.csproj.CoreCompileInputs.cache
-G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.MvcApplicationPartsAssemblyInfo.cs
-G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.MvcApplicationPartsAssemblyInfo.cache
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.RazorAssemblyInfo.cache
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.RazorAssemblyInfo.cs
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.TagHelpers.input.cache
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.TagHelpers.output.cache
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.RazorCoreGenerate.cache
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\CashSale\Index.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\CashSale\PartialOrderList.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\Mirror\AddCashSale.cshtml.g.cs
@@ -1100,5 +1097,9 @@ G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\staticwebassets
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.pdb
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.genruntimeconfig.cache
-G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\CashSale\Index.cshtml.g.cs
-G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\CashSale\PartialOrderList.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.csproj.CoreCompileInputs.cache
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.MvcApplicationPartsAssemblyInfo.cs
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.MvcApplicationPartsAssemblyInfo.cache

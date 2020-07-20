@@ -30,7 +30,8 @@ namespace SalesApp.Utility
                 newSelectList.Add(new SelectListItem
                 {
                     Value = item.Id.ToString(),
-                    Text = item.Name
+                    Text = item.Name,
+                     Selected=false
                 });
             }
             return newSelectList;
