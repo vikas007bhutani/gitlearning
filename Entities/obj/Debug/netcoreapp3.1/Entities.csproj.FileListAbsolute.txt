@@ -20,3 +20,4 @@ F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.csproj.Cor
 F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.dll
 F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.pdb
 F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.genruntimeconfig.cache
+F:\Kishor\Projects\AkbarERP\Entities\obj\Debug\netcoreapp3.1\Entities.csprojAssemblyReference.cache

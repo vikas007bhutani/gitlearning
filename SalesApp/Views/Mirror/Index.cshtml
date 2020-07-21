@@ -1,56 +1,11 @@
-﻿@{
+﻿@model SalesApp.ViewModel.MirrorDetailsVM;
+@{
     ViewData["Title"] = "Home Page";
 }
 
-@*<div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    </div>*@
-
 <div class="wrapper">
     <!-- Sidebar  -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <a href="" class="big-logo"><img src="img/big-logo.png" /></a>
-            <a href="" class="small-logo"><img src="img/small-logo.png" /></a>
-        </div>
-
-        <div class="sidebar-content">
-            <button type="button" id="dismiss" class="btn btn-info">
-                <i class="las la-arrow-left"></i>
-            </button>
-            <div class="profile-setting">
-                <div class="profile-img big-profile">
-                    <img src="img/avatar-01.jpg">
-                </div>
-                <div class="profile-info big-profile-image">
-                    <p class="profile-name">Vikram Solomon</p>
-                    <p class="profile-designation">Sales executive</p>
-                </div>
-            </div>
-            <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#homeSubmenu"><i class="las la-chart-bar"></i> Dashboard</a>
-
-                </li>
-                <li>
-                    <a href="#homeSubmenu"><i class="las la-print"></i> Print Sale</a>
-
-                </li>
-                <li>
-                    <a href="#homeSubmenu"><i class="las la-toolbox"></i> Add Custom Category</a>
-
-                </li>
-                <li>
-                    <a href="#homeSubmenu"><i class="las la-shapes"></i> Add new item shapes</a>
-
-                </li>
-            </ul>
-
-        </div>
-
-
-    </nav>
+    <partial name="Sidebar.cshtml" />
 
     <!-- Page Content  -->
     <div id="content">
@@ -61,53 +16,7 @@
 
             <h1><span class="fbold">Sales</span> <span class="fregular">Application</span></h1>
 
-            <div class="account-wrap">
-                <div class="account-item clearfix js-item-menu">
-                    <div class="image">
-                        <img src="~/img/avatar-01.jpg" alt="John Doe" />
-                    </div>
-                    <div class="content-account">
-                        <a class="js-acc-btn" href="#">Parag Tawde</a>
-                    </div>
-                    <div class="account-dropdown js-dropdown">
-                        <div class="info clearfix">
-                            <div class="image">
-                                <a href="#">
-                                    <img src="~/img/avatar-01.jpg" alt="John Doe" />
-                                </a>
-                            </div>
-                            <div class="content-account">
-                                <h5 class="name">
-                                    <a href="#">Parag Tawde</a>
-                                </h5>
-                                <span class="email">Sales executive</span>
-                            </div>
-                        </div>
-                        <div class="account-dropdown__body">
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-account"></i>Account
-                                </a>
-                            </div>
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-settings"></i>Setting
-                                </a>
-                            </div>
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-money-box"></i>Billing
-                                </a>
-                            </div>
-                        </div>
-                        <div class="account-dropdown__footer">
-                            <a href="#">
-                                <i class="zmdi zmdi-power"></i>Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!--UserAccount / account-wrap-->
         </div>
 
         <div class="main-container">
@@ -145,27 +54,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-center action-td">
-                                                <!-- <a href=""><i class="las la-plus" data-toggle="modal" data-target="#chooseType"></i></a> -->
-                                                @*<a href="../add-cash-sale.html" class="btn btn-primary btn-dark-gray">Add Cash Sale</a>
-                                                <a href="../add-sale.html" class="btn btn-primary btn-blue">Add Sale</a>*@
-                                                <a asp-action="AddCashSale" class="btn btn-primary btn-dark-gray">Add Cash Sale </a>
-                                                <a asp-action="AddSale" class="btn btn-primary btn-blue"> Add Sale</a>
+                                        <!-- Mirros loop here-->
+                                        @foreach (var item in Model.Mirrors)
+                                        {
+                                            <tr>
+                                                <td class="text-center action-td">
+                                                    <!-- <a href=""><i class="las la-plus" data-toggle="modal" data-target="#chooseType"></i></a> -->
+                                                    @*<a href="../add-cash-sale.html" class="btn btn-primary btn-dark-gray">Add Cash Sale</a>
+                                                    <a href="../add-sale.html" class="btn btn-primary btn-blue">Add Sale</a>*@
+                                                    <a asp-action="AddCashSale" class="btn btn-primary btn-dark-gray">Add Cash Sale </a>
+                                                    <a asp-action="AddSale" class="btn btn-primary btn-blue"> Add Sale</a>
 
-                                            </td>
-                                            <td>
-                                                <p><span class="fregular heads">Person:</span><span class="fbold val">Girish Arora</span></p>
-                                                <p><span class="fregular heads">Mirror ID:</span><span class="fbold val">52546</span></p>
-                                            </td>
-                                            <td>-</td>
-                                            <td class="text-center">12</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>Kuoni</td>
-                                            <td>12/05/2020</td>
-                                        </tr>
-                                    </tbody>
+                                                </td>
+                                                <td>
+                                                    <p><span class="fregular heads">Person:</span><span class="fbold val">@item.driver?.FirstOrDefault().name</span></p>
+                                                    <p><span class="fregular heads">Mirror ID:</span><span class="fbold val">@item.mirrorid</span></p>
+                                                </td>
+                                                <td>@item.Languageid</td>
+                                                <td class="text-center">@item.Pax</td>
+                                                <td>@item.guide?.FirstOrDefault().name</td>
+                                                <td>@item.teamescort?.FirstOrDefault().name</td>
+                                                <td>-</td>
+                                                <td>@item.mirrordate.Value.ToShortDateString()</td>
+                                            </tr>
+                                        }
+                                        </tbody>
                                 </table>
                             </div>
                         </div>
@@ -211,7 +124,7 @@
 <!-- jQuery Custom Scroller CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="~/js/plugins.js"></script>
-<script src="~/js/main.js"></script> 
+<script src="~/js/main.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#sidebar").mCustomScrollbar({
