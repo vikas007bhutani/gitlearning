@@ -42,6 +42,8 @@ namespace SALEERP.Data
         public virtual DbSet<UserLogin> UserLogin { get; set; }
         public virtual DbSet<VehicleDetails> VehicleDetails { get; set; }
         public virtual DbSet<VehicleMaster> VehicleMaster { get; set; }
+        public virtual DbSet<CurrencyMaster> CurrencyMaster { get; set; }
+        public virtual DbSet<SpecialAdditionDetails> SpecialAdditionDetails { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -867,6 +869,9 @@ namespace SALEERP.Data
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.salestatus)
+                    .HasColumnName("sale_status");
+
                 entity.HasOne(d => d.Mirror)
                     .WithMany(p => p.OrderMaster)
                     .HasForeignKey(d => d.MirrorId)
@@ -1155,7 +1160,7 @@ namespace SALEERP.Data
 
             modelBuilder.Entity<SpecialEdition>(entity =>
             {
-                entity.ToTable("special_edition", "comm");
+                entity.ToTable("SpecialEditionMaster", "sales");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -1303,6 +1308,81 @@ namespace SALEERP.Data
                     .HasColumnName("type")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UpdatedDatetime)
+                    .HasColumnName("updated_datetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<CurrencyMaster>(entity =>
+            {
+                entity.ToTable("CurrencyMaster", "comm");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+
+                entity.Property(e => e.IsActive)
+                   .HasColumnName("is_active")
+                   .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.CreatedDatetime)
+                    .HasColumnName("created_datetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Priority).HasColumnName("priority");
+
+                entity.Property(e => e.Rate)
+                    .HasColumnName("rate")
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Symbol)
+                    .HasColumnName("symbol")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Type)
+                    .HasColumnName("type")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+
+                entity.Property(e => e.UpdatedDatetime)
+                    .HasColumnName("updated_datetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+            });
+            modelBuilder.Entity<SpecialAdditionDetails>(entity =>
+            {
+                entity.ToTable("special_addition_details", "sales");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.CreatedDatetime)
+                    .HasColumnName("created_datetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");
+
+                entity.Property(e => e.SpecialAdditionDesc)
+                    .HasColumnName("special_addition_desc")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.SpecialAdditionId).HasColumnName("special_addition_id");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasColumnName("updated_by")

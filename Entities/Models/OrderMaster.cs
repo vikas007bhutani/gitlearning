@@ -29,6 +29,7 @@ namespace SALEERP.Models
         public DateTime? UpdatedDatetime { get; set; }
         public bool? IsActive { get; set; }
 
+        public int? salestatus { get; set; }
         public virtual MirrorList Mirror { get; set; }
         public virtual ICollection<CustomerDetails> CustomerDetails { get; set; }
         public virtual ICollection<OrderItemDetails> OrderItemDetails { get; set; }
