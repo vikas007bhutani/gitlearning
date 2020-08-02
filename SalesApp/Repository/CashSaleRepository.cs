@@ -142,6 +142,48 @@ namespace SalesApp.Repository
             }
         }
 
+        public async Task<bool> FinishCashSale(int orderid, int userid)
+        {
+
+            bool result = false, innerresult = false;
+            try
+            {
+
+
+                using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
+                {
+
+
+                    var entity = await _SALESDBE.OrderMaster.FirstOrDefaultAsync(item => item.Id == orderid).ConfigureAwait(false);
+
+                    if (entity != null)
+                    {
+
+                        entity.CreatedDatetime = DateTime.Now;
+                        entity.salestatus = 1;
+                        // entity.UpdatedBy=
+                        this._SALESDBE.OrderMaster.Update(entity);
+                        innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        if (innerresult)
+                        {
+                            await dbusertrans.CommitAsync().ConfigureAwait(false);
+
+                        }
+                        else
+                        { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+
+                    }
+                }
+                return innerresult;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
         public async Task<CashSaleVM> GetSales(long _mirrorid)
         {
             CashSaleVM _cashsaledetails = new CashSaleVM();
@@ -166,6 +208,7 @@ namespace SalesApp.Repository
 
             _cashsaledetails.currencydetails = await _comm.GetCurrency();
             _cashsaledetails.specialadditions = await _comm.GetSpecialAddition();
+            _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
             return _cashsaledetails;
 
         }

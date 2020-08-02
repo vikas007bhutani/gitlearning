@@ -49,7 +49,7 @@ namespace SalesApp.Controllers
             catch (Exception ex)
             {
 
-                ModelState.AddModelError("Error", "Stocknotfound");
+                ModelState.AddModelError("Error", "Error:Add Sale Item");
             }
             CashSaleVM cashdetails = new CashSaleVM();
             cashdetails = await _csale.GetSales(10009);
@@ -64,8 +64,23 @@ namespace SalesApp.Controllers
             }
             catch (Exception ex)
             {
+                ModelState.AddModelError("Error", "Error:Delete Sale Item");
+            }
+            CashSaleVM cashdetails = new CashSaleVM();
+            cashdetails = await _csale.GetSales(10009);
+            return View("Index", cashdetails);
 
-                ModelState.AddModelError("Error", "Stocknotfound");
+        }
+        public async Task<IActionResult> FinishSale(int mirrorid)
+        {
+            try
+            {
+                await _csale.FinishCashSale(mirrorid, 1);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError("Error", "Error:Finished Sale Item");
             }
             CashSaleVM cashdetails = new CashSaleVM();
             cashdetails = await _csale.GetSales(10009);

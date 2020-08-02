@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SalesApp.ViewModel;
 
 namespace SalesApp.Repository
 {
@@ -29,13 +30,19 @@ namespace SalesApp.Repository
             _getcurrency = BindingListUtillity.GenerateSelectList(_currencymaster);
             return _getcurrency;
         }
-
         public async Task<List<SelectListItem>> GetSpecialAddition()
         {
             List<SelectListItem> _getspecialaddition = new List<SelectListItem>();
             List<SpecialEdition> _samaster = await this._DBERP.SpecialEdition.Where(i => i.IsActive == true).ToListAsync();
             _getspecialaddition = BindingListUtillity.GenerateSelectList(_samaster);
             return _getspecialaddition;
+        }
+        public async Task<List<SelectListItem>>  getroles()
+        {
+            List<SelectListItem> _getroles = new List<SelectListItem>();
+            List<LoginRoles> userroles = await this._DBERP.LoginRoles.Where(a => a.IsActive == true && a.Name.ToUpper()=="SALES").ToListAsync();
+            _getroles = BindingListUtillity.GenerateSelectList(userroles);
+            return _getroles;
         }
     }
 }

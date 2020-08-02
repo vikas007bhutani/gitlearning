@@ -15,6 +15,8 @@ namespace SalesApp.Repository.Interface
 
         public Task<bool> DeleteCashSale(int orderid,int userid);
 
+        public Task<bool> FinishCashSale(int orderid, int userid);
+
         public Task<CashSaleVM> GetSales(long mirrorid);
     }
 }
