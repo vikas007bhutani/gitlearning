@@ -554,7 +554,8 @@
                         </div>
                         <div style="float:right;align-content:center;margin-left:460px;">
                             <button type="submit" style="background-color:orangered" class="btn btn-info btn-flat">Finish</button>
-                            <button type="button" href="javascript:void(0)" style="background-color:orangered" class="btn btn-info btn-flat">Cancel</button>
+                            @Html.ActionLink("CANCEL", "Index", "Mirror","", new { @class = "btn btn-info btn-flat" })
+                            @*<button type="button" href="javascript:void(0)" style="background-color:orangered" class="">Cancel</button>*@
                         </div>
                         <!-- /.card -->
                         <!-- general form elements disabled -->

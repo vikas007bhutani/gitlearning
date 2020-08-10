@@ -26,18 +26,31 @@ namespace SALEERP.Controllers
             this._srch = _search;
             this._DBERP = dbcontext;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
            // _mir = _mir.getAllAgentUsers();
-            return View(_mir.getAllMirrors());
+            return View(await _mir.getAllMirrors());
         }
 
-        public IActionResult Add(MirrorDetailsVM _details)
+        public async Task<IActionResult> Add(MirrorDetailsVM _details)
         {
             MirrorDetailsVM _allmirror = new MirrorDetailsVM();
+            try
+            {
+
+          
+          
             string userid = HttpContext.User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.PrimarySid)
                    .Select(c => c.Value).SingleOrDefault();
-            _mir.AddMirror(_details, Convert.ToInt32(userid));
+            await _mir.AddMirror(_details, Convert.ToInt32(userid));
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(e.Message, e.Message);
+
+                return View(_mir.getAllMirrors());
+                // throw;
+            }
 
             return RedirectToAction("Index", _allmirror);
         }
@@ -54,20 +67,32 @@ namespace SALEERP.Controllers
             //return View(staff);
             return PartialView("UpdateMirror", result);
         }
-        public ActionResult UpdateMirror(MirrorDetailsVM _mr)
+        public async Task<ActionResult> UpdateMirror(MirrorDetailsVM _mr)
         {
             MirrorDetailsVM _allmirror = new MirrorDetailsVM();
-            if (ModelState.IsValid)
+            try
             {
-                string userid = HttpContext.User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.PrimarySid)
-                  .Select(c => c.Value).SingleOrDefault();
-                bool result = _mir.UpdateMirror(_mr, Convert.ToInt32(userid));
-                if (!result)
+
+
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, "Username/Password did not matched.Invalid Login!");
+                    string userid = HttpContext.User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.PrimarySid)
+                      .Select(c => c.Value).SingleOrDefault();
+                    bool result =await _mir.UpdateMirror(_mr, Convert.ToInt32(userid));
+                    if (!result)
+                    {
+                        ModelState.AddModelError(string.Empty, "Username/Password did not matched.Invalid Login!");
+                    }
+
+
                 }
+            }
+            catch (Exception e)
+            {
 
+                ModelState.AddModelError(e.Message, e.Message);
 
+                return View(_mir.getAllMirrors());
             }
             // return View("Index", _allPools);
             return RedirectToAction("Index", _allmirror);
