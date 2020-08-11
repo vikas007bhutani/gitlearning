@@ -52,7 +52,8 @@ namespace SalesApp.Repository
                                    name = au.Name,
                                    mob = d.Mobile,
                                    agentcode = au.Code,
-
+                                   Pax = m.Pax
+                                   //Languageid = m.LanguageId
 
                                }).ToList().GroupBy(c => c.mirrorid)
     .Select(g => new MirrorDetailVM
@@ -61,7 +62,9 @@ namespace SalesApp.Repository
         mirrordate = g.FirstOrDefault().mirrordate,
         principle = g.Where(c => c.agentcode == "pi").ToList(),
         driver = g.Where(c => c.agentcode == "dr").ToList(),
-        excursion = g.Where(c => c.agentcode == "gu").ToList()
+        excursion = g.Where(c => c.agentcode == "gu").ToList(),
+        Pax = g.FirstOrDefault().Pax
+
         // p= g.Where(c => c.agentcode == "pi").SelectMany(a=>a.name).SingleOrDefault().ToString()
     }).ToList();
 

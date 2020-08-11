@@ -24,6 +24,7 @@ namespace SalesApp.Controllers
         public IActionResult Index()
         {
             // _mir = _mir.getAllAgentUsers();
+            //return View(_mir.getAllMirrors());
             return View(_mir.getAllMirrors());
         }
 

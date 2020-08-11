@@ -17,7 +17,7 @@ namespace SalesApp.Controllers
             this._csale = _cashsale;
            
         }
-        public async  Task<IActionResult> Index()
+        public async  Task<IActionResult> Index(int id)
         {
             CashSaleVM cashdetails = new CashSaleVM();
             cashdetails = await _csale.Init();
