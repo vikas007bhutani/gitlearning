@@ -1,4 +1,4 @@
-﻿@model SALEERP.ViewModel.UserLoginVM;
+﻿@model SalesApp.ViewModel.UserLoginVM
 @{
     ViewData["Title"] = "Index";
     Layout = null;
@@ -27,16 +27,16 @@
     <link rel="stylesheet" type="text/css" href="~/vendor/select2/select2.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="~/css/util.css">
-    <link rel="stylesheet" type="text/css" href="~/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/loginmain.css" />
 </head>
 <body>
     <div class="limiter">
         <div class="container-login100" style="background-image: url('../images/img-01.jpg');">
             <div class="wrap-login100 p-t-50 p-b-0">
                 <form asp-action="Login" class="login100-form validate-form">
-                    
+
                     <span class="login100-form-title p-t-20 p-b-45">
-                       SALES TO ERP PANEL
+                       LOGIN TO SALES PANEL
                     </span>
                     <div class="wrap-input100 validate-input m-b-10" data-validate="Email is required">
                         <input asp-for="UserName" class="input100" placeholder="UserName" autofocus>

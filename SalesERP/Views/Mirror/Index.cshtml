@@ -73,10 +73,10 @@
                                     <th>
                                         Escort
                                     </th>
-                                    @*<th>
-                                        Guide
-                                    </th>
                                     <th>
+                                        Language
+                                    </th>
+                                    @*<th>
                                         Team Lead
                                     </th>*@
                                 </tr>
@@ -116,13 +116,16 @@
                                     @Html.Raw(e_names)
                                 </td>
                                 @*@foreach (var item1 in Model.Mirrors.Select(a => a.g.FirstOrDefault().name))
-                                {
-                                    e_names += item1 + ",";
+        {
+            e_names += item1 + ",";
 
-                                }
+        }
+        <td>
+            @Html.Raw(e_names)
+        </td>*@
                                 <td>
-                                    @Html.Raw(e_names)
-                                </td>*@
+                                    @Html.DisplayFor(modelItem => item.language)
+                                </td>
                                 <td>
                                     <a onclick="getEditView(@item.mirrorid)" href="javascript:void(0)">Edit</a>
                                     @*@Html.ActionLink("Edit", "Edit", new { id = item.StaffID })*@ |

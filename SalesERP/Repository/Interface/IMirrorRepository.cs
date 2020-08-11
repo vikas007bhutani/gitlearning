@@ -12,10 +12,10 @@ namespace SALEERP.Repository.Interface
     {
         public  Task<List<AgentUserVM>> GetNames(string terms);
         //public Task<List<AgentUserVM>> GetNames1(string terms);
-        MirrorDetailsVM getAllMirrors();
-        bool AddMirror(MirrorDetailsVM _mirror, int userid);
+        public Task<MirrorDetailsVM> getAllMirrors();
+        public Task<bool> AddMirror(MirrorDetailsVM _mirror, int userid);
         MirrorDetailsVM EditMirror(Int64 uid);
-        bool UpdateMirror(MirrorDetailsVM _agent, int uid);
+        public Task<bool> UpdateMirror(MirrorDetailsVM _agent, int uid);
 
     }
 }

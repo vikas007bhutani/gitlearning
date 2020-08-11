@@ -11,6 +11,7 @@ namespace SALEERP.ViewModel
         public int? agentid { get; set; } 
         public DateTime? mirrordate { get; set; } = null;
         public string name { get; set; } = string.Empty;
+        public string language { get; set; } = string.Empty;
         public string mob { get; set; } = string.Empty;
         public string agentcode { get; set; } = string.Empty;
         public List<MirrorDetailVM> driver { get; set; }

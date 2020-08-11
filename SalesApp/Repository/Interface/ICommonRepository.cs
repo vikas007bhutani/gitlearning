@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SalesApp.ViewModel;
 
 namespace SalesApp.Repository.Interface
 {
@@ -10,5 +11,6 @@ namespace SalesApp.Repository.Interface
     {
         Task<List<SelectListItem>> GetCurrency();
         Task<List<SelectListItem>> GetSpecialAddition();
+        Task<List<SelectListItem>>  getroles();
     }
 }

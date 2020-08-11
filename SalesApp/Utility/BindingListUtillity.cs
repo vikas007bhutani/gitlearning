@@ -36,5 +36,18 @@ namespace SalesApp.Utility
             }
             return newSelectList;
         }
+        public static List<SelectListItem> GenerateSelectList(List<LoginRoles> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.Id.ToString(),
+                    Text = item.Name
+                });
+            }
+            return newSelectList;
+        }
     }
 }

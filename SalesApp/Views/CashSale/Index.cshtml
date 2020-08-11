@@ -249,8 +249,7 @@
                                         <div class="inputGroup">
                                             <input id="option4" name="option4" type="checkbox">
                                             <label for="option4">Addition</label>
-                                        </div>*@
-                                                }
+                                        </div>*@}
                                             </div>
                                         </div>
 
@@ -258,7 +257,7 @@
                                     <div class="row mar-b-10">
                                         <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
                                             Currecny
-                                            @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control" })
+                                            @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
                                             @Html.ValidationMessageFor(model => model.currencyid, "", new { @class = "text-danger" })
 
                                             <div>
@@ -268,7 +267,7 @@
                                         <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
                                             @*<label for="ConversionRate">Conv. Rate</label>*@
                                             @Html.LabelFor(model => model.conversionrate)
-                                            @Html.EditorFor(model => model.conversionrate, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "0", step = "0.01",htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
                                             @Html.ValidationMessageFor(model => model.conversionrate, "", new { @class = "text-danger" })
                                             @*<input type="text" class="form-control" id="ConversionRate" placeholder="">*@
                                         </div>
@@ -276,9 +275,10 @@
 
                                             <div class="total-inra">
                                                 @Html.LabelFor(model => model.totalvalue)
-                                                @Html.EditorFor(model => model.totalvalue, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "0", step = "1",htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
                                                 @Html.ValidationMessageFor(model => model.totalvalue, "", new { @class = "text-danger" })
-                                                @*<input type="text" class="form-control" id="totalvalue" placeholder="">*@
+
+                                                <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
                                             </div>
 
                                         </div>
@@ -385,7 +385,7 @@
 
 
                         <div class="col-lg-12 text-right">
-                            <p class="grand-total"><span class="fregular head">Grand Total:</span><span class="fbold val"><i class="las la-rupee-sign"></i> 400</span></p>
+                            <p class="grand-total"><span class="fregular head">Grand Total:</span> <span class="fbold val"><i class="las la-rupee-sign"> @Html.DisplayFor(model => model.grandtotal)</i></span></p>
                         </div>
 
 
@@ -452,6 +452,7 @@
                            $('#itemstone').text(data[0].marblestone);
                            $('#itemcolor').text(data[0].marblecolor);
                            $('#totalvalue').val(data[0].price);
+                           $('#hdntotal').val(data[0].price)
                            $('#item_desc').val(data[0].category + ',' + data[0].itemname + ',' + data[0].size + ',' + data[0].marblecolor);
 
                        }
@@ -500,6 +501,26 @@
 
 
     $(document).ready(function () {
+
+        $(function () {
+            $('#conversionrate').blur(function () {
+                var rate = getNum(parseFloat($('#conversionrate').val()));
+                var price = getNum(parseFloat($('#hdntotal').val()));
+                var calculatefinal = (price)/(rate);
+
+                var finalinvoice = Math.round(calculatefinal * 100) / 100;
+                if (!isNaN(finalinvoice)) {
+                    $('#totalvalue').val(finalinvoice);
+                }
+                
+            });
+        });
+        function getNum(val) {
+            if (isNaN(val)) {
+                return 0;
+            }
+            return val;
+        }
         $("#sidebar").mCustomScrollbar({
             theme: "minimal"
         });

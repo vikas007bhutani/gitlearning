@@ -21,6 +21,7 @@ namespace SalesApp.ViewModel
         public int quantity { get; set; }
         public int sale_type { get; set; }
         public decimal totalvalue { get; set; }
+        public decimal? grandtotal { get; set; }
         public int userid { get; set; }
         public List<cashsaledetails> cashsaledetails { get; set; }
         public List<SelectListItem> currencydetails { get; set; } = new List<SelectListItem>();

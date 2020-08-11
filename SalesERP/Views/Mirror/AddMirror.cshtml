@@ -30,7 +30,7 @@
     });*@
     $(document).ready(function () {
 
-        $('body').on('focus', 'input[id^="Driver_List"] ', function(){
+        $('#driversection').on('focus', 'input[id^="Driver_List"] ', function(){
             $(this).autocomplete({
                 source: '@Url.Action("Driver_Search")',
                 select: function (event, ui) {
@@ -40,11 +40,13 @@
                     if (ui.item.value != null) {
                         debugger;
                         finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
+                        if (finalstring  == "") { finalstring = ui.item.value;}
                         mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+
                     }
 
                     $(this).val(finalstring);
-                    $(this).closest('input').find("input[name='mob']").val(mobstring);
+                    $(this).next('#driversection_mob').find('input[name=Mob]').val(mobstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;
@@ -53,7 +55,7 @@
             });
     });
 
-        $('body').on('focus', 'input[id^="PAgentID_List"] ', function(){
+        $('#psection').on('focus', 'input[id^="PAgentID_List"] ', function(){
             $(this).autocomplete({
                 source: '@Url.Action("Principle_Search")',
                 select: function (event, ui) {
@@ -67,7 +69,7 @@
             }
             });
         });
-         $('body').on('focus', 'input[id^="EAgentID_List"] ', function(){
+        $('#esection').on('focus', 'input[id^="EAgentID_List"] ', function(){
             $(this).autocomplete({
                 source: '@Url.Action("EAgent_Search")',
                 select: function (event, ui) {
@@ -81,7 +83,7 @@
             }
             });
          });
-        $('body').on('focus', 'input[id^="GuideAgentID_List"] ', function(){
+        $('#gsection').on('focus', 'input[id^="GuideAgentID_List"] ', function(){
             $(this).autocomplete({
                 source: '@Url.Action("Guide_Search")',
                 select: function (event, ui) {
@@ -95,7 +97,7 @@
             }
             });
         });
-        $('body').on('focus', 'input[id^="LeaderAgentID_List"] ', function(){
+        $('#leadsection').on('focus', 'input[id^="LeaderAgentID_List"] ', function(){
             $(this).autocomplete({
                 source: '@Url.Action("Lead_Search")',
                 select: function (event, ui) {
@@ -109,7 +111,7 @@
             }
             });
          });
-        $('body').on('focus', 'input[id^="EscortAgentID_List"] ', function(){
+        $('#escortsection').on('focus', 'input[id^="EscortAgentID_List"] ', function(){
             $(this).autocomplete({
                 source: '@Url.Action("Escort_Search")',
                 select: function (event, ui) {
@@ -123,7 +125,7 @@
             }
             });
         });
-        $('body').on('focus', 'input[id^="DemoAgentID_List"] ', function(){
+        $('#demosection').on('focus', 'input[id^="DemoAgentID_List"] ', function(){
             $(this).autocomplete({
                 source: '@Url.Action("Demo_Search")',
                 select: function (event, ui) {
@@ -181,7 +183,7 @@
                                 <tr>
                                     <td class="">
 
-                                        <div class="form-group">
+                                        <div id="driversection" class="form-group">
                                             @* <input type="hidden" id="agentid" value="" />*@
                                             @Html.HiddenFor(model => model.Driver_List[0].agentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
 
@@ -194,7 +196,7 @@
 
                                         </div>
                                     </td>
-                                    <td class="">
+                                    <td  id="driversection_mob"  class="">
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.Driver_List[0].Mob)
                                             @Html.EditorFor(model => model.Driver_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
@@ -284,25 +286,32 @@
                                     </div>
                                     <td class="">
                                         <!-- text input -->
-                                        <div class="form-group">
+                                        <div id="psection"  class="form-group">
                                             @Html.HiddenFor(model => model.PAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                             <label>Principle Agent</label>
                                             @Html.EditorFor(model => model.PAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                             @Html.ValidationMessageFor(model => model.PAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                           
+                                        </div>
+                                        <div id="psection_mob" >
                                             @Html.EditorFor(model => model.PAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
                                             @Html.ValidationMessageFor(model => model.PAgentID_List[0].Mob, "", new { @class = "text-danger" })
                                         </div>
                                     </td>
 
                                     <td class="">
-                                        <div class="form-group">
+                                        <div id="esection" class="form-group">
 
                                             @Html.HiddenFor(model => model.EAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                             <label>Excursion Agent</label>
                                             @Html.EditorFor(model => model.EAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                             @Html.ValidationMessageFor(model => model.EAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                          
+                                        </div>
+                                        <div>
                                             @Html.EditorFor(model => model.EAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
                                             @Html.ValidationMessageFor(model => model.EAgentID_List[0].Mob, "", new { @class = "text-danger" })
+
                                         </div>
                                     </td>
                                     <td></td>
@@ -337,7 +346,7 @@
                                     <tr>
                                         <td class="">
                                             <!-- text input -->
-                                            <div class="form-group">
+                                            <div id="gsection" class="form-group">
                                                 @Html.HiddenFor(model => model.GuideAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
                                                 <label>Guide Name</label>
 
@@ -345,9 +354,12 @@
 
                                                 @Html.EditorFor(model => model.GuideAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter  Name..." } })
                                                 @Html.ValidationMessageFor(model => model.GuideAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                               
+
+                                            </div>
+                                            <div>
                                                 @Html.EditorFor(model => model.GuideAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
                                                 @Html.ValidationMessageFor(model => model.GuideAgentID_List[0].Mob, "", new { @class = "text-danger" })
-
                                             </div>
                                         </td>
                                         <td></td>
@@ -361,7 +373,7 @@
                                     <table id="dataTablelead" cellpadding="0" cellspacing="0">
                                         <tr>
                                             <td class="">
-                                                <div class="form-group">
+                                                <div id="leadsection" class="form-group">
 
                                                     @Html.HiddenFor(model => model.LeaderAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
                                                     <label>Tour Leader</label>
@@ -370,9 +382,12 @@
 
                                                     @Html.EditorFor(model => model.LeaderAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                                     @Html.ValidationMessageFor(model => model.LeaderAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                                   
+
+                                                </div>
+                                                <div>
                                                     @Html.EditorFor(model => model.LeaderAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
                                                     @Html.ValidationMessageFor(model => model.LeaderAgentID_List[0].Mob, "", new { @class = "text-danger" })
-
                                                 </div>
                                             </td>
                                             <td></td>
@@ -387,7 +402,7 @@
                                 <table id="dataTableescort">
                                     <tr>
                                         <td class="">
-                                            <div class="form-group">
+                                            <div id="escortsection" class="form-group">
 
                                                 @Html.HiddenFor(model => model.EscortAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required"} })
                                                 <label>Tour Escort</label>
@@ -396,6 +411,10 @@
 
                                                 @Html.EditorFor(model => model.EscortAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                                 @Html.ValidationMessageFor(model => model.EscortAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                               
+
+                                            </div>
+                                            <div>
                                                 @Html.EditorFor(model => model.EscortAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
                                                 @Html.ValidationMessageFor(model => model.EscortAgentID_List[0].Mob, "", new { @class = "text-danger" })
 
@@ -457,14 +476,18 @@
                                         <table id="dataTabledemo" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td class="col-sm-2">
-                                                    <div class="form-group">
+                                                    <div id="demosection" class="form-group">
                                                         @Html.HiddenFor(model => model.DemoAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required"} })
-                                                        <label>Tour Escort</label>
+                                                        <label>Demo Person</label>
 
 
 
                                                         @Html.EditorFor(model => model.DemoAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
                                                         @Html.ValidationMessageFor(model => model.DemoAgentID_List[0].agentname, "", new { @class = "text-danger" })
+                                                      
+
+                                                    </div>
+                                                    <div>
                                                         @Html.EditorFor(model => model.DemoAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
                                                         @Html.ValidationMessageFor(model => model.DemoAgentID_List[0].Mob, "", new { @class = "text-danger" })
 

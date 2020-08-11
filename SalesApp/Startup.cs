@@ -28,6 +28,12 @@ namespace SalesApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("CookieAuthentication")
+                .AddCookie("CookieAuthentication", config =>
+                {
+                    config.Cookie.Name = "UserLoginCookie";
+                    config.LoginPath = "/Account/Login";
+                });
             services.AddControllersWithViews();
             services.AddDbContext<Sales_ERPContext>(options =>
                options.UseSqlServer(
@@ -40,6 +46,7 @@ namespace SalesApp
             services.AddScoped<IMirrorRepository, MirrorRepository>();
             services.AddScoped<ICashSaleRepository, CashSaleRepository>();
             services.AddScoped<ICommonRepository, CommonRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 
@@ -67,7 +74,7 @@ namespace SalesApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Mirror}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Index}/{id?}");
             });
         }
     }
