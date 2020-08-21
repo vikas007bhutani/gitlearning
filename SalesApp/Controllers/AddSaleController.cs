@@ -20,7 +20,7 @@ namespace SalesApp.Controllers
         public async Task<IActionResult> Index(int id)
         {
             CashSaleVM cashdetails = new CashSaleVM();
-            cashdetails = await _csale.Init();
+            cashdetails = await _csale.Init(id);
             return View("Index", cashdetails);
         }
 

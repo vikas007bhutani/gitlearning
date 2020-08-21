@@ -10,7 +10,7 @@ namespace SalesApp.Repository.Interface
    public interface ICashSaleRepository
     {
         public Task<List<StockDetailVM>> GetStock(string terms);
-        public Task<CashSaleVM> Init();
+        public Task<CashSaleVM> Init(int mirrorId);
         public Task<bool> AddCashSale(CashSaleVM _user, int userid);
 
         public Task<bool> DeleteCashSale(int orderid,int userid);

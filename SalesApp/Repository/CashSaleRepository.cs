@@ -247,7 +247,7 @@ namespace SalesApp.Repository
 
         }
 
-        public async Task<CashSaleVM> Init()
+        public async Task<CashSaleVM> Init(int mirrorId)
         {
             CashSaleVM _cashsaledetails = new CashSaleVM();
             CommonRepository _comm = new CommonRepository(_SALESDBE);
