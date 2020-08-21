@@ -11,6 +11,8 @@ namespace SalesApp.ViewModel
     {
 
         public long mirrorid { get; set; }
+
+        public long orderid { get; set; }
         public DateTime mirrordate { get; set; }
         public int  specialaddition { get; set; }
         public string customspecialaddition { get; set; }

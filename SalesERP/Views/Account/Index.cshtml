@@ -45,13 +45,13 @@
                             <i class="fa fa-user"></i>
                         </span>
                     </div>
-                    <div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
-                        <input asp-for="UserPass" class="input100" type="password" placeholder="Password">
+                    @*<div class="wrap-input100 validate-input m-b-10" >
+                        <input asp-for="UserPass" class="input100" type="password" disabled placeholder="Password">
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
                             <i class="fa fa-lock"></i>
                         </span>
-                    </div>
+                    </div>*@
                     <div class="wrap-input100 validate-input m-b-10" data-validate="Please select Role">
                         <select asp-for="RoleId" asp-items="Model.loginroles" class="input100">
                             <option value="">-- Please select --</option>

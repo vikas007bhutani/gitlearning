@@ -13,10 +13,13 @@ namespace SALEERP.Models
         public string State { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
+        public int? countryid { get; set; }
+        public string nationality { get; set; }
         public string Zipcode { get; set; }
         public string Mobile { get; set; }
         public string Telephone { get; set; }
         public string TeleCountryCode { get; set; }
+        public string MobCountryCode { get; set; }
         public string Email { get; set; }
         public string PassportNo { get; set; }
         public string Airport { get; set; }

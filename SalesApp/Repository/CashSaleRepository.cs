@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SalesApp.Utility;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SalesApp.Repository
 {
@@ -26,33 +27,46 @@ namespace SalesApp.Repository
 
         }
 
-        public async Task<bool> AddCashSale(CashSaleVM _sale, int userid)
+        public async Task<Int64> AddCashSale([Bind("orderid")] CashSaleVM _sale, int userid)
         {
             bool result = false, innerresult = false;
+            long uid = 0;
             try
             {
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
-                    await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
-                    {
-                        MirrorId = 10009,
-                        SaleDate = DateTime.Now,
-                        DelieveryType = 0,
-                        SaleType = 2,
-                        PortType = 0,
-                        Unit = 1,
-                        Description = "SaleType",
-                        TransactionId = Common.GetUnique(),
-                        CreatedDatetime = DateTime.Now,
-                        IsActive = true,
-                        salestatus = 1
+                    //if (_sale.orderid > 0)
+                    //{
+                        var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid && i.MirrorId == 2).ConfigureAwait(false);
+                        if (entityorder != null && entityorder.Id > 0)
+                        {
+                            uid = entityorder.Id;
+                        }
+                        else
+                        {
+                            await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
+                            {
+                                MirrorId = 2,
+                                SaleDate = DateTime.Now,
+                                DelieveryType = 0,
+                                SaleType = 2,
+                                PortType = 0,
+                                Unit = 1,
+                                Description = "SaleType",
+                                TransactionId = Common.GetUnique(),
+                                CreatedDatetime = DateTime.Now,
+                                IsActive = true,
+                                salestatus = 1
 
-                    }).ConfigureAwait(false);
+                            }).ConfigureAwait(false);
 
-                    result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                    if (result)
+                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                        }
+                  //  }
+                    if (uid>0)
                     {
-                        long uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                       
 
                         await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
                         {
@@ -79,11 +93,12 @@ namespace SalesApp.Repository
                                 if (item != null)
                                 {
                                     await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
+                                    innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
                                 }
                             }
                         }
-                        innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                        if (innerresult)
+                       
+                        if (oid>0)
                         {
                             await dbusertrans.CommitAsync().ConfigureAwait(false);
 
@@ -99,7 +114,7 @@ namespace SalesApp.Repository
 
                 throw;
             }
-            return result;
+            return uid;
 
         }
 
@@ -184,7 +199,7 @@ namespace SalesApp.Repository
 
         }
 
-        public async Task<CashSaleVM> GetSales(long _mirrorid)
+        public async Task<CashSaleVM> GetSales(long _orderid)
         {
             CashSaleVM _cashsaledetails = new CashSaleVM();
             CommonRepository _comm = new CommonRepository(_SALESDBE);
@@ -192,7 +207,7 @@ namespace SalesApp.Repository
                                                       join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
                                                      on m.Id equals od.OrderId
 
-                                                      where m.MirrorId == _mirrorid
+                                                      where m.Id == _orderid
                                                       select new cashsaledetails
                                                       {
                                                           itemorderid = od.Id,
@@ -209,6 +224,7 @@ namespace SalesApp.Repository
             _cashsaledetails.currencydetails = await _comm.GetCurrency();
             _cashsaledetails.specialadditions = await _comm.GetSpecialAddition();
             _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
+            _cashsaledetails.orderid = _orderid;
             return _cashsaledetails;
 
         }
