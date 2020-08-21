@@ -149,8 +149,9 @@
                                             <td class="text-center action-td">
                                                 <!-- <a href=""><i class="las la-plus" data-toggle="modal" data-target="#chooseType"></i></a> -->
                                                 @*<a href="../add-cash-sale.html" class="btn btn-primary btn-dark-gray">Add Cash Sale</a>
-                                                <a href="../add-sale.html" class="btn btn-primary btn-blue">Add Sale</a>*@
-                                                <a asp-action="AddCashSale" class="btn btn-primary btn-dark-gray">Add Cash Sale </a>
+        <a href="../add-sale.html" class="btn btn-primary btn-blue">Add Sale</a>*@
+                                                @Html.ActionLink("Add Cash Sale", "Index", "CashSale", "", new { @class = "btn btn-primary btn-dark-gray" })
+                                                @*<a asp-action="CashSale" class="btn btn-primary btn-dark-gray"> </a>*@
                                                 <a asp-action="AddSale" class="btn btn-primary btn-blue"> Add Sale</a>
 
                                             </td>

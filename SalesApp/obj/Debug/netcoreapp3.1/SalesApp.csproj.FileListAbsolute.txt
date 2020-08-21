@@ -1104,3 +1104,6 @@ G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\staticwebassets
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.pdb
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.genruntimeconfig.cache
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\CustomSale\Index.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\Shared\CustomerDetails.cshtml.g.cs
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\Razor\Views\Shared\CustomItem.cshtml.g.cs

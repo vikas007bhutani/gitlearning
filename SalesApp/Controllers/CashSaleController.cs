@@ -42,19 +42,23 @@ namespace SalesApp.Controllers
         }
         public async Task<IActionResult> AddSale(CashSaleVM saleetails)
         {
+            CashSaleVM cashdetails = new CashSaleVM();
+            Int64 _orderid = 0;
+            ModelState.Clear();
             try
             {
-                 await _csale.AddCashSale(saleetails,1);
+                 _orderid=   await _csale.AddCashSale(saleetails,1);
+                cashdetails = await _csale.GetSales(_orderid);
+             
             }
             catch (Exception ex)
             {
 
                 ModelState.AddModelError("Error", "Error:Add Sale Item");
             }
-            CashSaleVM cashdetails = new CashSaleVM();
-            cashdetails = await _csale.GetSales(10009);
-            return View("Index",cashdetails);
-           
+            return View("Index", cashdetails);
+
+
         }
         public async Task<IActionResult> DeleteSale(int orderid)
         {

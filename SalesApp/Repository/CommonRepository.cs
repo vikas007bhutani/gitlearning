@@ -44,5 +44,58 @@ namespace SalesApp.Repository
             _getroles = BindingListUtillity.GenerateSelectList(userroles);
             return _getroles;
         }
+
+        public async Task<List<SelectListItem>> GetShapes()
+        {
+            List<SelectListItem> _getshapes = new List<SelectListItem>();
+            List<Shape> allshapes = await this._DBERP.Shape.ToListAsync();
+            _getshapes = BindingListUtillity.GenerateSelectList(allshapes);
+            return _getshapes;
+           // throw new NotImplementedException();
+        }
+
+        public async Task<List<SelectListItem>> GetMarbleColor()
+        {
+            List<SelectListItem> _getmarble = new List<SelectListItem>();
+            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a=>a.TypeId==13).ToListAsync();
+            _getmarble = BindingListUtillity.GenerateSelectList(allmarblecolor);
+            return _getmarble;
+        }
+
+        public async Task<List<SelectListItem>> GetCategory()
+        {
+            List<SelectListItem> _getcategory = new List<SelectListItem>();
+            List<ItemCategoryMaster> allcategory = await(from m in this._DBERP.ItemCategoryMaster 
+                                                                                      join od in this._DBERP.CategorySeparate
+                                                                                     on m.CategoryId equals od.Categoryid select new ItemCategoryMaster
+                                                                                     {
+                                                                                        CategoryId=m.CategoryId,
+                                                                                         CategoryName=m.CategoryName
+
+                                                                                     }
+
+                                                                                   
+                                                                                    ).ToListAsync();
+
+
+
+            _getcategory = BindingListUtillity.GenerateSelectList(allcategory);
+            return _getcategory;
+        }
+        public async Task<List<SelectListItem>> GetNationality()
+        {
+            List<SelectListItem> _getnationality = new List<SelectListItem>();
+            List<Nationality> _nationalitymaster = await this._DBERP.Nationality.ToListAsync();
+            _getnationality = BindingListUtillity.GenerateSelectList(_nationalitymaster);
+            return _getnationality;
+        }
+
+        public async Task<List<SelectListItem>> GetCountries()
+        {
+            List<SelectListItem> _getcountry = new List<SelectListItem>();
+            List<CountriesMaster> _countrymaster = await this._DBERP.CountriesMaster.Where(c=>c.IsActive==true).ToListAsync();
+            _getcountry = BindingListUtillity.GenerateSelectList(_countrymaster);
+            return _getcountry;
+        }
     }
 }

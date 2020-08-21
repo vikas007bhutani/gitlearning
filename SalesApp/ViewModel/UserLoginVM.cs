@@ -15,7 +15,7 @@ namespace SalesApp.ViewModel
         [StringLength(60, MinimumLength = 3)]
         [Required]
         public string UserName { get; set; }
-        [Required]
+     //   [Required]
         public string UserPass { get; set; }
         public string UserPhone { get; set; }
         public string UserEmail { get; set; }

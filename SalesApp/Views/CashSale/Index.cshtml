@@ -162,6 +162,7 @@
                                                 <label for="StockNumber">Stock No.</label>
                                                 <input type="text" class="form-control" id="StockNumber" asp-for="stockno" placeholder="" onblur="GetItemDetails()">
                                                 <input type="hidden" asp-for="item_desc" />
+                                               
                                             </div>
                                             <div class="description-container mobile-description">
                                                 <!-- <h5>Description</h5> -->
@@ -267,7 +268,7 @@
                                         <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
                                             @*<label for="ConversionRate">Conv. Rate</label>*@
                                             @Html.LabelFor(model => model.conversionrate)
-                                            @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "0", step = "0.01",htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "0", step = "0.01", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
                                             @Html.ValidationMessageFor(model => model.conversionrate, "", new { @class = "text-danger" })
                                             @*<input type="text" class="form-control" id="ConversionRate" placeholder="">*@
                                         </div>
@@ -275,16 +276,17 @@
 
                                             <div class="total-inra">
                                                 @Html.LabelFor(model => model.totalvalue)
-                                                @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "0", step = "1",htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "0", step = "1", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
                                                 @Html.ValidationMessageFor(model => model.totalvalue, "", new { @class = "text-danger" })
 
                                                 <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
+                                                <input type="hidden" asp-for="orderid" />
                                             </div>
 
                                         </div>
 
                                         <div class="col-lg-3 text-right col-md-3 col-sm-3 col-xs-6 col-6">
-                                            <button class="btn-blue">Add Item</button>
+                                            <button type="submit" class="btn-blue">Add Item</button>
                                         </div>
                                     </div>
                                 </div>
@@ -314,6 +316,7 @@
                                     <tbody>
 
                                         @if (Model.cashsaledetails != null)
+                                        {
                                             @if (Model.cashsaledetails.Count() > 0)
                                             {
                                                 @foreach (var item in Model.cashsaledetails)
@@ -336,7 +339,7 @@
                                                         </td>
                                                     </tr>
                                                 }
-                                                    }
+                                                }
                                             }
                                         @*<tr>
             <td class="table-description-td">

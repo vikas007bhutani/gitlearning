@@ -154,7 +154,17 @@ namespace SALEERP.Repository
                 if (result)
                 {
                     Int64 mid =await this._DBERP.MirrorDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
-                    foreach (var item in _mirror.Driver_List)
+
+                        await this._DBERP.MirrorList.AddAsync(new MirrorList()
+                        {
+                           MirrorId=mid,
+                            Status=1,
+                            CreatedBy = userid,
+                            CreatedDatetime = DateTime.Now
+
+                        }).ConfigureAwait(false);
+                        result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        foreach (var item in _mirror.Driver_List)
                     {
                         if (item != null)
                         {
@@ -192,6 +202,7 @@ namespace SALEERP.Repository
 
                                     }
 
+
                                 }
                                 else
                                 {
@@ -209,35 +220,81 @@ namespace SALEERP.Repository
 
                                 await this._DBERP.MirrorAgent.AddAsync(new MirrorAgent() { AgentId = item.agentId, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now, ParchiAmount = item.parchiamount, IsParchi = item.isparchiamount }).ConfigureAwait(false);
                                 innerresult =await this._DBERP.SaveChangesAsync() > 0;
-                                await this._DBERP.VehicleDetails.AddAsync(new VehicleDetails() { AgentId = item.agentId, VehicleId = item.vehicletypeid, Number = item.vehicleNo, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
-                                innerresultvehicle =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
 
-
-
-
-                                var entitycontact =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive == true).ConfigureAwait(false);
-                                if (entitycontact != null)
-                                {
-                                    if (entitycontact.AgentId != item.agentId)
+                                    var agentcontact = await _DBERP.AgentContact.Where(a => a.AgentId == item.agentId && a.IsActive == true).ToListAsync().ConfigureAwait(false);
+                                    var agentvehicle = await _DBERP.VehicleDetails.Where(a => a.AgentId == item.agentId && a.IsActive == true).ToListAsync().ConfigureAwait(false);
+                                    //if (agentUsers != null)
+                                    //{
+                                    //    foreach (var r in agentUsers)
+                                    //    {
+                                    //        r.IsActive = false;
+                                    //        r.Updateddatetime = DateTime.Now;
+                                    //    }
+                                    //    result = this._DBERP.SaveChanges() > 0;
+                                    //}
+                                    if (agentcontact.Count>0 && agentcontact != null)
                                     {
-                                        result = false;
-                                       await dbusertrans.RollbackAsync().ConfigureAwait(false);
-                                        return result;
+                                        foreach (var r in agentcontact)
+                                        {
+                                           
+                                            r.Mobile = item.Mob;
+                                            r.UpdatedDatetime = DateTime.Now;
+                                        }
+                                        result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                    }
+                                    else
+                                    {
 
+                                        await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentId, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                        innerresultcontact = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                    }
+                                    if (agentvehicle.Count > 0 &&  agentvehicle != null)
+                                    {
+                                        foreach (var r in agentvehicle)
+                                        {
+                                           
+                                            r.VehicleId = item.vehicletypeid;
+                                            r.Number = item.vehicleNo;
+                                            r.UpdatedDatetime = DateTime.Now;
+                                        }
+                                        result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                    }
+                                    else
+                                    {   await this._DBERP.VehicleDetails.AddAsync(new VehicleDetails() { AgentId = item.agentId, VehicleId = item.vehicletypeid, Number = item.vehicleNo, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                        innerresultvehicle = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                                     }
 
+                                    #region old
+                                    //await this._DBERP.VehicleDetails.AddAsync(new VehicleDetails() { AgentId = item.agentId, VehicleId = item.vehicletypeid, Number = item.vehicleNo, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                    //innerresultvehicle =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+
+
+
+
+                                    //var entitycontact =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive == true).ConfigureAwait(false);
+                                    //if (entitycontact != null)
+                                    //{
+                                    //    if (entitycontact.AgentId != item.agentId)
+                                    //    {
+                                    //        result = false;
+                                    //       await dbusertrans.RollbackAsync().ConfigureAwait(false);
+                                    //        return result;
+
+                                    //    }
+
+                                    //}
+                                    //else
+                                    //{
+
+                                    //   await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentId, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                    //    innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                    //}
+                                    #endregion
+
                                 }
-                                else
-                                {
 
-                                   await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentId, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
-                                    innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+
                                 }
-
-                            }
-
-
-                        }
                     }
                     bool innerresultpagent = false, innerresulteagnet = false, innerresultguide = false, innerresultleader = false, innerresultescort = false, innerresultdemo = false;
                     foreach (var item in _mirror.PAgentID_List)
@@ -298,35 +355,56 @@ namespace SALEERP.Repository
 
                             }
                         }
-                        else { 
+                        else {
+                                this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+
+                                var agentcontact = await _DBERP.AgentContact.Where(a => a.AgentId == item.agentid && a.IsActive == true).ToListAsync().ConfigureAwait(false);
                             
-                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
-
-                            var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive==true).ConfigureAwait(false);
-                            if (entitycontactnew != null)
-                            {
-                                if (entitycontactnew.AgentId != item.agentid)
+                                if (agentcontact.Count>0 && agentcontact != null)
                                 {
-                                    result = false;
-                                   await dbusertrans.RollbackAsync().ConfigureAwait(false);
-                                    return result;
+                                    foreach (var r in agentcontact)
+                                    {
+                                      
+                                        r.Mobile = item.Mob;
+                                        r.UpdatedDatetime = DateTime.Now;
+                                    }
+                                    result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                }
+                                else
+                                {
 
+                                    await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                    innerresultcontact = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                                 }
 
+
+                                
+                                #region old
+                                //    var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive==true).ConfigureAwait(false);
+                                //if (entitycontactnew != null)
+                                //{
+                                //    if (entitycontactnew.AgentId != item.agentid)
+                                //    {
+                                //        result = false;
+                                //       await dbusertrans.RollbackAsync().ConfigureAwait(false);
+                                //        return result;
+
+                                //    }
+
+                                //}
+                                //else
+                                //{
+
+                                //   await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                //    innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //}
+                                #endregion
+
+
+
+
                             }
-                            else
-                            {
-
-                               await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
-                                innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            }
-
-
-
-
-
-                        }
-                        innerresultpagent = this._DBERP.SaveChanges() > 0;
+                            innerresultpagent = this._DBERP.SaveChanges() > 0;
                     }
                     foreach (var item in _mirror.EAgentID_List)
                     {
@@ -384,30 +462,51 @@ namespace SALEERP.Repository
                         }
                         else
                         {
-                            // this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
-                            var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive == true).ConfigureAwait(false);
-                            if (entitycontactnew != null)
-                            {
-                                if (entitycontactnew.AgentId != item.agentid)
-                                {
-                                    result = false;
-                                   await dbusertrans.RollbackAsync().ConfigureAwait(false);
-                                    return result;
+                                 this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                var agentcontact = await _DBERP.AgentContact.Where(a => a.AgentId == item.agentid && a.IsActive == true).ToListAsync().ConfigureAwait(false);
 
+                                if (agentcontact.Count>0 && agentcontact != null)
+                                {
+                                    foreach (var r in agentcontact)
+                                    {
+                                       
+                                        r.Mobile = item.Mob;
+                                        r.UpdatedDatetime = DateTime.Now;
+                                    }
+                                    result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                }
+                                else
+                                {
+
+                                    await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                    innerresultcontact = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                                 }
 
+                               
+                                #region old
+                                //    var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive == true).ConfigureAwait(false);
+                                //if (entitycontactnew != null)
+                                //{
+                                //    if (entitycontactnew.AgentId != item.agentid)
+                                //    {
+                                //        result = false;
+                                //       await dbusertrans.RollbackAsync().ConfigureAwait(false);
+                                //        return result;
+
+                                //    }
+
+                                //}
+                                //else
+                                //{
+
+                                //  await  this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                //    innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //}
+                                #endregion
+
+
                             }
-                            else
-                            {
-
-                              await  this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
-                                innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            }
-
-
-
-                        }
-                        innerresulteagnet =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            innerresulteagnet =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                     }
                     foreach (var item in _mirror.EscortAgentID_List)
                     {
@@ -465,31 +564,50 @@ namespace SALEERP.Repository
                         }
                         else
                         {
+                                this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                var agentcontact = await _DBERP.AgentContact.Where(a => a.AgentId == item.agentid && a.IsActive == true).ToListAsync().ConfigureAwait(false);
 
-
-                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
-
-                            var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive == true).ConfigureAwait(false);
-                            if (entitycontactnew != null)
-                            {
-                                if (entitycontactnew.AgentId != item.agentid)
+                                if (agentcontact.Count>0 && agentcontact != null)
                                 {
-                                    result = false;
-                                  await  dbusertrans.RollbackAsync().ConfigureAwait(false);
-                                    return result;
+                                    foreach (var r in agentcontact)
+                                    {
+                                       
+                                        r.Mobile = item.Mob;
+                                        r.UpdatedDatetime = DateTime.Now;
+                                    }
+                                    result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                }
+                                else
+                                {
 
+                                    await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                    innerresultcontact = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                                 }
 
-                            }
-                            else
-                            {
+                                //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                #region old
+                                //    var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive == true).ConfigureAwait(false);
+                                //if (entitycontactnew != null)
+                                //{
+                                //    if (entitycontactnew.AgentId != item.agentid)
+                                //    {
+                                //        result = false;
+                                //      await  dbusertrans.RollbackAsync().ConfigureAwait(false);
+                                //        return result;
 
-                               await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
-                                innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            }
+                                //    }
 
-                        }
-                        innerresultescort =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //}
+                                //else
+                                //{
+
+                                //   await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                //    innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //}
+                                #endregion
+
+                            }
+                            innerresultescort =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                     }
                     foreach (var item in _mirror.GuideAgentID_List)
                     {
@@ -543,29 +661,50 @@ namespace SALEERP.Repository
                         }
                         else
                         {
-                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
-                            var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive == true).ConfigureAwait(false);
-                            if (entitycontactnew != null)
-                            {
-                                if (entitycontactnew.AgentId != item.agentid)
+                                this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                var agentcontact = await _DBERP.AgentContact.Where(a => a.AgentId == item.agentid && a.IsActive == true).ToListAsync().ConfigureAwait(false);
+
+                                if (agentcontact.Count>0 && agentcontact != null)
                                 {
-                                    result = false;
-                                  await  dbusertrans.RollbackAsync().ConfigureAwait(false);
-                                    return result;
-
+                                    foreach (var r in agentcontact)
+                                    {
+                                       
+                                        r.Mobile = item.Mob;
+                                        r.UpdatedDatetime = DateTime.Now;
+                                    }
+                                    result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                                 }
+                                else
+                                {
+
+                                    await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                    innerresultcontact = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                }
+                                #region old
+                                //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                //var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive == true).ConfigureAwait(false);
+                                //if (entitycontactnew != null)
+                                //{
+                                //    if (entitycontactnew.AgentId != item.agentid)
+                                //    {
+                                //        result = false;
+                                //      await  dbusertrans.RollbackAsync().ConfigureAwait(false);
+                                //        return result;
+
+                                //    }
+
+                                //}
+                                //else
+                                //{
+
+                                //  await  this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                //    innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //}
+                                #endregion
+
 
                             }
-                            else
-                            {
-
-                              await  this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
-                                innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            }
-
-
-                        }
-                        innerresultguide =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            innerresultguide =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                     }
                     foreach (var item in _mirror.LeaderAgentID_List)
                     {
@@ -573,7 +712,7 @@ namespace SALEERP.Repository
                         {
                           await  this._DBERP.AgentUser.AddAsync(new AgentUser()
                             {
-                                Code = "le",
+                                Code = "te",
                                 Name = item.agentname,
                                 Status = "new",
                                 IsActive = true,
@@ -619,30 +758,52 @@ namespace SALEERP.Repository
                         }
                         else
                         {
-                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
 
-                            var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive==true).ConfigureAwait(false);
-                            if (entitycontactnew != null)
-                            {
-                                if (entitycontactnew.AgentId != item.agentid)
+                                var agentcontact = await _DBERP.AgentContact.Where(a => a.AgentId == item.agentid && a.IsActive == true).ToListAsync().ConfigureAwait(false);
+
+                                if (agentcontact.Count>0 && agentcontact != null)
                                 {
-                                    result = false;
-                                 await   dbusertrans.RollbackAsync().ConfigureAwait(false);
-                                    return result;
-
+                                    foreach (var r in agentcontact)
+                                    {
+                                      
+                                        r.Mobile = item.Mob;
+                                        r.UpdatedDatetime = DateTime.Now;
+                                    }
+                                    result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                                 }
+                                else
+                                {
+
+                                    await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                    innerresultcontact = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                }
+                                #region old
+                               
+
+                                //var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive==true).ConfigureAwait(false);
+                                //if (entitycontactnew != null)
+                                //{
+                                //    if (entitycontactnew.AgentId != item.agentid)
+                                //    {
+                                //        result = false;
+                                //     await   dbusertrans.RollbackAsync().ConfigureAwait(false);
+                                //        return result;
+
+                                //    }
+
+                                //}
+                                //else
+                                //{
+
+                                //   await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
+                                //    innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //}
+                                #endregion
+
 
                             }
-                            else
-                            {
-
-                               await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now }).ConfigureAwait(false);
-                                innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            }
-
-
-                        }
-                        innerresultleader =await this._DBERP.SaveChangesAsync() > 0;
+                            innerresultleader =await this._DBERP.SaveChangesAsync() > 0;
                     }
                     foreach (var item in _mirror.DemoAgentID_List)
                     {
@@ -696,29 +857,50 @@ namespace SALEERP.Repository
                         }
                         else
                         {
+                                this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                var agentcontact = await _DBERP.AgentContact.Where(a => a.AgentId == item.agentid && a.IsActive == true).ToListAsync().ConfigureAwait(false);
 
-                            var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive==true).ConfigureAwait(false);
-                            if (entitycontactnew != null)
-                            {
-                                if (entitycontactnew.AgentId != item.agentid)
+                                if (agentcontact.Count > 0 && agentcontact != null)
                                 {
-                                    result = false;
-                                  await  dbusertrans.RollbackAsync().ConfigureAwait(false);
-                                    return result;
-
+                                    foreach (var r in agentcontact)
+                                    {
+                                       
+                                        r.Mobile = item.Mob;
+                                        r.UpdatedDatetime = DateTime.Now;
+                                    }
+                                    result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                                 }
+                                else
+                                {
+
+                                    await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                    innerresultcontact = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                }
+                                #region old
+
+                                //var entitycontactnew =await _DBERP.AgentContact.FirstOrDefaultAsync(i => i.Mobile == item.Mob && i.IsActive==true).ConfigureAwait(false);
+                                //if (entitycontactnew != null)
+                                //{
+                                //    if (entitycontactnew.AgentId != item.agentid)
+                                //    {
+                                //        result = false;
+                                //      await  dbusertrans.RollbackAsync().ConfigureAwait(false);
+                                //        return result;
+
+                                //    }
+
+                                //}
+                                //else
+                                //{
+
+                                //   await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
+                                //    innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //}
+                                #endregion
+                               
 
                             }
-                            else
-                            {
-
-                               await this._DBERP.AgentContact.AddAsync(new AgentContact() { AgentId = item.agentid, Mobile = item.Mob, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
-                                innerresultcontact =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            }
-
-                            //this._DBERP.MirrorAgent.Add(new MirrorAgent() { AgentId = item.agentid, MirrorId = mid, IsActive = true, CreatedBy = userid, CreatedDatetime = DateTime.Now });
-                        }
-                        innerresultdemo =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            innerresultdemo =await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                     }
 
                    await dbusertrans.CommitAsync().ConfigureAwait(false);
@@ -2103,16 +2285,17 @@ namespace SALEERP.Repository
 
 
                     }
-                    if (result)
-                    {
-                       await dbusertrans.CommitAsync();
-                        bool resultinner;
-                       resultinner=await afterupdateMirror(_mirror, uid);
+                    await dbusertrans.CommitAsync();
+                    bool resultinner;
+                    resultinner = await afterupdateMirror(_mirror, uid);
+                    //if (result)
+                    //{
+                      
 
                        
 
-                    }
-                    else { dbusertrans.Rollback(); }
+                    //}
+                   // else { dbusertrans.Rollback(); }
                     return true;
                 }
 

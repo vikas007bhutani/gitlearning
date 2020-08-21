@@ -45,6 +45,7 @@ namespace SalesApp
 
             services.AddScoped<IMirrorRepository, MirrorRepository>();
             services.AddScoped<ICashSaleRepository, CashSaleRepository>();
+            services.AddScoped<ICustomSaleRepository, CustomSaleRepository>();
             services.AddScoped<ICommonRepository, CommonRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddRazorPages().AddRazorRuntimeCompilation();
