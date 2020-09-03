@@ -60,8 +60,10 @@ namespace SalesApp.Controllers
 
                             var userPrincipal = new ClaimsPrincipal(new[] { SalesIdentity });
                             await HttpContext.SignInAsync(userPrincipal);
+                        //---
+                        _comm.SetLoggedInUserId(userid);
                             // userid = result.UserId;
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "Mirror");
                         }
                         else { ModelState.AddModelError(string.Empty, "Username/Password did not matched.Invalid Login!"); }
 
