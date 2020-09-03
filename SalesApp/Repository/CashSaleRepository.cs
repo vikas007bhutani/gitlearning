@@ -16,9 +16,13 @@ namespace SalesApp.Repository
 {
     public class CashSaleRepository : ICashSaleRepository
     {
+        #region Properties and Variables
         private ExportErpDbContext _ERPDB;
         private Sales_ERPContext _SALESDBE;
 
+        #endregion
+
+        #region Constructor and InIt Region
         public CashSaleRepository(Sales_ERPContext salesdbcontext, ExportErpDbContext exporterpdbcontext)
         {
 
@@ -26,7 +30,20 @@ namespace SalesApp.Repository
             this._SALESDBE = salesdbcontext;
 
         }
+        public async Task<CashSaleVM> Init(int mirrorId)
+        {
+            CashSaleVM _cashsaledetails = new CashSaleVM();
+            CommonRepository _comm = new CommonRepository(_SALESDBE);
+            _cashsaledetails.mirrorid = mirrorId;
+            _cashsaledetails.currencydetails = await _comm.GetCurrency();
+            _cashsaledetails.specialadditions = await _comm.GetSpecialAddition();
+            return _cashsaledetails;
 
+        }
+        #endregion
+
+        #region Add Sale, Delete Sale, Finish Sale Region
+        //#To DO:Remove Hard coded values and fetch from DB/Enums
         public async Task<Int64> AddCashSale([Bind("orderid")] CashSaleVM _sale, int userid)
         {
             bool result = false, innerresult = false;
@@ -37,36 +54,36 @@ namespace SalesApp.Repository
                 {
                     //if (_sale.orderid > 0)
                     //{
-                        var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid && i.MirrorId == 2).ConfigureAwait(false);
-                        if (entityorder != null && entityorder.Id > 0)
-                        {
-                            uid = entityorder.Id;
-                        }
-                        else
-                        {
-                            await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
-                            {
-                                MirrorId = 2,
-                                SaleDate = DateTime.Now,
-                                DelieveryType = 0,
-                                SaleType = 2,
-                                PortType = 0,
-                                Unit = 1,
-                                Description = "SaleType",
-                                TransactionId = Common.GetUnique(),
-                                CreatedDatetime = DateTime.Now,
-                                IsActive = true,
-                                salestatus = 1
-
-                            }).ConfigureAwait(false);
-
-                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
-                        }
-                  //  }
-                    if (uid>0)
+                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid && i.MirrorId == _sale.mirrorid).ConfigureAwait(false);
+                    if (entityorder != null && entityorder.Id > 0)
                     {
-                       
+                        uid = entityorder.Id;
+                    }
+                    else
+                    {
+                        await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
+                        {
+                            MirrorId = _sale.mirrorid,
+                            SaleDate = DateTime.Now,
+                            DelieveryType = 0,
+                            SaleType = 2, //will be Always Cash Sale in cash sale form, to be set from DB/Enum
+                            PortType = 0,
+                            Unit = 1,
+                            Description = "SaleType",
+                            TransactionId = Common.GetUnique(),
+                            CreatedDatetime = DateTime.Now,
+                            IsActive = true,
+                            salestatus = 1
+
+                        }).ConfigureAwait(false);
+
+                        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                    }
+                    //  }
+                    if (uid > 0)
+                    {
+
 
                         await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
                         {
@@ -74,7 +91,7 @@ namespace SalesApp.Repository
                             ItemDesc = _sale.item_desc,
                             StockId = _sale.stockno,
                             OrderType = (int?)SaleType.OrderForm,
-                            OrderTypePrefix = "O/F",
+                            OrderTypePrefix = _sale.saletypevalue,
                             ItemType = 1,
                             Price = _sale.totalvalue,
                             PriceInr = _sale.totalvalue,
@@ -97,8 +114,8 @@ namespace SalesApp.Repository
                                 }
                             }
                         }
-                       
-                        if (oid>0)
+
+                        if (oid > 0)
                         {
                             await dbusertrans.CommitAsync().ConfigureAwait(false);
 
@@ -124,30 +141,28 @@ namespace SalesApp.Repository
             try
             {
 
-           
-            using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
-            {
-
-               
-                var entity = await _SALESDBE.OrderItemDetails.FirstOrDefaultAsync(item => item.Id == orderid).ConfigureAwait(false);
-
-                if (entity != null)
+                using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
+                    var entity = await _SALESDBE.OrderItemDetails.FirstOrDefaultAsync(item => item.Id == orderid).ConfigureAwait(false);
 
-                    entity.CreatedDatetime = DateTime.Now;
-                    entity.IsActive = false;
-                    // entity.UpdatedBy=
-                     this._SALESDBE.OrderItemDetails.Update(entity);
-                    innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false)>0;
-                    if(innerresult)
+                    if (entity != null)
                     {
-                        await dbusertrans.CommitAsync().ConfigureAwait(false);
 
-                    }else
-                    { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+                        entity.CreatedDatetime = DateTime.Now;
+                        entity.IsActive = false;
+                        // entity.UpdatedBy=
+                        this._SALESDBE.OrderItemDetails.Update(entity);
+                        innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        if (innerresult)
+                        {
+                            await dbusertrans.CommitAsync().ConfigureAwait(false);
 
+                        }
+                        else
+                        { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+
+                    }
                 }
-            }
                 return innerresult;
             }
             catch (Exception)
@@ -199,6 +214,9 @@ namespace SalesApp.Repository
 
         }
 
+        #endregion
+
+        #region Common Methods
         public async Task<CashSaleVM> GetSales(long _orderid)
         {
             CashSaleVM _cashsaledetails = new CashSaleVM();
@@ -259,18 +277,128 @@ namespace SalesApp.Repository
             //StockDetailVM _sdetails = new StockDetailVM();
 
             return _list;
-
-
         }
 
-        public async Task<CashSaleVM> Init(int mirrorId)
+        public async Task<long> GetOderIdByOrderItemId(int orderItemId)
         {
-            CashSaleVM _cashsaledetails = new CashSaleVM();
-            CommonRepository _comm = new CommonRepository(_SALESDBE);
-            _cashsaledetails.currencydetails = await _comm.GetCurrency();
-            _cashsaledetails.specialadditions = await _comm.GetSpecialAddition();
-            return _cashsaledetails;
+            long orderId;
+
+            try
+            {
+                var entity = await _SALESDBE.OrderItemDetails.FirstOrDefaultAsync(item => item.Id == orderItemId).ConfigureAwait(false);
+                orderId = (long)entity.OrderId;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return orderId;
+        }
+
+        public Task<long> AddOrderPayment(OrderPaymentVM _payment, int userid)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Order Payment region
+        //#To DO:Remove Hard coded values and fetch from DB/Enums
+        public async Task<Int64> AddOrderPayment([Bind("orderid")] OrderPaymentVM _payment, int userid)
+        {
+            bool result = false, innerresult = false;
+            long uid = 0;
+            try
+            {
+                using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
+                {
+                    //if (_sale.orderid > 0)
+                    //{
+                    var entityorder = await this._SALESDBE.OrderPayment.FirstOrDefaultAsync(i => i.Id == _payment.orderid && i.MirrorId == _sale.mirrorid).ConfigureAwait(false);
+                    if (entityorder != null && entityorder.Id > 0)
+                    {
+                        uid = entityorder.Id;
+                    }
+                    else
+                    {
+                        await this._SALESDBE.OrderPayment.AddAsync(new OrderPayment()
+                        {
+                            OrderId = _payment.OrderId,
+                            PayDate = DateTime.Now,
+                            PayMode = 1, //Cash
+                            Amount = _payment.Amount,
+                            CardType = _payment.CardType,
+                            AmoutHd = _payment.AmoutHd,
+                            CreatedBy = _payment.CreatedBy,
+                            CreatedDatetime = DateTime.Now,
+                            Gst = _payment.Gst,
+                            Igst = _payment.Igst,
+                            UpdatedBy = userid,
+                            UpdateDatetime = DateTime.Now,
+                            IsActive = true
+                        }).ConfigureAwait(false);
+
+                        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                    }
+                    //  }
+                    if (uid > 0)
+                    {
+
+
+                        await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
+                        {
+                            OrderId = uid,
+                            ItemDesc = _sale.item_desc,
+                            StockId = _sale.stockno,
+                            OrderType = (int?)SaleType.OrderForm,
+                            OrderTypePrefix = _sale.saletypevalue,
+                            ItemType = 1,
+                            Price = _sale.totalvalue,
+                            PriceInr = _sale.totalvalue,
+                            ConversionRate = _sale.conversionrate,
+                            Unit = 1,
+                            CreatedDatetime = DateTime.Now,
+                            IsActive = true,
+
+                        }).ConfigureAwait(false);
+                        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
+                        foreach (var item in _sale.specialadditions)
+                        {
+                            if (item.Selected)
+                            {
+                                if (item != null)
+                                {
+                                    await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
+                                    innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                }
+                            }
+                        }
+
+                        if (oid > 0)
+                        {
+                            await dbusertrans.CommitAsync().ConfigureAwait(false);
+
+                        }
+                        else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+
+
+                    }
+                    */
+                    }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return uid;
 
         }
+        #endregion
     }
+
+
 }

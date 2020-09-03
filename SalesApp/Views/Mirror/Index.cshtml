@@ -74,7 +74,7 @@
                                                 <td class="text-center">@item.Pax</td>
                                                 <td>@item.guide?.FirstOrDefault().name</td>
                                                 <td>@item.teamescort?.FirstOrDefault().name</td>
-                                                <td>@item.principle?.FirstOrDefault().name</td>
+                                                <td>@if (item.principle != null && item.principle.Count > 0) {@item.principle.FirstOrDefault().name}</td>
                                                 <td>@item.mirrordate.Value.ToShortDateString()</td>
                                             </tr>
                                         }

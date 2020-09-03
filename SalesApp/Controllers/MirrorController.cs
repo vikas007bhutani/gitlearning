@@ -15,11 +15,13 @@ namespace SalesApp.Controllers
     public class MirrorController : Controller
     {
         IMirrorRepository _mir;
+        ICommonRepository _comm;
         private Sales_ERPContext _DBERP;
-        public MirrorController(IMirrorRepository _seriesrepo, Sales_ERPContext dbcontext)
+        public MirrorController(IMirrorRepository _seriesrepo, Sales_ERPContext dbcontext, ICommonRepository commonRepository)
         {
             this._mir = _seriesrepo;
             this._DBERP = dbcontext;
+            this._comm = commonRepository;
         }
         public IActionResult Index()
         {

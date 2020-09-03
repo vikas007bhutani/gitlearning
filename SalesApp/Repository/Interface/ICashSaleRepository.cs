@@ -18,5 +18,7 @@ namespace SalesApp.Repository.Interface
         public Task<bool> FinishCashSale(int orderid, int userid);
 
         public Task<CashSaleVM> GetSales(long mirrorid);
+        public Task<long> GetOderIdByOrderItemId(int orderItemId);
+        public Task<Int64> AddOrderPayment(OrderPaymentVM _payment, int userid);
     }
 }

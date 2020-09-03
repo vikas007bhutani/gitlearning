@@ -9,6 +9,8 @@ namespace SalesApp.Repository.Interface
 {
     public interface ICommonRepository
     {
+        void SetLoggedInUserId(int UserId);
+        int GetLoggedInUserId();
         Task<List<SelectListItem>> GetCurrency();
         Task<List<SelectListItem>> GetShapes();
         Task<List<SelectListItem>> GetMarbleColor();

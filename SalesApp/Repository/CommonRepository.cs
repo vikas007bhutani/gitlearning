@@ -9,18 +9,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SalesApp.ViewModel;
+using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.AspNetCore.Http;
 
 namespace SalesApp.Repository
 {
     public class CommonRepository : ICommonRepository
     {
         private Sales_ERPContext _DBERP;
+        public static int loggedInUserId;
         public CommonRepository(Sales_ERPContext dbcontext)
         {
 
             this._DBERP = dbcontext;
-
         }
+
         public CommonRepository()
         { }
         public async Task<List<SelectListItem>> GetCurrency()
@@ -96,6 +99,15 @@ namespace SalesApp.Repository
             List<CountriesMaster> _countrymaster = await this._DBERP.CountriesMaster.Where(c=>c.IsActive==true).ToListAsync();
             _getcountry = BindingListUtillity.GenerateSelectList(_countrymaster);
             return _getcountry;
+        }
+
+        public void SetLoggedInUserId(int UserId)
+        {
+            loggedInUserId = UserId;
+        }
+        public int GetLoggedInUserId()
+        {
+            return loggedInUserId;
         }
     }
 }
