@@ -139,8 +139,11 @@
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
                             <a href="" class="scan-btn-n"><i class="las la-qrcode"></i> Scan Item</a>
                         </div>
+                     
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
-                            <a href="" class="custom-btn-n"><i class="las la-plus"></i> Add Custom Item</a>
+                            @Html.ActionLink("Add Custom Item","Index","CustomSale",new { pgno = "1"}, new { @class = "custom-btn-n" })
+                            @*<a href="" class="custom-btn-n"><i class="las la-plus"></i> Add Custom Item</a>*@
+
                         </div>
                     </div>
                     @using (Html.BeginForm("AddSale", "CashSale"))
@@ -190,13 +193,13 @@
                                             <label for="add" class="lable-head">Type</label>
                                             <div class="type-group">
                                                 <div class="inputGroup">
-                                                    @Html.RadioButtonFor(m => m._saletype, SaleType.CashMemo, new { @name = "radio", @type = "radio", @id = "CashMemo" })
+                                                    @Html.RadioButtonFor(m => m._saletype, SaleType.CM, new { @name = "radio", @type = "radio", @id = "CashMemo" })
 
                                                   
                                                     <label for="radio1" class="cm-lable">C/M</label>
                                                 </div>
                                                 <div class="inputGroup">
-                                                    @Html.RadioButtonFor(m => m._saletype, SaleType.OrderForm, new { @name = "radio", @type = "radio", @id = "OrderForm" })
+                                                    @Html.RadioButtonFor(m => m._saletype, SaleType.OF, new { @name = "radio", @type = "radio", @id = "OrderForm" })
                                                     <label for="OrderForm" class="of-lable">O/F</label>
                                                 </div>
 
@@ -294,7 +297,7 @@
                         </div>
 
 
-                                                    }
+                   }
 
 
                     @*<partial name="PartialOrderList.cshtml" />*@

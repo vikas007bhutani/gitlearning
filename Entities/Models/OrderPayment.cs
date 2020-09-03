@@ -14,6 +14,7 @@ namespace SALEERP.Models
         public decimal? Igst { get; set; }
         public decimal? Gst { get; set; }
         public DateTime? PayDate { get; set; }
+        public int? CurrencyType { get; set; }
         public DateTime? CreatedDatetime { get; set; }
         public int? CreatedBy { get; set; }
         public int? UpdatedBy { get; set; }

@@ -132,19 +132,19 @@
                             </a>
                         </li>
                         <li>
-                            <a href="payment.html">
+                            <a class="active" onclick="manaagetab('4')">
                                 <span class="nav-icon-container"><i class="las la-credit-card"></i></span>
                                 <span class="nav-txt-container">Payment</span>
                             </a>
                         </li>
-                        <li class="stand-nav" onclick="manaagetab('2')">
-                            <a href="stands-delivery.html">
+                        <li>
+                            <a class="active" onclick="manaagetab('2')">
                                 <span class="nav-icon-container"><i class="as la-user-cog"></i></span>
                                 <span class="nav-txt-container">CustomerInfo</span>
                             </a>
                         </li>
                         <li>
-                            <a class="active" onclick="manaagetab('2')">
+                            <a class="active" onclick="manaagetab('3')">
                                 <span class="nav-icon-container"><i class="las la-truck"></i></span>
                                 <span class="nav-txt-container">Stand & Delivery</span>
                             </a>
@@ -152,7 +152,7 @@
                         </li>
 
                         <li>
-                            <a href="review.html">
+                            <a onclick="manaagetab('5')">
                                 <span class="nav-icon-container"><i class="las la-print"></i></span>
                                 <span class="nav-txt-container">Review & Print</span>
                             </a>
@@ -169,24 +169,22 @@
                 <div id="customer">
                     <partial name="~/Views/Shared/CustomerDetails.cshtml" model="Model" />
                 </div>
-
-
-
-
-
-
-
+                <div id="stand">
+                    <partial name="~/Views/Shared/standdelivery.cshtml" model="Model" />
+                </div>
+                <div id="payment">
+                    <partial name="~/Views/Shared/OrderPayment.cshtml" model="Model" />
+                </div>
+                <div id="review">
+                    <partial name="~/Views/Shared/Review.cshtml" model="Model" />
+                </div>
 
             </div>
 
-
             </div>
-
-       
-
 
         </div>
-
+    <input type="hidden" id="hdnpgno" value="@ViewBag.pgno" />
 
     </div>
     <div class="overlay"></div>
@@ -255,14 +253,42 @@
     }
 
         function manaagetab(id) {
+            debugger;
             if (id == "1") {
                 $('#item').show();
                 $('#customer').hide();
+                $('#stand').hide();
+                $('#payment').hide();
+                $('#review').hide();
+                
             }
             else if (id == "2") {
                 $('#customer').show();
                 $('#item').hide();
-            } else { $('#item').show(); }
+                $('#stand').hide();
+                $('#payment').hide();
+                $('#review').hide();
+            } else if (id == "3") {
+                $('#customer').hide();
+                $('#item').hide();
+                $('#stand').show();
+                $('#payment').hide();
+                $('#review').hide();
+            }
+            else if (id == "4") {
+                $('#customer').hide();
+                $('#item').hide();
+                $('#stand').hide();
+                $('#payment').show();
+                $('#review').hide();
+            } else if (id == "5") {
+                $('#customer').hide();
+                $('#item').hide();
+                $('#stand').hide();
+                $('#payment').hide();
+                $('#review').show();
+            }
+            else { $('#item').show(); }
 
         }
 
@@ -270,38 +296,64 @@
 
 
 
-    $(document).ready(function () {
+        $(document).ready(function () {
+            debugger;
+            var statesAvailable = $('#hdnpgno').val();
 
-        debugger;
+       
         var queryDict = {};
         location.search.substr(1).split("&").forEach(function (item) { queryDict[item.split("=")[0]] = item.split("=")[1] })
 
-        if (queryDict['tab'] != 'undefined') {
+            if (statesAvailable != 'undefined') {
 
-            if (queryDict['tab'] == "1") {
+                if (statesAvailable == "1") {
                 $('#item').show();
-                $('#customer').hide();
+                    $('#customer').hide();
+                    $('#stand').hide();
+                    $('#payment').hide();
+                    $('#review').hide();
             }
-            else if (queryDict['tab'] == "2") {
+                else if (statesAvailable == "2") {
                 $('#customer').show();
-                $('#item').hide();
-            } else { $('#item').show();}
+                    $('#item').hide();
+                    $('#stand').hide();
+                    $('#payment').hide();
+                    $('#review').hide();
+                } else if (statesAvailable == "3") {
+                    $('#customer').hide();
+                    $('#item').hide();
+                    $('#stand').show();
+                    $('#payment').hide();
+                    $('#review').hide();
+                } else if (statesAvailable == "4") {
+                    $('#customer').hide();
+                    $('#item').hide();
+                    $('#stand').hide();
+                    $('#payment').show();
+                    $('#review').hide();
+                } else if (id == "5") {
+                    $('#customer').hide();
+                    $('#item').hide();
+                    $('#stand').hide();
+                    $('#payment').hide();
+                    $('#review').show();
+                }else { $('#item').show();}
 
         }
-       
-        $(function () {
-            $('#conversionrate').blur(function () {
-                var rate = getNum(parseFloat($('#conversionrate').val()));
-                var price = getNum(parseFloat($('#hdntotal').val()));
-                var calculatefinal = (price)/(rate);
 
-                var finalinvoice = Math.round(calculatefinal * 100) / 100;
-                if (!isNaN(finalinvoice)) {
-                    $('#totalvalue').val(finalinvoice);
-                }
+        //$(function () {
+        //    $('#conversionrate').blur(function () {
+        //        var rate = getNum(parseFloat($('#conversionrate').val()));
+        //        var price = getNum(parseFloat($('#hdntotal').val()));
+        //        var calculatefinal = (price)/(rate);
 
-            });
-        });
+        //        var finalinvoice = Math.round(calculatefinal * 100) / 100;
+        //        if (!isNaN(finalinvoice)) {
+        //            $('#totalvalue').val(finalinvoice);
+        //        }
+
+        //    });
+        //});
         function getNum(val) {
             if (isNaN(val)) {
                 return 0;

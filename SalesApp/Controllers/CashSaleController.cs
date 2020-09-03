@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SalesApp.Repository;
 using SalesApp.Repository.Interface;
 using SalesApp.ViewModel;
@@ -21,6 +22,7 @@ namespace SalesApp.Controllers
         {
             CashSaleVM cashdetails = new CashSaleVM();
             cashdetails = await _csale.Init();
+            ViewBag.pgno = 1;
             return View("Index",cashdetails);
         }
         public async Task<List<StockDetailVM>> GetStockDetails(string stockid)

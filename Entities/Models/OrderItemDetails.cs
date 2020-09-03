@@ -21,6 +21,8 @@ namespace SALEERP.Models
         public string Shape { get; set; }
         public string Color { get; set; }
         public string Size { get; set; }
+        public string width { get; set; }
+        public string height { get; set; }
         public string Category { get; set; }
         public string Photo { get; set; }
         public string ItemDesc { get; set; }

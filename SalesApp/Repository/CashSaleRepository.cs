@@ -73,7 +73,7 @@ namespace SalesApp.Repository
                             OrderId = uid,
                             ItemDesc = _sale.item_desc,
                             StockId = _sale.stockno,
-                            OrderType = (int?)SaleType.OrderForm,
+                            OrderType = (int?)SaleType.OF,
                             OrderTypePrefix = "O/F",
                             ItemType = 1,
                             Price = _sale.totalvalue,
@@ -205,8 +205,7 @@ namespace SalesApp.Repository
             CommonRepository _comm = new CommonRepository(_SALESDBE);
             _cashsaledetails.cashsaledetails = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
                                                       join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
-                                                     on m.Id equals od.OrderId
-
+                                                      on m.Id equals od.OrderId
                                                       where m.Id == _orderid
                                                       select new cashsaledetails
                                                       {

@@ -51,6 +51,11 @@ namespace SALEERP.Data
         public virtual DbSet<ItemCategoryMaster> ItemCategoryMaster { get; set; }
         public virtual DbSet<Shape> Shape { get; set; }
         public virtual DbSet<Nationality> Nationality { get; set; }
+        public virtual DbSet<ItemMaster> ItemMaster { get; set; }
+        public virtual DbSet<Size> Size { get; set; }
+        public virtual DbSet<CardTypeMaster> CardTypeMaster { get; set; }
+        public virtual DbSet<PayLaterMaster> PayLaterMaster { get; set; }
+        public virtual DbSet<PayMethodMaster> PayMethodMaster { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -63,6 +68,86 @@ namespace SALEERP.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Size>(entity =>
+            {
+                entity.HasIndex(e => new { e.SizeId, e.Shapeid })
+                    .HasName("SizeIndex");
+
+                entity.Property(e => e.SizeId).ValueGeneratedNever();
+
+                entity.Property(e => e.Actualfullareasqyd)
+                    .HasColumnType("decimal(18, 4)")
+                    .HasComputedColumnSql("([dbo].[F_getfullareasqyd]([areaft],[mastercompanyid]))");
+
+                entity.Property(e => e.LengthFt).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.ProdLengthFt).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.ProdSizeFt).HasMaxLength(50);
+
+                entity.Property(e => e.ProdSizeMtr).HasMaxLength(50);
+
+                entity.Property(e => e.ProdWidthFt).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.SizeFt).HasMaxLength(50);
+
+                entity.Property(e => e.SizeInch).HasMaxLength(50);
+
+                entity.Property(e => e.SizeMtr).HasMaxLength(50);
+
+                entity.Property(e => e.Userid).HasColumnName("userid");
+
+                entity.Property(e => e.WidthFt).HasColumnType("decimal(10, 2)");
+            });
+            modelBuilder.Entity<ItemMaster>(entity =>
+            {
+                entity.HasKey(e => e.ItemId);
+
+                entity.ToTable("ITEM_MASTER");
+
+                entity.HasIndex(e => e.CategoryId)
+                    .HasName("IX_ITEM_MASTER");
+
+                entity.HasIndex(e => e.ItemType)
+                    .HasName("ITEM_MASTER_UnitId");
+
+                entity.HasIndex(e => e.MasterCompanyid)
+                    .HasName("IX_ITEM_MASTER_MastercompanyId");
+
+                entity.Property(e => e.ItemId)
+                    .HasColumnName("ITEM_ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CategoryId).HasColumnName("CATEGORY_ID");
+
+                entity.Property(e => e.Ismultipleconstruction)
+                    .HasColumnName("ISMULTIPLECONSTRUCTION")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.ItemCode)
+                    .IsRequired()
+                    .HasColumnName("ITEM_CODE")
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ItemName)
+                    .IsRequired()
+                    .HasColumnName("ITEM_NAME")
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Itemstatusbypassonfolio)
+                    .HasColumnName("ITEMSTATUSBYPASSONFOLIO")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Katiwithexportsize)
+                    .HasColumnName("KATIWITHEXPORTSIZE")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UnitTypeId).HasColumnName("UnitTypeID");
+
+                entity.Property(e => e.Userid).HasColumnName("userid");
+            });
             modelBuilder.Entity<Nationality>(entity =>
             {
                 entity.HasNoKey();
@@ -813,6 +898,14 @@ namespace SALEERP.Data
                     .HasColumnName("size")
                     .HasMaxLength(20);
 
+                entity.Property(e => e.width)
+                    .HasColumnName("width")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.height)
+                    .HasColumnName("height")
+                    .HasMaxLength(20);
+
                 entity.Property(e => e.StockId)
                     .HasColumnName("stock_id")
                     .HasMaxLength(50);
@@ -879,6 +972,14 @@ namespace SALEERP.Data
                     .HasColumnName("port_type")
                     .HasComment("used for seaport|airport");
 
+                entity.Property(e => e.PortName)
+                   .HasColumnName("port_name")
+                   .HasMaxLength(100);
+
+                entity.Property(e => e.PassportNo)
+                  .HasColumnName("passport_no")
+                  .HasMaxLength(50);
+
                 entity.Property(e => e.SaleDate)
                     .HasColumnName("sale_date")
                     .HasColumnType("datetime")
@@ -942,6 +1043,7 @@ namespace SALEERP.Data
                 entity.Property(e => e.Gst)
                     .HasColumnName("GST")
                     .HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CurrencyType).HasColumnName("currency_type");
 
                 entity.Property(e => e.Igst)
                     .HasColumnName("IGST")
@@ -1439,7 +1541,109 @@ namespace SALEERP.Data
             });
             modelBuilder.Entity<CarpetNumber>(entity =>
             {
-                entity.HasNoKey();
+               
+                entity.HasKey(e => e.StockNo)
+                   .HasName("PK__Carpet_Number__210CC53E");
+
+                entity.HasIndex(e => e.Companyid)
+                    .HasName("CarpetNumber_CompanyId");
+
+                entity.HasIndex(e => e.CurrentProStatus)
+                    .HasName("ix_Currentprostatus");
+
+                entity.HasIndex(e => e.IssRecStatus)
+                    .HasName("ix_issrecstatus");
+
+             
+
+                entity.HasIndex(e => e.OrderId)
+                    .HasName("CarpetNumber_orderid");
+
+                entity.HasIndex(e => e.PackingDetailId)
+                    .HasName("CarpetNumber_PackingDetailid");
+
+                entity.HasIndex(e => e.PackingId)
+                    .HasName("CarpetNumber_Packingid");
+
+                entity.HasIndex(e => e.Postfix)
+                    .HasName("IX_CarpetNumber_2");
+
+                entity.HasIndex(e => e.ProcessRecDetailId)
+                    .HasName("ix_ProcessrecDetailid");
+
+                entity.HasIndex(e => e.ProcessRecId)
+                    .HasName("ix_Processrecid");
+
+                entity.HasIndex(e => e.StockNo)
+                    .HasName("IX_CarpetNumber")
+                    .IsUnique();
+
+               
+
+                entity.HasIndex(e => e.TypeId)
+                    .HasName("CarpetNumber_Typeid");
+
+                entity.Property(e => e.StockNo).ValueGeneratedNever();
+
+                entity.Property(e => e.Comments)
+                    .HasColumnName("comments")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.Confirm)
+                    .HasColumnName("CONFIRM")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Confirmdate)
+                    .HasColumnName("confirmdate")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Damaged).HasColumnName("damaged");
+
+                entity.Property(e => e.Godownid).HasColumnName("godownid");
+
+                entity.Property(e => e.Ismobsend).HasColumnName("ismobsend");
+
+                entity.Property(e => e.item_finished_id).HasColumnName("Item_Finished_Id");
+
+                entity.Property(e => e.Locationid)
+                    .HasColumnName("LOCATIONID")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.OldStockNo).HasMaxLength(50);
+
+                entity.Property(e => e.PackDate)
+                    .HasColumnName("Pack_Date")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.PackSource)
+                    .HasColumnName("pack_source")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PackingDetailId).HasColumnName("PackingDetailID");
+
+                entity.Property(e => e.PackingId).HasColumnName("PackingID");
+
+                entity.Property(e => e.Prefix).HasMaxLength(10);
+
+                entity.Property(e => e.Price).HasColumnType("decimal(28, 2)");
+
+                entity.Property(e => e.ProcessRecDetailId).HasColumnName("Process_Rec_Detail_Id");
+
+                entity.Property(e => e.ProcessRecId).HasColumnName("Process_Rec_id");
+
+                entity.Property(e => e.RecDate)
+                    .HasColumnName("Rec_Date")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.TStockNo)
+                    .IsRequired()
+                    .HasColumnName("TStockNo")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Userid).HasColumnName("userid");
+
+
             });
 
             modelBuilder.Entity<CategorySeparate>(entity =>
@@ -1522,6 +1726,125 @@ namespace SALEERP.Data
                     .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Userid).HasColumnName("userid");
+            });
+            modelBuilder.Entity<CardTypeMaster>(entity =>
+            {
+                entity.ToTable("CardTypeMaster", "comm");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CardCode)
+                    .HasColumnName("card_code")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.CardDesc)
+                    .HasColumnName("card_desc")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CardName)
+                    .HasColumnName("card_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.CreatedDatetime)
+                    .HasColumnName("created_datetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UpdatedDatetime)
+                    .HasColumnName("updated_datetime")
+                    .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<PayLaterMaster>(entity =>
+            {
+                entity.ToTable("PayLaterMaster", "comm");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.CreatedDatetime)
+                    .HasColumnName("created_datetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.TypeCode)
+                    .HasColumnName("type_code")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.TypeDesc)
+                    .HasColumnName("type_desc")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.TypeName)
+                    .HasColumnName("type_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UpdatedDatetime)
+                    .HasColumnName("updated_datetime")
+                    .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<PayMethodMaster>(entity =>
+            {
+                entity.ToTable("PayMethodMaster", "comm");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasColumnName("created_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.CreatedDatetime)
+                    .HasColumnName("created_datetime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.IsActive)
+                    .HasColumnName("is_active")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.PayCode)
+                    .HasColumnName("pay_code")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.PayDesc)
+                    .HasColumnName("pay_desc")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.PayName)
+                    .HasColumnName("pay_name")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("updated_by")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UpdatedDatetime)
+                    .HasColumnName("updated_datetime")
+                    .HasColumnType("datetime");
             });
 
             OnModelCreatingPartial(modelBuilder);

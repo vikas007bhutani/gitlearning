@@ -13,8 +13,7 @@
         </div>
 
 
-        @using (Html.BeginForm("AddCustomSale", "CustomSale", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
+        @using (Html.BeginForm("AddCustomSale", "CustomSale", FormMethod.Post, new { enctype = "multipart/form-data" })) {
             @Html.AntiForgeryToken()
 
 
@@ -80,7 +79,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <label for="inputState">Size</label>
-                                            <input type="text" class="form-control" id="size" placeholder="">
+                                            <input type="text" asp-for="size">
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -95,19 +94,18 @@
 
                         </div>
 
-                        <div class="row ">
+                        @*<div class="row ">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="description-container desktop-description">
-                                    <!-- <h5>Description</h5> -->
-                                    <!-- <p><span class="fbold product-name">Buddha</span> <span class="fregular product-info">Sitting Buddha</span></p> -->
+                               
                                     <ul>
-                                        <li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold"> Buddha</span><span class="fregular"> Sitting Buddha</span><span class="divide">/</span><span class="fbold">0*0*6</span><span class="divide">/</span><span class="fbold">Marble</span><span class="divide">/</span><span class="fbold">White</span></p></li>
+                                        <li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold"><label asp-for="cashsaledetails[0].category"></label> </span><span class="divide">/</span><span class="fbold"><label asp-for="cashsaledetails[0].size"></label> </span><span class="divide">/</span><span class="fbold"><label asp-for="cashsaledetails[0].shape"></label> </span><span class="divide">/</span><span class="fbold"><label asp-for="cashsaledetails[0].color"></label> </span></p></li>
 
 
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
 
 
 
@@ -141,15 +139,13 @@
                                 <label for="inputState">Fx</label>
                                 @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
                                 @Html.ValidationMessageFor(model => model.currencyid, "", new { @class = "text-danger" })
-                                @*<select id="inputState" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option>...</option>
-                                </select>*@
+                             
                             </div>
+                            
                             <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
                                 @*<label for="ConversionRate">Conv. Rate</label>*@
                                 @Html.LabelFor(model => model.conversionrate)
-                                @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "0", step = "0.01", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "0", step = "0.1", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
                                 @Html.ValidationMessageFor(model => model.conversionrate, "", new { @class = "text-danger" })
                             </div>
                             <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6">
@@ -158,6 +154,7 @@
                                 @Html.ValidationMessageFor(model => model.totalvalue, "", new { @class = "text-danger" })
 
                                 <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
+                                <input type="hidden" asp-for="orderid" />
 
                             </div>
 
@@ -168,7 +165,8 @@
                     </div>
                 </div>
             </div>
-        }
+         }
+        
         <div class="row pad-t-0 pad-rl-20">
             <div class="col-lg-12 pad-0">
                 <div class="table-responsive table--no-card m-b-30">
@@ -176,8 +174,8 @@
                         <thead>
                             <tr>
                                 <th>Description</th>
-                                <th>Currency</th>
-                                <th>Total</th>
+                                <th>Fx</th>
+                                <th>INR</th>
                                 <th class="text-center">Action</th>
 
                             </tr>
@@ -194,7 +192,7 @@
                                         <tr>
                                             <td class="table-description-td">
                                                 <p class="table-description-p">
-                                                    <span class="table-stock-number">@Html.DisplayFor(modelItem => item.stockid)</span>
+                                                    @*<span class="table-stock-number">@Html.DisplayFor(modelItem => item.ordertype)</span>*@
                                                     <span class="table-type CM">@Html.DisplayFor(modelItem => item.ordertype)</span>
                                                 </p>
                                                 <p class="table-description">@Html.DisplayFor(modelItem => item.itemdesc)</p>
@@ -203,14 +201,14 @@
                                             <td><i class="las la-rupee-sign"></i> @Html.DisplayFor(modelItem => item.salevalueinr)</td>
                                             <td class="text-center">
 
-                                                @Html.ActionLink("Delete", "DeleteSale", "CashSale", new { orderid = item.itemorderid }, new { @class = "delete-item" })
+                                                @Html.ActionLink("Delete", "DeleteSale", "CustomSale", new { itemorderid = item.itemorderid }, new { @class = "delete-item" })
 
 
                                             </td>
                                         </tr>
                                     }
                                 }
-                                }
+                                
                         </table>
                     </div>
                 </div>
@@ -218,7 +216,7 @@
 
                 <div class="col-lg-12 text-right clearfix bg-pink">
 
-                    <p class="grand-total"><span class="fregular head">Grand Total:</span><span class="fbold val"><i class="las la-rupee-sign"></i> > @Html.DisplayFor(model => model.grandtotal)</span></p>
+                    <p class="grand-total"><span class="fregular head">Grand Total:</span><span class="fbold val"><i class="las la-rupee-sign"></i>  @Html.DisplayFor(model => model.grandtotal)</span></p>
                     <p class="info-txt"><!-- <i class="las la-info"></i>  -->Swipe Card Now !!</p>
                 </div>
 

@@ -22,6 +22,45 @@ namespace SalesApp.Utility
             }
             return newSelectList;
         }
+        public static List<SelectListItem> GenerateSelectListWidth(List<Size> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.WidthInch.ToString(),
+                    Text = item.WidthInch.ToString()
+                });
+            }
+            return newSelectList;
+        }
+        public static List<SelectListItem> GenerateSelectListLength(List<Size> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.LengthInch.ToString(),
+                    Text = item.LengthInch.ToString()
+                });
+            }
+            return newSelectList;
+        }
+        public static List<SelectListItem> GenerateSelectList(List<ItemMaster> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.ItemCode,
+                    Text = item.ItemName
+                });
+            }
+            return newSelectList;
+        }
         public static List<SelectListItem> GenerateSelectList(List<SpecialEdition> collection)
         {
             List<SelectListItem> newSelectList = new List<SelectListItem>();
@@ -56,7 +95,7 @@ namespace SalesApp.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.ShapeId.ToString(),
+                    Value = item.ShapeName,
                     Text = item.ShapeName
                 });
             }
@@ -70,7 +109,21 @@ namespace SalesApp.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.Id.ToString(),
+                    Value = item.Name,
+                    Text = item.Name
+                });
+            }
+            return newSelectList;
+
+        }
+        public static List<SelectListItem> GenerateSelectListcolor(List<DesignIntricacyComponentPlacementMarblecolor> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.Name,
                     Text = item.Name
                 });
             }
@@ -84,7 +137,7 @@ namespace SalesApp.Utility
             {
                 newSelectList.Add(new SelectListItem
                 {
-                    Value = item.CategoryId.ToString(),
+                    Value = item.CategoryName,
                     Text = item.CategoryName
                 });
             }
@@ -100,6 +153,32 @@ namespace SalesApp.Utility
                 {
                     Value = item.Id.ToString(),
                     Text = item.Nationality1
+                });
+            }
+            return newSelectList;
+        }
+        public static List<SelectListItem> GenerateSelectList(List<CardTypeMaster> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.Id.ToString(),
+                    Text = item.CardName
+                });
+            }
+            return newSelectList;
+        }
+        public static List<SelectListItem> GenerateSelectList(List<PayLaterMaster> collection)
+        {
+            List<SelectListItem> newSelectList = new List<SelectListItem>();
+            foreach (var item in collection)
+            {
+                newSelectList.Add(new SelectListItem
+                {
+                    Value = item.Id.ToString(),
+                    Text = item.TypeName
                 });
             }
             return newSelectList;

@@ -23,6 +23,29 @@ namespace SalesApp.Repository
         }
         public CommonRepository()
         { }
+        public async Task<List<SelectListItem>> GetWidth()
+        {
+            List<SelectListItem> _getwidth = new List<SelectListItem>();
+           // List<SelectListItem> _getlength = new List<SelectListItem>();
+            List<Size> _sizemaster = await this._DBERP.Size.ToListAsync();
+            _getwidth = BindingListUtillity.GenerateSelectListWidth(_sizemaster);
+          //  _getlength = BindingListUtillity.GenerateSelectListLength(_sizemaster);
+            return _getwidth;
+        }
+        public async Task<List<SelectListItem>> GetLenght()
+        {
+            List<SelectListItem> _getlength = new List<SelectListItem>();
+            List<Size> _sizemaster = await this._DBERP.Size.ToListAsync();
+            _getlength = BindingListUtillity.GenerateSelectListLength(_sizemaster);
+            return _getlength;
+        }
+        public async Task<List<SelectListItem>> GetItemName()
+        {
+            List<SelectListItem> _getItem = new List<SelectListItem>();
+            List<ItemMaster> _Itemmaster = await this._DBERP.ItemMaster.Where(i => i.CategoryId==55).ToListAsync();
+            _getItem = BindingListUtillity.GenerateSelectList(_Itemmaster);
+            return _getItem;
+        }
         public async Task<List<SelectListItem>> GetCurrency()
         {
             List<SelectListItem> _getcurrency = new List<SelectListItem>();
@@ -61,6 +84,13 @@ namespace SalesApp.Repository
             _getmarble = BindingListUtillity.GenerateSelectList(allmarblecolor);
             return _getmarble;
         }
+        public async Task<List<SelectListItem>> GetStandColor()
+        {
+            List<SelectListItem> _getmarble = new List<SelectListItem>();
+            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a => a.TypeId == 13).ToListAsync();
+            _getmarble = BindingListUtillity.GenerateSelectListcolor(allmarblecolor);
+            return _getmarble;
+        }
 
         public async Task<List<SelectListItem>> GetCategory()
         {
@@ -89,7 +119,21 @@ namespace SalesApp.Repository
             _getnationality = BindingListUtillity.GenerateSelectList(_nationalitymaster);
             return _getnationality;
         }
-
+        public async Task<List<SelectListItem>> GetCardType()
+        {
+            List<SelectListItem> _getcardtype = new List<SelectListItem>();
+            List<CardTypeMaster> _cardtypemaster = await this._DBERP.CardTypeMaster.ToListAsync();
+            _getcardtype = BindingListUtillity.GenerateSelectList(_cardtypemaster);
+            return _getcardtype;
+        }
+        public async Task<List<SelectListItem>> GetPayLaterType()
+        {
+            List<SelectListItem> _getpaylater = new List<SelectListItem>();
+            List<CardTypeMaster> _paylatermaster = await this._DBERP.CardTypeMaster.Where(i=>i.IsActive==true  && i.CardCode=="P").ToListAsync();
+            _getpaylater = BindingListUtillity.GenerateSelectList(_paylatermaster);
+            return _getpaylater;
+        }
+      
         public async Task<List<SelectListItem>> GetCountries()
         {
             List<SelectListItem> _getcountry = new List<SelectListItem>();

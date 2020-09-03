@@ -20,6 +20,8 @@ namespace SALEERP.Models
         public int? SaleType { get; set; }
         public int? PortType { get; set; }
         public string Description { get; set; }
+        public string PortName { get; set; }
+        public string PassportNo { get; set; }
         public int? Unit { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
