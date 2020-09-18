@@ -187,13 +187,13 @@
 
                                             <div class="form-group">
                                                 @* <input type="hidden" id="agentid" value="" />*@
-                                                @Html.HiddenFor(model => model.Mirrors[0].driver[j].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.HiddenFor(model => model.Mirrors[0].driver[j].agentid, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
 
 
 
                                                 @Html.LabelFor(model => model.Drivername)
                                                 @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
-                                                @Html.EditorFor(model => model.Mirrors[0].driver[j].name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.EditorFor(model => model.Mirrors[0].driver[j].name, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                                 @Html.ValidationMessageFor(model => model.Mirrors[0].driver[j].name, "", new { @class = "text-danger" })
 
                                             </div>
@@ -201,14 +201,14 @@
                                         <td class="">
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.Mob)
-                                                @Html.EditorFor(model => model.Mirrors[0].driver[j].mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.EditorFor(model => model.Mirrors[0].driver[j].mob, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                                 @Html.ValidationMessageFor(model => model.Mirrors[0].driver[j].mob, "", new { @class = "text-danger" })
                                             </div>
                                         </td>
                                         <td class="">
                                             <div class="form-group">
                                                 @Html.LabelFor(model => model.vehicleNo)
-                                                @Html.EditorFor(model => model.Mirrors[0].driver[j].vehicleNo, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.EditorFor(model => model.Mirrors[0].driver[j].vehicleNo, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                                 @Html.ValidationMessageFor(model => model.Mirrors[0].driver[j].vehicleNo, "", new { @class = "text-danger" })
                                             </div>
                                         </td>
@@ -230,7 +230,7 @@
 
                                                 @Html.LabelFor(model => model.Driver_List[0].parchiamount)
                                                 <div class="col-md-10">
-                                                    @Html.CheckBoxFor(model => model.Driver_List[0].isparchiamount, new { htmlAttributes = new { @class = "form-check-input" } })
+                                                    @Html.CheckBoxFor(model => model.Driver_List[0].isparchiamount, new { htmlAttributes = new { @class = "form-che ck-input" } })
                                                     @*<input class="form-check-input" value="@Model.Driver_List" type="checkbox">*@
                                                 </div>
 
@@ -298,9 +298,9 @@
                                                 <div class="form-group">
                                                     @Html.HiddenFor(model => model.Mirrors[0].principle[j].agentid, new { htmlAttributes = new { @class = "form-control", required = "required"} })
                                                     <label>Principle Agent</label>
-                                                    @Html.EditorFor(model => model.Mirrors[0].principle[j].name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                    @Html.EditorFor(model => model.Mirrors[0].principle[j].name, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Name ..." } })
                                                     @Html.ValidationMessageFor(model => model.Mirrors[0].principle[j].name, "", new { @class = "text-danger" })
-                                                    @Html.EditorFor(model => model.Mirrors[0].principle[j].mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                    @Html.EditorFor(model => model.Mirrors[0].principle[j].mob, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Mobile ..." } })
                                                     @Html.ValidationMessageFor(model => model.Mirrors[0].principle[j].mob, "", new { @class = "text-danger" })
                                                 </div>
                                             </td>
@@ -317,9 +317,9 @@
 
                                                     @Html.HiddenFor(model => model.Mirrors[0].excursion[k].agentid, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                                     <label>Excursion Agent</label>
-                                                    @Html.EditorFor(model => model.Mirrors[0].excursion[k].name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                    @Html.EditorFor(model => model.Mirrors[0].excursion[k].name, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Name ..." } })
                                                     @Html.ValidationMessageFor(model => model.Mirrors[0].excursion[k].name, "", new { @class = "text-danger" })
-                                                    @Html.EditorFor(model => model.Mirrors[0].excursion[k].mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                    @Html.EditorFor(model => model.Mirrors[0].excursion[k].mob, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Mobile ..." } })
                                                     @Html.ValidationMessageFor(model => model.Mirrors[0].excursion[k].mob, "", new { @class = "text-danger" })
                                                 </div>
                                             </td>
@@ -375,14 +375,14 @@
                                                 <td class="col-sm-3">
                                                     <!-- text input -->
                                                     <div class="form-group">
-                                                        @Html.HiddenFor(model => model.Mirrors[0].guide[m].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.HiddenFor(model => model.Mirrors[0].guide[m].agentid, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                                         <label>Guide Name</label>
 
 
 
-                                                        @Html.EditorFor(model => model.Mirrors[0].guide[m].name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                        @Html.EditorFor(model => model.Mirrors[0].guide[m].name, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Name ..." } })
                                                         @Html.ValidationMessageFor(model => model.Mirrors[0].guide[m].name, "", new { @class = "text-danger" })
-                                                        @Html.EditorFor(model => model.Mirrors[0].guide[m].mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                        @Html.EditorFor(model => model.Mirrors[0].guide[m].mob, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Mobile ..." } })
                                                         @Html.ValidationMessageFor(model => model.Mirrors[0].guide[m].mob, "", new { @class = "text-danger" })
 
 
@@ -410,14 +410,14 @@
                                                     <td class="">
                                                         <div class="form-group">
 
-                                                            @Html.HiddenFor(model => model.Mirrors[0].teamlead[n].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                            @Html.HiddenFor(model => model.Mirrors[0].teamlead[n].agentid, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                                             <label>Tour Leader</label>
 
 
 
-                                                            @Html.EditorFor(model => model.Mirrors[0].teamlead[n].name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                            @Html.EditorFor(model => model.Mirrors[0].teamlead[n].name, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Name ..." } })
                                                             @Html.ValidationMessageFor(model => model.Mirrors[0].teamlead[n].name, "", new { @class = "text-danger" })
-                                                            @Html.EditorFor(model => model.Mirrors[0].teamlead[n].mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                            @Html.EditorFor(model => model.Mirrors[0].teamlead[n].mob, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Mobile ..." } })
                                                             @Html.ValidationMessageFor(model => model.Mirrors[0].teamlead[n].mob, "", new { @class = "text-danger" })
 
                                                         </div>
@@ -450,9 +450,9 @@
 
 
 
-                                                            @Html.EditorFor(model => model.Mirrors[0].teamescort[o].name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                            @Html.EditorFor(model => model.Mirrors[0].teamescort[o].name, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Name ..." } })
                                                             @Html.ValidationMessageFor(model => model.Mirrors[0].teamescort[o].name, "", new { @class = "text-danger" })
-                                                            @Html.EditorFor(model => model.Mirrors[0].teamescort[o].mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                            @Html.EditorFor(model => model.Mirrors[0].teamescort[o].mob, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Mobile ..." } })
                                                             @Html.ValidationMessageFor(model => model.Mirrors[0].teamescort[o].mob, "", new { @class = "text-danger" })
 
                                                         </div>
@@ -491,7 +491,7 @@
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Pax</label>
-                                        @Html.EditorFor(model => model.Mirrors.FirstOrDefault().Pax, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                        @Html.EditorFor(model => model.Mirrors.FirstOrDefault().Pax, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                         @Html.ValidationMessageFor(model => model.Mirrors.FirstOrDefault().Pax, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -528,9 +528,9 @@
 
 
 
-                                                                @Html.EditorFor(model => model.Mirrors[0].demo[p].name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                                @Html.EditorFor(model => model.Mirrors[0].demo[p].name, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Name ..." } })
                                                                 @Html.ValidationMessageFor(model => model.Mirrors[0].demo[p].name, "", new { @class = "text-danger" })
-                                                                @Html.EditorFor(model => model.Mirrors[0].demo[p].mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                                @Html.EditorFor(model => model.Mirrors[0].demo[p].mob, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter Mobile ..." } })
                                                                 @Html.ValidationMessageFor(model => model.Mirrors[0].demo[p].mob, "", new { @class = "text-danger" })
 
                                                             </div>

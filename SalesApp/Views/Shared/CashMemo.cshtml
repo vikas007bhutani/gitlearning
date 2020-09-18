@@ -1,0 +1,27 @@
+﻿
+@model SalesApp.ViewModel.InvoiceVM;
+
+@{
+    ViewBag.Title = "Add Normal Sale Item";
+
+}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+    var _getValue = '@(Model.PdfUrl1 == null ? "isNull" : "notNull")';
+     var _getValue1 = '@(Model.PdfUrl2 == null ? "isNull" : "notNull")';
+    @*var url1 = @Model.PdfUrl1;
+    var  url2= @Model.PdfUrl2;*@
+    if (_getValue !== null && _getValue !== '' && _getValue !== undefined) {
+        window.open('@Model.PdfUrl1');
+    }
+    if (_getValue1 !== null && _getValue1 !== '' && _getValue1 !== undefined) {
+        window.open('@Model.PdfUrl2');
+    }
+    window.parent.close();
+
+
+
+</script>
+

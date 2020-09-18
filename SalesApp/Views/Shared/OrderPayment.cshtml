@@ -9,42 +9,7 @@
 
 
 
-        @*<div class="sale-process-nav">
-                <ul>
-                    <li>
-                        <a href="add-sale.html">
-                            <span class="nav-icon-container"><i class="las la-shopping-cart"></i></span>
-                            <span class="nav-txt-container">Add Item</span>
-                        </a>
-                    </li>
-                    <li class="active">
-                        <a href="payment.html">
-                            <span class="nav-icon-container"><i class="las la-credit-card"></i></span>
-                            <span class="nav-txt-container">Payment</span>
-                        </a>
-                    </li>
-                    <li class="stand-nav">
-                        <a href="stands-delivery.html">
-                            <span class="nav-icon-container"><i class="las la-truck"></i></span>
-                            <span class="nav-txt-container">Stand & Delivery</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="customer-info.html">
-                            <span class="nav-icon-container"><i class="las la-user-cog"></i></span>
-                            <span class="nav-txt-container">Customer Info</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="review.html">
-                            <span class="nav-icon-container"><i class="las la-print"></i></span>
-                            <span class="nav-txt-container">Review & Print</span>
-                        </a>
-                    </li>
-
-                </ul>
-            </div>*@
+       
 
         <div class="container-fluid customer-info-form">
 
@@ -81,7 +46,7 @@
                                 <div class="inputGroup">
                                     @Html.RadioButtonFor(model => model._paymethod, paymethod.Paytm, new { @name = "radio", @type = "radio", @id = "radio5", onclick = "paytm();" })
                                     @*<input id="radio5" name="radio" type="radio" onclick="paytm();">*@
-                                    <label for="radio5"><img src="img/paytm.png" /></label>
+                                    <label for="radio5"><img src="~/img/paytm.png" /></label>
                                 </div>
 
                             </div>
@@ -91,8 +56,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12 summary-container">
                         <div class="">
                             <!-- <p><span class="fbold fdark conversion-head">Conversion Rate:</span> <span class="fbold conversion-val">USD 76</span></p> -->
-                            <p><span class="fbold fdark conversion-head">Balance:</span> <span class="fbold conversion-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.balinr)/$@Html.DisplayFor(model => model.balcurrency)</span></p>
-                            <p><span class="fbold fdark grand-total-head">Grand Total:</span> <span class="fbold grand-total-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.grandtotalinr)/$@Html.DisplayFor(model => model.grandtotalcurrency)</span></p>
+                            <p><span class="fbold fdark conversion-head">Balance:</span> <span class="fbold conversion-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.balinr)/@Html.DisplayFor(model => model.currsymbol)@Html.DisplayFor(model => model.balcurrency)</span></p>
+                            <p><span class="fbold fdark grand-total-head">Grand Total:</span> <span class="fbold grand-total-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.grandtotalinr)/@Html.DisplayFor(model => model.currsymbol)/@Html.DisplayFor(model => model.grandtotalcurrency)</span></p>
                         </div>
                     </div>
                 </div>
@@ -103,13 +68,13 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-12 form-group">
                                 <label for="">Payment Type</label>
-                                @Html.DropDownListFor(model => model.paylaterid, Model.paylaterdetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control"})
+                                @Html.DropDownListFor(model => model.paylaterid, Model.paylaterdetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.paylaterid, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12 col-12 form-group">
                                 <label for="">Amount(INR)</label>
                                 <div class="amount-input">
-                                    @Html.TextBoxFor(model => model.PayLaterAmount, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
+                                    @Html.TextBoxFor(model => model.PayLaterAmount, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter ..." } })
                                     @Html.ValidationMessageFor(model => model.cinfo.Address, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -171,7 +136,7 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-12 form-group">
                                 <label for="">Card Type</label>
-                                @Html.DropDownListFor(model => model.cardid, Model.cardtypedetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control"})
+                                @Html.DropDownListFor(model => model.cardid, Model.cardtypedetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.cardid, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12 col-12 form-group">
@@ -207,6 +172,7 @@
                         </div>
                     </div>
                 </div>
+                <input type="hidden" id="hndbalance" value="@ViewBag.totalbalance" />
                 <input type="hidden" asp-for="orderid" />
 
             }
@@ -214,51 +180,67 @@
                 <div class="table-responsive table--no-card m-b-30">
                     <table class="table table-borderless table-striped table-earning">
                         <thead>
-                         
-                                        <tr>
-                                            <th class="table-desc-col">Payment Mode</th>
-                                            <th>Type</th>
-                                            <th class="text-center">Amount(INR)</th>
-                                            <th class="text-center">Action</th>
 
-                                        </tr>
-                                    </thead>
+                            <tr>
+                                <th class="table-desc-col">Payment Mode</th>
+                                <th>Type</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Action</th>
+
+                            </tr>
+                        </thead>
                         <tbody>
                             @if (Model.paymentdetails != null)
                                 @if (Model.paymentdetails.Count() > 0)
                                 {
                                     @foreach (var item in Model.paymentdetails)
                                     {
-                                        <tr>
+                            <tr>
 
-                                            <td>@Html.DisplayFor(modelItem => item.paymode)
-                                            </td>
-                                            <td>@Html.DisplayFor(modelItem => item.paytype)</td>
-                                            <td class="text-center"><i class="las la-rupee-sign"></i>@Html.DisplayFor(modelItem => item.payamount)</td>
-                                            <td class="text-center">
-                                                @Html.ActionLink("Delete", "DeletePayment", "CustomSale", new { payid = item.payid }, new { @class = "delete-item" })
-                                                @*<a href="" class="delete-item"><i class="las la-times"></i></a>*@
-                                            </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.paymode)
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.paytype)</td>
+                                @if (item.paymode.ToUpper().Contains("CASH") && item.paytype.ToUpper() != "INR")
+                                {
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.symbol)&nbsp;@Html.DisplayFor(modelItem => item.payamount)</td>
+                                }
+                                else
+                                {
+                                    <td class="text-center">@Html.DisplayFor(modelItem => item.symbol)&nbsp;@Html.DisplayFor(modelItem => item.payamountinr)</td>
+                                }
+                                <td class="text-center">
+                                    @Html.ActionLink("", "DeletePayment", "CustomSale", new { payid = item.payid }, new { @class = "delete-item  las la-times" })
+                                    @*<a href="" class="delete-item"><i class="las la-times"></i></a>*@
+                                </td>
 
-                                        </tr>
-                                    }
-                                    }
+                            </tr>
+                                }
+                                }
 
-                                    </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
 
-            <div class="row pad-0 mar-0">
-                <div class="col-lg-12 footer-btn text-right pad-rl-10 btns-group">
-                    <button class="btn-dark-gray">Back</button>
-                    <button class="btn-blue-light">Reset</button>
-                    <button type="button" id="paymentsubmit" class="btn-pink">Continue</button>
+                <div class="row pad-0 mar-0">
+                    <div class="col-lg-12 footer-btn text-right pad-rl-10 btns-group">
+                        <button class="btn-dark-gray">Back</button>
+                        <button class="btn-blue-light">Reset</button>
+                        @*<button type="button" id="paymentsubmit" class="btn-pink">Continue</button>*@
+                        @{
+                            string Disabled = "";
+                            if (@ViewBag.totalbalance > 0)
+                            {
+                                Disabled = "disabled";
+                            }
+                        }
+                        <button class="btn-pink" @Disabled onclick="manaagetab('2')">Continue</button>
+                    </div>
                 </div>
-            </div>
 
-        </div>
+            </div>
 
     </div>
 

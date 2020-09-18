@@ -38,7 +38,7 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetLenght()
         {
             List<SelectListItem> _getlength = new List<SelectListItem>();
-            List<Size> _sizemaster = await this._DBERP.Size.ToListAsync();
+            List<Size> _sizemaster = await this._DBERP.Size.Where(a=>a.LengthInch>0).ToListAsync();
             _getlength = BindingListUtillity.GenerateSelectListLength(_sizemaster);
             return _getlength;
         }
@@ -74,7 +74,7 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetShapes()
         {
             List<SelectListItem> _getshapes = new List<SelectListItem>();
-            List<Shape> allshapes = await this._DBERP.Shape.ToListAsync();
+            List<Shape> allshapes = await this._DBERP.Shape.Where(a=>a.Type !=null).OrderBy(T=>T.Type).ToListAsync();
             _getshapes = BindingListUtillity.GenerateSelectList(allshapes);
             return _getshapes;
            // throw new NotImplementedException();
@@ -108,7 +108,7 @@ namespace SalesApp.Repository
                                                                                      }
 
                                                                                    
-                                                                                    ).ToListAsync();
+                                                                                    ).Distinct().ToListAsync();
 
 
 
@@ -125,7 +125,7 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetCardType()
         {
             List<SelectListItem> _getcardtype = new List<SelectListItem>();
-            List<CardTypeMaster> _cardtypemaster = await this._DBERP.CardTypeMaster.ToListAsync();
+            List<CardTypeMaster> _cardtypemaster = await this._DBERP.CardTypeMaster.Where(i => i.IsActive == true && i.CardCode == "C").ToListAsync();
             _getcardtype = BindingListUtillity.GenerateSelectList(_cardtypemaster);
             return _getcardtype;
         }

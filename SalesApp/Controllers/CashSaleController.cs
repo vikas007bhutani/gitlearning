@@ -31,6 +31,8 @@ namespace SalesApp.Controllers
             try
             {
                 _stock = await _csale.GetStock(stockid);
+               
+                
             }
             catch (Exception ex)
             {
@@ -49,13 +51,23 @@ namespace SalesApp.Controllers
             ModelState.Clear();
             try
             {
-                 _orderid=   await _csale.AddCashSale(saleetails, _comm.GetLoggedInUserId());
-                cashdetails = await _csale.GetSales(_orderid);
+                if (string.IsNullOrEmpty(saleetails.stockno))
+                {
+                    TempData["CashMessage"] = new MessageVM() { title = "Please enter", msg = "stock no." };
+                    cashdetails = await _csale.GetSales(saleetails.orderid, saleetails);
+
+                }
+                else
+                {
+                    _orderid = await _csale.AddCashSale(saleetails, _comm.GetLoggedInUserId());
+                    cashdetails = await _csale.GetSales(_orderid, saleetails);
+                }
              
             }
             catch (Exception ex)
             {
-
+              
+                cashdetails = await _csale.Init(saleetails.mirrorid);
                 ModelState.AddModelError("Error", "Error:Add Sale Item");
             }
             return View("Index", cashdetails);
@@ -74,24 +86,38 @@ namespace SalesApp.Controllers
             }
             CashSaleVM cashdetails = new CashSaleVM();
             long orderid = await _csale.GetOderIdByOrderItemId(orderItemId);
-            cashdetails = await _csale.GetSales(orderid);
+            cashdetails = await _csale.GetSales(orderid,null);
             return View("Index", cashdetails);
 
         }
         public async Task<IActionResult> FinishSale(int orderId)
         {
+            bool result;
             try
             {
-            //    await _csale.FinishCashSale(orderId, _comm.GetLoggedInUserId());
+             result=   await _csale.AddOrderPayment(orderId, _comm.GetLoggedInUserId());
+                if (result)
+                {
+                    return RedirectToAction("Index", "Mirror");
+
+                }
+                else
+                {
+                    CashSaleVM cashdetails = new CashSaleVM();
+                    cashdetails = await _csale.GetSales(orderId, null);
+                    TempData["CashMessage"] = new MessageVM() { title = "Error!", msg = "Error." };
+                     return View("Index", cashdetails);
+
+                }
             }
             catch (Exception ex)
             {
-
-                ModelState.AddModelError("Error", "Error:Finished Sale Item");
+                TempData["CashMessage"] = new MessageVM() { title = "Error!", msg = "Error" };
+                
             }
-            CashSaleVM cashdetails = new CashSaleVM();
-            cashdetails = await _csale.GetSales(orderId);
-            return View("Payment", cashdetails);
+            //CashSaleVM cashdetails = new CashSaleVM();
+            //cashdetails = await _csale.GetSales(orderId,null);
+            return RedirectToAction("Index", "Mirror");
 
         }
 

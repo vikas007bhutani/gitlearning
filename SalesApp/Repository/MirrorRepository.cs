@@ -31,7 +31,7 @@ namespace SalesApp.Repository
             List<CountriesMaster> _countrymaster = this._DBERP.CountriesMaster.Where(i => i.IsActive == true).ToList();
             List<VehicleMaster> _vehiclemaster = this._DBERP.VehicleMaster.Where(i => i.IsActive == true).ToList();
             List<SeriesMaster> _seriesmaster = this._DBERP.SeriesMaster.Where(i => i.IsActive == true).ToList(); */
-            _mirror.MirrorDate = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy hh: mm"));
+           // _mirror.MirrorDate = DateTime.Now.ToString("dd/MM/yyyy hh: mm");
             _mirror.Mirrors = (from m in this._DBERP.MirrorDetails
                                join ma in this._DBERP.MirrorAgent
                                on m.Id equals ma.MirrorId
@@ -44,7 +44,7 @@ namespace SalesApp.Repository
                                on ma.AgentId equals v.AgentId into vehicledetails
                                from vh in vehicledetails.Where(f => f.IsActive == true).DefaultIfEmpty()
 
-                               where ma.IsActive == true
+                               where ma.IsActive == true &&  m.Date.Value.Date == DateTime.Today
                                select new MirrorDetailVM
                                {
                                    mirrorid = m.Id,

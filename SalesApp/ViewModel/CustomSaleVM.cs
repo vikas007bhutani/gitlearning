@@ -20,13 +20,14 @@ namespace SalesApp.ViewModel
         public int specialaddition { get; set; }
         public decimal? balinr { get; set; }
         public decimal? balcurrency { get; set; }
+        public string currsymbol { get; set; }
         public decimal? grandtotalinr { get; set; }
         public decimal? grandtotalcurrency { get; set; }
         public string customspecialaddition { get; set; }
         public string stockno { get; set; }
         public string item_desc { get; set; }
         [DisplayName("Conv. Rate")]
-        public decimal conversionrate { get; set; }
+        public decimal? conversionrate { get; set; }
         public int currencyid { get; set; }
         public int countryid { get; set; }
         public int nationalityid { get; set; }
@@ -35,7 +36,7 @@ namespace SalesApp.ViewModel
         public int paylaterid { get; set; }
         public int quantity { get; set; }
         public int title_type { get; set; }
-        [DisplayName("Sale Value(Fx)")]
+        [DisplayName("Sale Value (Fx)")]
         public decimal totalvalue { get; set; }
         public decimal totalvalueinr { get; set; }
         public decimal? grandtotal { get; set; }
@@ -52,7 +53,7 @@ namespace SalesApp.ViewModel
         public decimal PaytmAmount { get; set; }
 
 
-
+        public int itemcount { get; set; }
         public string width { get; set; }
         public string height { get; set; }
         public string size { get; set; }
@@ -129,6 +130,15 @@ namespace SalesApp.ViewModel
         public string color { get; set; }
         public string size { get; set; }
         public decimal? conversionrate { get; set; }
+        public long mirrorid { get; set; }
+
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime? mirrordate { get; set; }
+        public string symbol { get; set; }
+        public int currencyid { get; set; }
+        public string currency { get; set; }
+
 
     }
     public class standdetails
@@ -152,6 +162,9 @@ namespace SalesApp.ViewModel
         public string paytype { get; set; }
         public string currency { get; set; }
         public decimal? payamount { get; set; }
+        public decimal? payamountinr { get; set; }
+        public string symbol { get; set; }
+        public int currencyid { get; set; }
 
     }
     public class customerinfo
@@ -178,9 +191,30 @@ namespace SalesApp.ViewModel
     {
         public string Passport { get; set; }
         public string PortName { get; set; }
+        [DataType(DataType.Date)]
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? DeliveryFrom { get; set; }
+        [DataType(DataType.Date)]
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? DeliveryTo { get; set; }
+        public int? DelieveryType { get; set; }
+
+        public int? PortType { get; set; }
+    }
+    public class calucation
+    {
+        public long? mirrorid { get; set; }
+        public long orderid { get; set; }
+        public long itemorderid { get; set; }
+        public decimal? conversionrate { get; set; }
+
+        public decimal Amount { get; set; }
+        public decimal AmountINR { get; set; }
+        public decimal TotalAmount { get; set; }
+
+        public decimal TotalAmountINR { get; set; }
+
     }
 }

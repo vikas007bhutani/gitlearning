@@ -1,350 +1,172 @@
-﻿@model SalesApp.ViewModel.CashSaleVM;
+﻿@model SalesApp.ViewModel.NormalSaleVM;
 
 @{
-    ViewBag.Title = "Add Sale";
+    ViewBag.Title = "Cash Sale";
 
 }
+
     <div class="wrapper">
         <!-- Sidebar  -->
-        <partial name="../Shared/Sidebar.cshtml" />
+        <partial name="~/Views/Shared/Sidebar.cshtml" model="Model" />
+    </div>
+<!-- Page Content  -->
+    <div id="content">
+        <div class="header-container clearfix">
+            <button type="button" id="sidebarCollapse" class="btn btn-info">
+                <i class="las la-align-left"></i>
+            </button>
 
-        <!-- Page Content  -->
-        <div id="content">
-            <div class="header-container clearfix">
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="las la-align-left"></i>
-                </button>
+            <h1><span class="fbold">Sales</span> <span class="fregular">Application</span></h1>
 
-                <h1><span class="fbold">Sales</span> <span class="fregular">Application</span></h1>
-
-                <div class="account-wrap">
-                    <div class="account-item clearfix js-item-menu">
-                        <div class="image">
-                            <img src="img/avatar-01.jpg" alt="John Doe" />
-                        </div>
-                        <div class="content-account">
-                            <a class="js-acc-btn" href="#">Parag Tawde</a>
-                        </div>
-                        <div class="account-dropdown js-dropdown">
-                            <div class="info clearfix">
-                                <div class="image">
-                                    <a href="#">
-                                        <img src="img/avatar-01.jpg" alt="John Doe" />
-                                    </a>
-                                </div>
-                                <div class="content-account">
-                                    <h5 class="name">
-                                        <a href="#">Parag Tawde</a>
-                                    </h5>
-                                    <span class="email">Sales executive</span>
-                                </div>
-                            </div>
-                            <div class="account-dropdown__body">
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-account"></i>Account
-                                    </a>
-                                </div>
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-settings"></i>Setting
-                                    </a>
-                                </div>
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-money-box"></i>Billing
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="account-dropdown__footer">
+            <div class="account-wrap">
+                <div class="account-item clearfix js-item-menu">
+                    <div class="image">
+                        <img src="~/img/avatar-01.jpg" alt="John Doe" />
+                    </div>
+                    <div class="content-account">
+                        <a class="js-acc-btn" href="#">Parag Tawde</a>
+                    </div>
+                    <div class="account-dropdown js-dropdown">
+                        <div class="info clearfix">
+                            <div class="image">
                                 <a href="#">
-                                    <i class="zmdi zmdi-power"></i>Logout
+                                    <img src="~/img/avatar-01.jpg" alt="John Doe" />
+                                </a>
+                            </div>
+                            <div class="content-account">
+                                <h5 class="name">
+                                    <a href="#">Parag Tawde</a>
+                                </h5>
+                                <span class="email">Sales executive</span>
+                            </div>
+                        </div>
+                        <div class="account-dropdown__body">
+                            <div class="account-dropdown__item">
+                                <a href="#">
+                                    <i class="zmdi zmdi-account"></i>Account
+                                </a>
+                            </div>
+                            <div class="account-dropdown__item">
+                                <a href="#">
+                                    <i class="zmdi zmdi-settings"></i>Setting
+                                </a>
+                            </div>
+                            <div class="account-dropdown__item">
+                                <a href="#">
+                                    <i class="zmdi zmdi-money-box"></i>Billing
                                 </a>
                             </div>
                         </div>
+                        <div class="account-dropdown__footer">
+                            <a href="#">
+                                <i class="zmdi zmdi-power"></i>Logout
+                            </a>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="main-container">
+            <div class="container-bg clearfix">
+                <div class="container-header clearfix"></div>
+
+                <div class="sale-process-nav" id="menu2">
+                    <ul>
+                        <li id="l_item" class="active">
+                            <a href="#" onclick="manaagetab('1')">
+                                <span class="nav-icon-container"><i class="las la-shopping-cart"></i></span>
+                                <span class="nav-txt-container">Add Item</span>
+                            </a>
+                        </li>
+                        <li id="l_pay">
+                            <a class="active" onclick="manaagetab('4')">
+                                <span class="nav-icon-container"><i class="las la-credit-card"></i></span>
+                                <span class="nav-txt-container">Payment</span>
+                            </a>
+                        </li>
+                        <li id="l_customer">
+                            <a class="active" onclick="manaagetab('2')">
+                                <span class="nav-icon-container"><i class="as la-user-cog"></i></span>
+                                <span class="nav-txt-container">CustomerInfo</span>
+                            </a>
+                        </li>
+                        <li id="l_stand">
+                            <a class="active" onclick="manaagetab('3')">
+                                <span class="nav-icon-container"><i class="las la-truck"></i></span>
+                                <span class="nav-txt-container">Stand & Delivery</span>
+                            </a>
+
+                        </li>
+
+                        <li id="l_review">
+                            <a onclick="manaagetab('5')">
+                                <span class="nav-icon-container"><i class="las la-print"></i></span>
+                                <span class="nav-txt-container">Review & Print</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <!-- <div class="container-name-cart-info clearfix">
+              <p class="clients-name-info"><i class="las la-user-circle"></i> Shomayala Arooz</p>
+              <p class="clients-cart-info hide-mobile"><i class="las la-shopping-cart"></i> You have <span class="fbold">2 items</span> in your Cart</p>
+
+            </div> -->
+
+                <div class="container-fluid">
+
+
+                    <!--
+                <a href="" class="btn-create"><i class="las la-plus"></i></a>
+                <a href="" class="btn-scan"><i class="las la-qrcode"></i></a> -->
+
+
+
+                    <div id="item">
+
+                        <partial name="~/Views/Shared/NormalSaleItem.cshtml" model="Model" />
+
+                    </div>
+
+                    <div id="customer">
+                        <partial name="~/Views/Shared/NormalCustomerDetails.cshtml" model="Model" />
+                    </div>
+                    <div id="stand">
+                        <partial name="~/Views/Shared/Normalstanddelivery.cshtml" model="Model" />
+                    </div>
+                    <div id="payment">
+                        <partial name="~/Views/Shared/NormalOrderPayment.cshtml" model="Model" />
+                    </div>
+                    <div id="review">
+                        <partial name="~/Views/Shared/NormalReview.cshtml" model="Model" />
+                    </div>
+
+                </div>
+
+
+                <div class="container-bg clearfix">
+
+
+
+
                 </div>
             </div>
 
 
 
-            <div class="main-container">
-                <div class="container-bg clearfix">
-                    <div class="container-header clearfix">
-                        <h2>Add Sale</h2>
-                        <div class="header-sales-info">
-                            <!--   <p class="float-left clients-name-info"><i class="las la-user-circle"></i> Shomayala Arooz</p> -->
-                            <p class="float-left"><span class="fregular">Sale Date:</span> <span class="fbold">05/05/2020</span></p>
-                            <p class="float-right"><span class="fregular">Mirror ID:</span> <span class="fbold">47345</span></p>
-                            <p class="cart-display"><span class="clients-cart-info"><i class="las la-shopping-cart"></i><span class="cart-notify">2</span></span></p>
-
-
-                        </div>
-                    </div>
-                    <!-- <div class="container-name-cart-info clearfix">
-                  <p class="clients-name-info"><i class="las la-user-circle"></i> Shomayala Arooz</p>
-                  <p class="clients-cart-info hide-mobile"><i class="las la-shopping-cart"></i> You have <span class="fbold">2 items</span> in your Cart</p>
-
-                </div> -->
-
-                    <div class="sale-process-nav">
-                        <ul>
-                            <li class="active">
-                                <a href="add-sale.html">
-                                    <span class="nav-icon-container"><i class="las la-shopping-cart"></i></span>
-                                    <span class="nav-txt-container">Add Item</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="payment.html">
-                                    <span class="nav-icon-container"><i class="las la-credit-card"></i></span>
-                                    <span class="nav-txt-container">Payment</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="stands-delivery.html">
-                                    <span class="nav-icon-container"><i class="las la-truck"></i></span>
-                                    <span class="nav-txt-container">Stand & Delivery</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="customer-info.html">
-                                    <span class="nav-icon-container"><i class="las la-user-cog"></i></span>
-                                    <span class="nav-txt-container">Customer Info</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="review.html">
-                                    <span class="nav-icon-container"><i class="las la-print"></i></span>
-                                    <span class="nav-txt-container">Review & Print</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-
-                    <div class="container-fluid">
-                        <div class="row pad-t-10">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
-                                <a href="" class="scan-btn-n"><i class="las la-qrcode"></i> Scan Item</a>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
-                                <a href="" class="custom-btn-n"><i class="las la-plus"></i> Add Custom Item</a>
-                            </div>
-                        </div>
-
-
-
-
-
-                        <div class="row pad-rl-20 pad-tb-10">
-
-                            <div class="col-lg-12 col-md-12 full-width-col pad-0">
-                                <div class="container-fluid pad-0">
-                                    <div class="row">
-
-                                        <!--  <div class="col-lg-12 hide-desktop text-right">
-                                       <div class="scanner-image">
-                                         <img src="img/scan.png"/>
-                                       </div>
-                                     </div> -->
-                                        <div class="col-lg-3 col-md-3 col-sm-3">
-                                            <div class="form-group">
-                                                <label for="StockNumber">Stock No.</label>
-                                                <input type="text" class="form-control" id="StockNumber" placeholder="">
-                                                <input type="text" class="form-control" id="StockNumber" asp-for="stockno" placeholder="" onblur="GetItemDetails()">
-                                            </div>
-
-                                            <div class="description-container mobile-description">
-                                                <!-- <h5>Description</h5> -->
-                                                <!-- <p><span class="fbold product-name">Buddha</span> <span class="fregular product-info">Sitting Buddha</span></p> -->
-                                                <ul>
-                                                    <li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold"> Buddha</span><span class="fregular"> Sitting Buddha</span><span class="divide">/</span><span class="fbold">0*0*6</span><span class="divide">/</span><span class="fbold">Marble</span><span class="divide">/</span><span class="fbold">White</span></p></li>
-
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-5">
-                                            <div class="form-group">
-                                                <label for="Qty">Special Addition</label>
-                                                <input type="text" class="form-control" id="Qty" placeholder="">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-4 addition-addon clearfix">
-                                            <label for="add" class="lable-head">Type</label>
-                                            <div class="type-group">
-                                                <div class="inputGroup">
-                                                    <input id="radio1" name="radio" type="radio" />
-                                                    <label for="radio1" class="cm-lable">C/M</label>
-                                                </div>
-                                                <div class="inputGroup">
-                                                    <input id="radio2" name="radio" type="radio" />
-                                                    <label for="radio2" class="of-lable">O/F</label>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row ">
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <div class="description-container desktop-description">
-                                                <!-- <h5>Description</h5> -->
-                                                <!-- <p><span class="fbold product-name">Buddha</span> <span class="fregular product-info">Sitting Buddha</span></p> -->
-                                                <ul>
-                                                    <li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold"> Buddha</span><span class="fregular"> Sitting Buddha</span><span class="divide">/</span><span class="fbold">0*0*6</span><span class="divide">/</span><span class="fbold">Marble</span><span class="divide">/</span><span class="fbold">White</span></p></li>
-
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-                                    <div class="row mar-b-10">
-                                        <div class="col-lg-6 addition-add-new clearfix">
-                                            <label for="add" class="lable-head">Add</label>
-                                            <div class="addition-add-input">
-                                                <div class="inputGroup">
-                                                    <input id="option1" name="option1" type="checkbox" />
-                                                    <label for="option1">LED</label>
-                                                </div>
-                                                <div class="inputGroup">
-                                                    <input id="option2" name="option2" type="checkbox" />
-                                                    <label for="option2">Wooden Frame</label>
-                                                </div>
-                                                <div class="inputGroup">
-                                                    <input id="option3" name="option3" type="checkbox" />
-                                                    <label for="option3">Marble Cubes</label>
-                                                </div>
-                                                <div class="inputGroup">
-                                                    <input id="option4" name="option3" type="checkbox" />
-                                                    <label for="option4">Addition</label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row mar-b-10">
-                                        <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
-                                            <label for="inputState">Fx</label>
-                                            <select id="inputState" class="form-control">
-                                                <option selected>Choose...</option>
-                                                <option>...</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
-                                            <label for="ConversionRate">Conv. Rate</label>
-                                            <input type="text" class="form-control" id="ConversionRate" placeholder="">
-                                        </div>
-                                        <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
-                                            <label for="ConversionRate">Sale value (Fx)</label>
-                                            <div class="total-inra">
-                                                <input type="text" class="form-control" id="ConversionRate" placeholder="">
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-lg-3 text-right col-md-3 col-sm-3 col-xs-6 col-6">
-                                            <button class="btn-blue">Add Item</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row pad-t-0 pad-rl-20">
-                            <div class="col-lg-12 pad-0">
-                                <div class="table-responsive table--no-card m-b-30">
-                                    <table class="table table-borderless table-striped table-earning">
-                                        <thead>
-                                            <tr>
-                                                <th>Description</th>
-                                                <th class="text-center">Fx</th>
-                                                <th class="text-center">INR</th>
-                                                <th class="text-center">Action</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="table-description-td">
-                                                    <p class="table-description-p">
-                                                        <span class="table-stock-number">A300</span>
-                                                        <span class="table-type CM">C/M</span>
-                                                    </p>
-                                                    <p class="table-description-item">Buddha, Sitting Buddha, 0*0*6, White</p>
-
-                                                </td>
-
-                                                <td class="text-center"><i class="las la-rupee-sign"></i> 200</td>
-                                                <td class="text-center"><i class="las la-rupee-sign"></i> 200</td>
-                                                <td class="text-center">
-                                                    <a href="" class="delete-item"><i class="las la-times"></i></a>
-                                                </td>
-
-
-                                            </tr>
-                                            <tr>
-                                                <td>
-
-
-                                                    <p>
-                                                        <span class="table-stock-number">A300</span>
-                                                        <span class="table-type of">O/F</span>
-                                                    </p>
-
-                                                    <p class="table-description-item">Buddha, Sitting Buddha, 0*0*6, White</p>
-
-                                                </td>
-
-                                                <td class="text-center"><i class="las la-rupee-sign"></i> 200</td>
-                                                <td class="text-center"><i class="las la-rupee-sign"></i> 200</td>
-                                                <td class="text-center">
-                                                    <a href="" class="delete-item"><i class="las la-times"></i></a>
-                                                </td>
-
-
-                                            </tr>
-
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-
-                            <div class="col-lg-12 text-right clearfix swipe-container">
-                                <a href="#" class="swipe-btn">Swipe Card Now</a>
-                                <p class="grand-total"><span class="fregular head">Grand Total:</span><span class="fbold val"><i class="las la-rupee-sign"></i> 400</span></p>
-                            </div>
-
-
-
-                        </div>
-
-                        <div class="row pad-0 mar-0">
-                            <div class="col-lg-12 footer-btn text-right pad-rl-10">
-                                <button class="btn-pink">Continue</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="container-bg clearfix">
-                </div>
-            </div>
 
         </div>
 
+        <input type="hidden" id="hdnpgno" value="@ViewBag.pgno" />
+        <input type="hidden" id="hdnbalance" value="@ViewBag.totalbalance" />
+       
+        <input type="hidden" asp-for="conversionrate" />
     </div>
 <div class="overlay"></div>
-
 
 <script src="~/js/vendor/modernizr-3.8.0.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -358,17 +180,101 @@
 <script src="~/js/plugins.js"></script>
 <script src="~/js/main.js"></script>
 
-@*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 <script type="text/javascript">
 
+    function GetItemDetails() {
+        var stockid = $('#StockNumber').val();
+        if (stockid != '') {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetStockDetails", "CashSale")',
+                //contentType: false,
+                //processData: false,
+                data: { "stockid": stockid },
+                success: function (data) {
+                    if (data != null) {
+                        var response = JSON.stringify(data[0]);
+                        if (response != null) {
+                            $('#itemcategory').text(data[0].category);
+                            $('#itemcategory').css('color', 'green');
+                            $('#itemname').text(data[0].itemname);
+                            $('#itemsize').text(data[0].size);
+                            $('#itemstone').text(data[0].marblestone);
+                            $('#itemcolor').text(data[0].marblecolor);
+                            // $('#totalvalue').val(data[0].price);
+                            $('#hdntotal').val(data[0].price)
+
+                            $('#item_desc').val(data[0].category + ',' + data[0].itemname + ',' + data[0].size + ',' + data[0].marblecolor);
+
+                        }
+                        else {
+                            $('#itemcategory').text('No Record Exists!!!');
+                            $('#itemcategory').css('color', 'red');
+                            $('#itemname').text('');
+                            $('#itemsize').text('');
+                            $('#itemstone').text('');
+                            $('#itemcolor').text('');
+                            $('#totalvalue').val('');
+                        }
+                    }
+                    else {
+                        $('#itemcategory').text('No Record Exists!!!');
+                        $('#itemcategory').css('color', 'red');
+                        $('#itemname').text('');
+                        $('#itemsize').text('');
+                        $('#itemstone').text('');
+                        $('#itemcolor').text('');
+                        $('#totalvalue').val('');
+                    }
+
+
+
+                },
+                Error: function (err) {
+                    $('#itemcategory').append(err);
+                    //  debugger;
+                },
+                /* beforeSend: function () {
+                     $(".progress").show();
+                 },
+                 complete: function () {
+                    $(".progress").hide();
+                 }*/
+            });
+
+        }
+    }
+
     $(document).ready(function () {
+
+        //$(function () {
+        //    $('#conversionrate').blur(function () {
+        //        var rate = getNum(parseFloat($('#conversionrate').val()));
+        //        var price = getNum(parseFloat($('#hdntotal').val()));
+        //        var calculatefinal = (price)/(rate);
+
+        //        var finalinvoice = Math.round(calculatefinal * 100) / 100;
+        //        if (!isNaN(finalinvoice)) {
+        //            $('#totalvalue').val(finalinvoice);
+        //        }
+
+        //    });
+        //});
+        function getNum(val) {
+            if (isNaN(val)) {
+                return 0;
+            }
+            return val;
+        }
         $("#sidebar").mCustomScrollbar({
             theme: "minimal"
         });
 
         $('#dismiss, .overlay').on('click', function () {
             $('#sidebar').removeClass('active');
-            $('.overlay').removeClass('active');
+            $('.overlay-nav').removeClass('active');
         });
 
         // $('#sidebarCollapse').on('click', function () {
@@ -380,66 +286,248 @@
 
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar, #content').toggleClass('active');
-            $('.overlay').addClass('active');
+            $('.overlay-nav').addClass('active');
             $('.collapse.in').toggleClass('in');
             $('a[aria-expanded=true]').attr('aria-expanded', 'false');
         });
-
-        function GetItemDetails() {
-        debugger;
-        var stockid = $('#StockNumber').val();
-           $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetStockDetails", "AddSale")',
-                //contentType: false,
-                //processData: false,
-               data: { "stockid": stockid},
-               success: function (data) {
-                   if (data != null) {
-                       var response = JSON.stringify(data[0]);
-                       if (response != null) {
-                           $('#itemcategory').text(data[0].category);
-                           $('#itemcategory').css('color', 'green');
-                           $('#itemname').text(data[0].itemname);
-                           $('#itemsize').text(data[0].size);
-                           $('#itemstone').text(data[0].marblestone);
-                           $('#itemcolor').text(data[0].marblecolor);
-                           $('#totalvalue').val(data[0].price);
-                           $('#item_desc').val(data[0].category + ',' + data[0].itemname + ',' + data[0].size + ',' + data[0].marblecolor);
-
-                       }
-                       else {
-                           $('#itemcategory').text('No Record Exists!!!');
-                           $('#itemcategory').css('color', 'red');
-                           $('#itemname').text('');
-                           $('#itemsize').text('');
-                           $('#itemstone').text('');
-                           $('#itemcolor').text('');
-                           $('#totalvalue').val('');
-                       }
-                   }
-                   else {
-                       $('#itemcategory').text('No Record Exists!!!');
-                       $('#itemcategory').css('color', 'red');
-                       $('#itemname').text('');
-                       $('#itemsize').text('');
-                       $('#itemstone').text('');
-                       $('#itemcolor').text('');
-                       $('#totalvalue').val('');
-                   }
-
-                },
-                Error: function (err) {
-                    $('#itemcategory').append(err);
-                  //  debugger;
-                },
-                /* beforeSend: function () {
-                     $(".progress").show();
-                 },
-                 complete: function () {
-                    $(".progress").hide();
-                 }*/
-            });
-    }
     });
+
+    function balancecheck(totalbalance) {
+
+        if (totalbalance != '') {
+
+            if (totalbalance > 0) {
+
+                return false;
+
+            }
+            else { return true;}
+
+        }
+
+    }
+ function manaagetab(id) {
+
+     var totalbalance = $('#hdnbalance').val();
+     if (id == "1") {
+
+             $('#item').show();
+             $('#customer').hide();
+             $('#stand').hide();
+             $('#payment').hide();
+             $('#review').hide();
+             $('#menu2').hide();
+         $('#l_item').addClass('active');
+         $('#l_customer').removeClass('active');
+         $('#l_stand').removeClass('active');
+         $('#l_pay').removeClass('active');
+         $('#l_review').removeClass('active');
+
+            }
+     else if (id == "2") {
+         if (balancecheck(totalbalance)) {
+             $('#customer').show();
+             $('#item').hide();
+             $('#stand').hide();
+             $('#payment').hide();
+             $('#review').hide();
+             $('#menu2').show();
+             $('#l_customer').addClass('active');
+             $('#l_item').removeClass('active');
+             $('#l_stand').removeClass('active');
+             $('#l_pay').removeClass('active');
+             $('#l_review').removeClass('active');
+         }
+     } else if (id == "3") {
+         if (balancecheck(totalbalance)) {
+             $('#customer').hide();
+             $('#item').hide();
+             $('#stand').show();
+             $('#payment').hide();
+             $('#review').hide();
+             $('#menu2').show();
+             $('#l_customer').removeClass('active');
+             $('#l_item').removeClass('active');
+             $('#l_stand').addClass('active');
+             $('#l_pay').removeClass('active');
+             $('#l_review').removeClass('active');
+         }
+            }
+     else if (id == "4") {
+         //if (balancecheck(totalbalance)) {
+             $('#customer').hide();
+             $('#item').hide();
+             $('#stand').hide();
+             $('#payment').show();
+             $('#review').hide();
+         $('#menu2').show();
+         $('#l_pay').addClass('active');
+         $('#l_customer').removeClass('active');
+         $('#l_stand').removeClass('active');
+         $('#l_item').removeClass('active');
+         $('#l_review').removeClass('active');
+        // }
+     } else if (id == "5") {
+         if (balancecheck(totalbalance)) {
+             $('#customer').hide();
+             $('#item').hide();
+             $('#stand').hide();
+             $('#payment').hide();
+             $('#review').show();
+             $('#menu2').show();
+             $('#l_review').addClass('active');
+             $('#l_customer').removeClass('active');
+             $('#l_stand').removeClass('active');
+             $('#l_item').removeClass('active');
+             $('#l_pay').removeClass('active');
+         }
+            }
+     else {
+         $('#item').show(); $('#menu2').hide(); $('#l_item').addClass('active');
+         $('#l_customer').removeClass('active');
+         $('#l_stand').removeClass('active');
+         $('#l_pay').removeClass('active');
+         $('#l_review').removeClass('active');}
+
+        }
+
+        $(document).ready(function () {
+
+            var statesAvailable = $('#hdnpgno').val();
+
+
+        var queryDict = {};
+        location.search.substr(1).split("&").forEach(function (item) { queryDict[item.split("=")[0]] = item.split("=")[1] })
+
+            if (statesAvailable != 'undefined') {
+
+                if (statesAvailable == "1") {
+                    $('#item').show();
+                    $('#customer').hide();
+                    $('#stand').hide();
+                    $('#payment').hide();
+                    $('#review').hide();
+                    $('#menu2').hide();
+
+                    $('#l_item').addClass('active');
+                    $('#l_customer').removeClass('active');
+                    $('#l_stand').removeClass('active');
+                    $('#l_pay').removeClass('active');
+                    $('#l_review').removeClass('active');
+
+            }
+                else if (statesAvailable == "2") {
+                $('#customer').show();
+                    $('#item').hide();
+                    $('#stand').hide();
+                    $('#payment').hide();
+                    $('#review').hide();
+                    $('#menu2').show();
+
+                    $('#l_customer').addClass('active');
+                    $('#l_item').removeClass('active');
+                    $('#l_stand').removeClass('active');
+                    $('#l_pay').removeClass('active');
+                    $('#l_review').removeClass('active');
+                } else if (statesAvailable == "3") {
+                    $('#customer').hide();
+                    $('#item').hide();
+                    $('#stand').show();
+                    $('#payment').hide();
+                    $('#review').hide();
+                    $('#menu2').show();
+                    $('#l_customer').removeClass('active');
+                    $('#l_item').removeClass('active');
+                    $('#l_stand').addClass('active');
+                    $('#l_pay').removeClass('active');
+                    $('#l_review').removeClass('active');
+                } else if (statesAvailable == "4") {
+                    $('#customer').hide();
+                    $('#item').hide();
+                    $('#stand').hide();
+                    $('#payment').show();
+                    $('#review').hide();
+                    $('#menu2').show();
+                    $('#l_pay').addClass('active');
+                    $('#l_customer').removeClass('active');
+                    $('#l_stand').removeClass('active');
+                    $('#l_item').removeClass('active');
+                    $('#l_review').removeClass('active');
+                } else if (id == "5") {
+                    $('#customer').hide();
+                    $('#item').hide();
+                    $('#stand').hide();
+                    $('#payment').hide();
+                    $('#review').show();
+                    $('#menu2').show();
+                    $('#l_review').addClass('active');
+                    $('#l_customer').removeClass('active');
+                    $('#l_stand').removeClass('active');
+                    $('#l_item').removeClass('active');
+                    $('#l_pay').removeClass('active');
+                } else {
+                    $('#item').show(); $('#menu2').hide(); $('#l_item').addClass('active');
+                    $('#l_customer').removeClass('active');
+                    $('#l_stand').removeClass('active');
+                    $('#l_pay').removeClass('active');
+                    $('#l_review').removeClass('active');}
+
+        }
+
+        //$(function () {
+        //    $('#conversionrate').blur(function () {
+        //        var rate = getNum(parseFloat($('#conversionrate').val()));
+        //        var price = getNum(parseFloat($('#hdntotal').val()));
+        //        var calculatefinal = (price)/(rate);
+
+        //        var finalinvoice = Math.round(calculatefinal * 100) / 100;
+        //        if (!isNaN(finalinvoice)) {
+        //            $('#totalvalue').val(finalinvoice);
+        //        }
+
+        //    });
+        //});
+        function getNum(val) {
+            if (isNaN(val)) {
+                return 0;
+            }
+            return val;
+        }
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#dismiss, .overlay').on('click', function () {
+            $('#sidebar').removeClass('active');
+            $('.overlay-nav').removeClass('active');
+        });
+
+        // $('#sidebarCollapse').on('click', function () {
+        //     $('#sidebar').addClass('active');
+        //     $('.overlay').addClass('active');
+        //     $('.collapse.in').toggleClass('in');
+        //     $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        // });
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content').toggleClass('active');
+            $('.overlay-nav').addClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+        });
+    function IsEmail(email) {
+        debugger;
+        var regex = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        if (!regex.test(email.value)) {
+            alert('Invalid Email');
+           
+    return false;
+  }else{
+    return true;
+  }
+}
+
+
+
 </script>

@@ -5,51 +5,10 @@
 
 }
 
-<div class="wrapper">
-    <!-- Sidebar  -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <a href="" class="big-logo"><img src="~/img/big-logo.png" /></a>
-            <a href="" class="small-logo"><img src="~/img/small-logo.png" /></a>
-        </div>
-
-        <div class="sidebar-content">
-            <button type="button" id="dismiss" class="btn btn-info">
-                <i class="las la-arrow-left"></i>
-            </button>
-            <div class="profile-setting">
-                <div class="profile-img big-profile">
-                    <img src="~/img/avatar-01.jpg">
-                </div>
-                <div class="profile-info big-profile-image">
-                    <p class="profile-name">Vikram Solomon</p>
-                    <p class="profile-designation">Sales executive</p>
-                </div>
-            </div>
-            <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#homeSubmenu"><i class="las la-chart-bar"></i> Dashboard</a>
-
-                </li>
-                <li>
-                    <a href="#homeSubmenu"><i class="las la-print"></i> Print Sale</a>
-
-                </li>
-                <li>
-                    <a href="#homeSubmenu"><i class="las la-toolbox"></i> Add Custom Category</a>
-
-                </li>
-                <li>
-                    <a href="#homeSubmenu"><i class="las la-shapes"></i> Add new item shapes</a>
-
-                </li>
-            </ul>
-
-        </div>
-
-
-    </nav>
-</div>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <partial name="~/Views/Shared/Sidebar.cshtml" model="Model" />
+    </div>
 <!-- Page Content  -->
 <div id="content">
     <div class="header-container clearfix">
@@ -116,9 +75,9 @@
                 <h2>Add Cash Sale</h2>
                 <div class="header-sales-info">
                     <!-- <p class="float-left clients-name-info"><i class="las la-user-circle"></i> Shomayala Arooz</p> -->
-                    <p class="float-left"><span class="fregular">Sale Date:</span> <span class="fbold">05/05/2020</span></p>
-                    <p class="float-right"><span class="fregular">Mirror ID:</span> <span class="fbold">47345</span></p>
-                    <p class="cart-display"><span class="clients-cart-info"><i class="las la-shopping-cart"></i><span class="cart-notify">2</span></span></p>
+                    <p class="float-left"><span class="fregular">Sale Date:</span> <span class="fbold">@Html.DisplayFor(model => model.mirrordate)</span></p>
+                    <p class="float-right"><span class="fregular">Mirror ID:</span> <span class="fbold">@Html.DisplayFor(model => model.mirrorid)</span></p>
+                    <p class="cart-display"><span class="clients-cart-info"><i class="las la-shopping-cart"></i><span class="cart-notify">@Html.DisplayFor(model => model.itemcount)</span></span></p>
 
 
                 </div>
@@ -133,15 +92,15 @@
 
 
                 <!--
-                <a href="" class="btn-create"><i class="las la-plus"></i></a>
-                <a href="" class="btn-scan"><i class="las la-qrcode"></i></a> -->
+    <a href="" class="btn-create"><i class="las la-plus"></i></a>
+    <a href="" class="btn-scan"><i class="las la-qrcode"></i></a> -->
                 <div class="row pad-t-10">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
                         <a href="" class="scan-btn-n"><i class="las la-qrcode"></i> Scan Item</a>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
-                        <a href="" class="custom-btn-n"><i class="las la-plus"></i> Add Custom Item</a>
-                    </div>
+                    @*<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
+                <a href="" class="custom-btn-n"><i class="las la-plus"></i> Add Custom Item</a>
+            </div>*@
                 </div>
                 @using (Html.BeginForm("AddSale", "CashSale"))
                 {
@@ -154,14 +113,14 @@
                                 <div class="row">
 
                                     <!--  <div class="col-lg-12 hide-desktop text-right">
-                                      <div class="scanner-image">
-                                        <img src="img/scan.png"/>
-                                      </div>
-                                    </div> -->
+                          <div class="scanner-image">
+                            <img src="img/scan.png"/>
+                          </div>
+                        </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <div class="form-group">
                                             <label for="StockNumber">Stock No.</label>
-                                            <input type="text" class="form-control" id="StockNumber" asp-for="stockno" placeholder="" onblur="GetItemDetails()">
+                                            <input type="text" class="form-control" id="StockNumber" asp-for="stockno" required placeholder="" onblur="GetItemDetails()">
                                             <input type="hidden" asp-for="item_desc" />
 
                                         </div>
@@ -175,32 +134,33 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-4">
-                                        <div class="form-group">
-                                            <label for="Qty">Special Addition</label>
-                                            <input type="text" class="form-control" asp-for="customspecialaddition" id="Qty" placeholder="">
-                                        </div>
-                                    </div>
+                                    @*<div class="col-lg-6 col-md-6 col-sm-4">
+                                <div class="form-group">
+                                    <label for="Qty">Special Addition</label>
+                                    <input type="text" class="form-control" asp-for="customspecialaddition" id="Qty" placeholder="">
+                                </div>
+                            </div>*@
                                     <div class="col-lg-2 col-md-2 col-sm-4">
                                         <div class="form-group">
                                             <label for="Qty">Quantity</label>
                                             <input type="text" class="form-control" asp-for="quantity" id="Qty" value="1" readonly="readonly" placeholder="">
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-4 addition-addon clearfix">
-                                        <label for="add" class="lable-head">Type</label>
-                                        <div class="type-group">
+                                    @*<div class="col-lg-3 col-md-3 col-sm-4 addition-addon clearfix">
+                                        <label for="add" class="lable-head">Type</label>*@
+                                        @*<div class="type-group">
                                             <div class="inputGroup">
-                                                @Html.RadioButtonFor(m => m._saletype, SaleType.CashMemo, new { @name = "radio", @type = "radio", @id = "CashMemo" })
-                                                <label for="CashMemo" class="cm-lable">C/M</label>
-                                            </div>
-                                            <div class="inputGroup">
-                                                @Html.RadioButtonFor(m => m._saletype, SaleType.OrderForm, new { @name = "radio", @type = "radio", @id = "OrderForm" })
+                                                <input asp-for="_saletype" checked="checked" id="CashMemo" name="radio" type="radio" value="CM" />*@
+                                                @*@Html.RadioButtonFor(m => m._saletype, "CM", new { @checked = "checked", @name = "radio", @type = "radio", @id = "CashMemo" })*@
+                                                @*<label for="CashMemo" class="cm-lable">C/M</label>
+                                            </div>*@
+                                            @*<div class="inputGroup">
+                                                @Html.RadioButtonFor(m => m._saletype, SaleType.OF, new { @name = "radio", @type = "radio", @id = "OrderForm" })
                                                 <label for="OrderForm" class="of-lable">O/F</label>
-                                            </div>
+                                            </div>*@
 
-                                        </div>
-                                    </div>
+                                        @*</div>*@
+                                    @*</div>*@
                                 </div>
 
                                 <div class="row ">
@@ -216,47 +176,32 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mar-b-10">
+                                @*<div class="row mar-b-10">
                                     <div class="col-lg-6 addition-add-new clearfix">
                                         <label for="add" class="lable-head">Add</label>
                                         <div class="addition-add-input">
-                                            @{
+                                           
                                                 @for (int i = 0; i < Model.specialadditions.Count(); i++)
                                                 {
                                                     <div class="inputGroup">
-                                                        @*<input id="chk@(item.Value)"
-                                                            type="checkbox"
-                                                            value="@item.Value"
-                                                            checked="@item.Selected" />*@
-                                                        @*<label for="chk@(item.Value)">@item.Text</label>*@
+                                                       
                                                         <input asp-for="specialadditions[i].Selected" type="checkbox" id="option@(i)">
                                                         <label for="option@(i)" asp-for="specialadditions[i].Text">@Model.specialadditions[i].Text</label>
                                                         <input type="hidden" asp-for="specialadditions[i].Value" />
                                                         <input type="hidden" asp-for="specialadditions[i].Text" />
                                                     </div>
 
-                                                    @*<label for="option1">LED</label>*@
+                                                   
 
                                                 }
-                                                @*<div class="inputGroup">
-                                                        <input id="option2" name="option2" type="checkbox">
-                                                        <label for="option2">Wooden Frame</label>
-                                                    </div>
-                                                    <div class="inputGroup">
-                                                        <input id="option3" name="option3" type="checkbox">
-                                                        <label for="option3">Marble Cubes</label>
-                                                    </div>
-                                                    <div class="inputGroup">
-                                                        <input id="option4" name="option4" type="checkbox">
-                                                        <label for="option4">Addition</label>
-                                                    </div>*@}
+                                              
                                         </div>
                                     </div>
 
-                                </div>
+                                </div>*@
                                 <div class="row mar-b-10">
                                     <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
-                                        Currecny
+                                        <label for="Currecny">Currecny</label> 
                                         @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
                                         @Html.ValidationMessageFor(model => model.currencyid, "", new { @class = "text-danger" })
 
@@ -267,7 +212,7 @@
                                     <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
                                         @*<label for="ConversionRate">Conv. Rate</label>*@
                                         @Html.LabelFor(model => model.conversionrate)
-                                        @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "0", step = "0.01", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                        @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "0", step = "0.01", @class = "form-control", required = "required", placeholder = "Enter ..." } )
                                         @Html.ValidationMessageFor(model => model.conversionrate, "", new { @class = "text-danger" })
                                         @*<input type="text" class="form-control" id="ConversionRate" placeholder="">*@
                                     </div>
@@ -275,10 +220,11 @@
 
                                         <div class="total-inra">
                                             @Html.LabelFor(model => model.totalvalue)
-                                            @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "0", step = "1", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "0", step = "1", @class = "form-control", required = "required", placeholder = "Enter ..." })
                                             @Html.ValidationMessageFor(model => model.totalvalue, "", new { @class = "text-danger" })
 
                                             <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
+                                            <input type="hidden" id="hdntotal" value="@Model.grandtotal" />
                                             <input type="hidden" asp-for="orderid" />
                                         </div>
 
@@ -297,7 +243,14 @@
 
 
                 @*<partial name="PartialOrderList.cshtml" />*@
-
+                @if (TempData["CashMessage"] != null)
+                {
+                    var message = (SalesApp.ViewModel.MessageVM)TempData["CashMessage"];
+                    <div style="color:red">
+                        <strong>@message.title</strong>
+                        <strong>@message.msg</strong> 
+                    </div>
+                }
 
                 <div class="row pad-t-0 pad-rl-20">
                     <div class="col-lg-12 pad-0">
@@ -306,8 +259,8 @@
                                 <thead>
                                     <tr>
                                         <th>Description</th>
-                                        <th>Currency</th>
-                                        <th>Total</th>
+                                        <th>Fx</th>
+                                        <th>INR</th>
                                         <th class="text-center">Action</th>
 
                                     </tr>
@@ -328,7 +281,7 @@
                                                         </p>
                                                         <p class="table-description">@Html.DisplayFor(modelItem => item.itemdesc)</p>
                                                     </td>
-                                                    <td><i class="las la-rupee-sign"></i> @Html.DisplayFor(modelItem => item.salevalue)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.symbol)&nbsp;@Html.DisplayFor(modelItem => item.salevalue)</td>
                                                     <td><i class="las la-rupee-sign"></i> @Html.DisplayFor(modelItem => item.salevalueinr)</td>
                                                     <td class="text-center">
 
@@ -341,43 +294,43 @@
                                         }
                                     }
                                     @*<tr>
-                                            <td class="table-description-td">
-                                                <p class="table-description-p">
-                                                    <span class="table-stock-number">A300</span>
-                                                    <span class="table-type CM">C/M</span>
-                                                </p>
-                                                <p class="table-description">Buddha, Sitting Buddha, 0*0*6, White</p>
+                                <td class="table-description-td">
+                                    <p class="table-description-p">
+                                        <span class="table-stock-number">A300</span>
+                                        <span class="table-type CM">C/M</span>
+                                    </p>
+                                    <p class="table-description">Buddha, Sitting Buddha, 0*0*6, White</p>
 
-                                            </td>
+                                </td>
 
-                                            <td><i class="las la-rupee-sign"></i> 200</td>
-                                            <td><i class="las la-rupee-sign"></i> 200</td>
-                                            <td class="text-center">
-                                                <a href="" class="delete-item"><i class="las la-times"></i></a>
-                                            </td>
+                                <td><i class="las la-rupee-sign"></i> 200</td>
+                                <td><i class="las la-rupee-sign"></i> 200</td>
+                                <td class="text-center">
+                                    <a href="" class="delete-item"><i class="las la-times"></i></a>
+                                </td>
 
-                                        </tr>
-                                        <tr>
-                                            <td>
-
-
-                                                <p>
-                                                    <span class="table-stock-number">A300</span>
-                                                    <span class="table-type of">O/F</span>
-                                                </p>
-
-                                                <p class="table-description">Buddha, Sitting Buddha, 0*0*6, White</p>
-
-                                            </td>
-
-                                            <td><i class="las la-rupee-sign"></i> 200</td>
-                                            <td><i class="las la-rupee-sign"></i> 200</td>
-                                            <td class="text-center">
-                                                <a href="" class="delete-item"><i class="las la-times"></i></a>
-                                            </td>
+                            </tr>
+                            <tr>
+                                <td>
 
 
-                                        </tr>*@
+                                    <p>
+                                        <span class="table-stock-number">A300</span>
+                                        <span class="table-type of">O/F</span>
+                                    </p>
+
+                                    <p class="table-description">Buddha, Sitting Buddha, 0*0*6, White</p>
+
+                                </td>
+
+                                <td><i class="las la-rupee-sign"></i> 200</td>
+                                <td><i class="las la-rupee-sign"></i> 200</td>
+                                <td class="text-center">
+                                    <a href="" class="delete-item"><i class="las la-times"></i></a>
+                                </td>
+
+
+                            </tr>*@
 
 
                                 </tbody>
@@ -396,7 +349,7 @@
                 <div class="row pad-0 mar-0">
                     <div class="col-lg-12 footer-btn text-right pad-rl-40">
                         @*<button class="btn-pink">Finish</button>*@
-                        @Html.ActionLink("Finish", "FinishSale", "CashSale", new { orderId = Model.orderid}, new { @class = "btn-pink" })
+                        @Html.ActionLink("Finish", "FinishSale", "CashSale", new { orderId = Model.orderid }, new { @class = "btn-pink" })
                     </div>
                 </div>
 
@@ -433,53 +386,56 @@
 
     function GetItemDetails() {
         var stockid = $('#StockNumber').val();
-           $.ajax({
+        if (stockid != '') {
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetStockDetails", "CashSale")',
                 //contentType: false,
                 //processData: false,
-               data: { "stockid": stockid},
-               success: function (data) {
-                   if (data != null) {
-                       var response = JSON.stringify(data[0]);
-                       if (response != null) {
-                           $('#itemcategory').text(data[0].category);
-                           $('#itemcategory').css('color', 'green');
-                           $('#itemname').text(data[0].itemname);
-                           $('#itemsize').text(data[0].size);
-                           $('#itemstone').text(data[0].marblestone);
-                           $('#itemcolor').text(data[0].marblecolor);
-                           $('#totalvalue').val(data[0].price);
-                           $('#hdntotal').val(data[0].price)
-                           $('#item_desc').val(data[0].category + ',' + data[0].itemname + ',' + data[0].size + ',' + data[0].marblecolor);
+                data: { "stockid": stockid },
+                success: function (data) {
+                    if (data != null) {
+                        var response = JSON.stringify(data[0]);
+                        if (response != null) {
+                            $('#itemcategory').text(data[0].category);
+                            $('#itemcategory').css('color', 'green');
+                            $('#itemname').text(data[0].itemname);
+                            $('#itemsize').text(data[0].size);
+                            $('#itemstone').text(data[0].marblestone);
+                            $('#itemcolor').text(data[0].marblecolor);
+                            // $('#totalvalue').val(data[0].price);
+                            //   $('#hdntotal').val(data[0].price)
+                            $('#item_desc').val(data[0].category + ',' + data[0].itemname + ',' + data[0].size + ',' + data[0].marblecolor);
 
-                       }
-                       else {
-                           $('#itemcategory').text('No Record Exists!!!');
-                           $('#itemcategory').css('color', 'red');
-                           $('#itemname').text('');
-                           $('#itemsize').text('');
-                           $('#itemstone').text('');
-                           $('#itemcolor').text('');
-                           $('#totalvalue').val('');
-                       }
-                   }
-                   else {
-                       $('#itemcategory').text('No Record Exists!!!');
-                       $('#itemcategory').css('color', 'red');
-                       $('#itemname').text('');
-                       $('#itemsize').text('');
-                       $('#itemstone').text('');
-                       $('#itemcolor').text('');
-                       $('#totalvalue').val('');
-                   }
+                        }
+                        else {
+                            $('#itemcategory').text('Either Stock is packed or Stock not Exists!!!');
+                            $('#itemcategory').css('color', 'red');
+                            $('#itemname').text('');
+                            $('#StockNumber').val('');
+                            $('#itemsize').text('');
+                            $('#itemstone').text('');
+                            $('#itemcolor').text('');
+                            $('#totalvalue').val('');
+                        }
+                    }
+                    else {
+                        $('#itemcategory').text('Either Stock is packed or Stock not Exists!!!');
+                        $('#itemcategory').css('color', 'red');
+                        $('#itemname').text('');
+                        $('#itemsize').text('');
+                        $('#StockNumber').val('');
+                        $('#itemstone').text('');
+                        $('#itemcolor').text('');
+                        $('#totalvalue').val('');
+                    }
 
 
 
                 },
                 Error: function (err) {
                     $('#itemcategory').append(err);
-                  //  debugger;
+                    //  debugger;
                 },
                 /* beforeSend: function () {
                      $(".progress").show();
@@ -488,24 +444,14 @@
                     $(".progress").hide();
                  }*/
             });
-
+        }
 
     }
 
     $(document).ready(function () {
 
         $(function () {
-           /* $('#conversionrate').blur(function () {
-                var rate = getNum(parseFloat($('#conversionrate').val()));
-                var price = getNum(parseFloat($('#hdntotal').val()));
-                var calculatefinal = (price)/(rate);
-
-                var finalinvoice = Math.round(calculatefinal * 100) / 100;
-                if (!isNaN(finalinvoice)) {
-                    $('#totalvalue').val(finalinvoice);
-                }
-
-            }); */
+          
         });
         function getNum(val) {
             if (isNaN(val)) {

@@ -49,7 +49,9 @@ namespace SalesApp
             services.AddScoped<IStandDeliveryRepository, StandDeliveryRepository>();
             services.AddScoped<ICommonRepository, CommonRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<INormalSaleRepository, NormalSaleRepository>();
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddDirectoryBrowser();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

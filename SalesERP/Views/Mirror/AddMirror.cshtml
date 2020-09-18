@@ -38,15 +38,20 @@
                 //set tagids to save
                     var finalstring,mobstring;
                     if (ui.item.value != null) {
-                        debugger;
+                      
                         finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
                         if (finalstring  == "") { finalstring = ui.item.value;}
                         mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+                        $('#Driver_List_0__Mob').val(mobstring);
+                      //  $(this).closest('input[type=text]').focus();
+
+                        //$(this).closest('#driversection_mob').find('#Driver_List_0__Mo').val('vikas');
+                        console.log(mobstring);
 
                     }
 
                     $(this).val(finalstring);
-                    $(this).next('#driversection_mob').find('input[name=Mob]').val(mobstring);
+                   // $(this).next('#driversection_mob').find('input[name=Mob]').val(mobstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;
@@ -59,10 +64,26 @@
             $(this).autocomplete({
                 source: '@Url.Action("Principle_Search")',
                 select: function (event, ui) {
+                    var finalstring, mobstring;
+                    if (ui.item.value != null) {
 
-                //set tagids to save
-                    $(this).val(ui.item.value);
+                        finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
+                        if (finalstring == "") { finalstring = ui.item.value; }
+                        mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+                        $('#PAgentID_List_0__Mob').val(mobstring);
+                        //  $(this).closest('input[type=text]').focus();
+
+                        //$(this).closest('#driversection_mob').find('#Driver_List_0__Mo').val('vikas');
+                        
+
+                    }
+
+                    $(this).val(finalstring);
+                  //  $(this).next('#driversection_mob').find('input[name=Mob]').val(mobstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
+                //set tagids to save
+                    //$(this).val(ui.item.value);
+                    //$(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;
                 return false;
@@ -73,9 +94,21 @@
             $(this).autocomplete({
                 source: '@Url.Action("EAgent_Search")',
                 select: function (event, ui) {
+                    var finalstring, mobstring;
+                    if (ui.item.value != null) {
 
+                        finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
+                        if (finalstring == "") { finalstring = ui.item.value; }
+                        mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+                        $('#EAgentID_List_0__Mob').val(mobstring);
+                        //  $(this).closest('input[type=text]').focus();
+
+                        //$(this).closest('#driversection_mob').find('#Driver_List_0__Mo').val('vikas');
+
+
+                    }
                 //set tagids to save
-                    $(this).val(ui.item.value);
+                    $(this).val(finalstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;
@@ -87,9 +120,21 @@
             $(this).autocomplete({
                 source: '@Url.Action("Guide_Search")',
                 select: function (event, ui) {
+                    var finalstring, mobstring;
+                    if (ui.item.value != null) {
 
+                        finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
+                        if (finalstring == "") { finalstring = ui.item.value; }
+                        mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+                        $('#GuideAgentID_List_0__Mob').val(mobstring);
+                        //  $(this).closest('input[type=text]').focus();
+
+                        //$(this).closest('#driversection_mob').find('#Driver_List_0__Mo').val('vikas');
+
+
+                    }
                 //set tagids to save
-                    $(this).val(ui.item.value);
+                    $(this).val(finalstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;
@@ -101,9 +146,21 @@
             $(this).autocomplete({
                 source: '@Url.Action("Lead_Search")',
                 select: function (event, ui) {
+                    var finalstring, mobstring;
+                    if (ui.item.value != null) {
 
+                        finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
+                        if (finalstring == "") { finalstring = ui.item.value; }
+                        mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+                        $('#LeaderAgentID_List_0__Mob').val(mobstring);
+                        //  $(this).closest('input[type=text]').focus();
+
+                        //$(this).closest('#driversection_mob').find('#Driver_List_0__Mo').val('vikas');
+
+
+                    }
                 //set tagids to save
-                    $(this).val(ui.item.value);
+                    $(this).val(finalstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;
@@ -115,9 +172,21 @@
             $(this).autocomplete({
                 source: '@Url.Action("Escort_Search")',
                 select: function (event, ui) {
+                    var finalstring, mobstring;
+                    if (ui.item.value != null) {
 
+                        finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
+                        if (finalstring == "") { finalstring = ui.item.value; }
+                        mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+                        $('#EscortAgentID_List_0__Mob').val(mobstring);
+                        //  $(this).closest('input[type=text]').focus();
+
+                        //$(this).closest('#driversection_mob').find('#Driver_List_0__Mo').val('vikas');
+
+
+                    }
                 //set tagids to save
-                    $(this).val(ui.item.value);
+                    $(this).val(finalstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;
@@ -129,9 +198,21 @@
             $(this).autocomplete({
                 source: '@Url.Action("Demo_Search")',
                 select: function (event, ui) {
+                    var finalstring, mobstring;
+                    if (ui.item.value != null) {
 
+                        finalstring = ui.item.value.substring(0, ui.item.value.indexOf('('));
+                        if (finalstring == "") { finalstring = ui.item.value; }
+                        mobstring = ui.item.value.substring(ui.item.value.indexOf('(') + 1, ui.item.value.length - 1);
+                        $('#DemoAgentID_List_0__Mob').val(mobstring);
+                        //  $(this).closest('input[type=text]').focus();
+
+                        //$(this).closest('#driversection_mob').find('#Driver_List_0__Mo').val('vikas');
+
+
+                    }
                 //set tagids to save
-                    $(this).val(ui.item.value);
+                    $(this).val(finalstring);
                     $(this).parent().find('input[type=hidden]').val(ui.item.id);
                 //Tags for display
                // this.value = ui.value;
@@ -160,7 +241,7 @@
                         <div class="col-sm-2" style="float:left;width:300px;padding-left:10px;">
                             <div class="form-group">
                                 <label asp-for="MirrorDate" class="control-label"></label>
-                                <input asp-for="MirrorDate" style="color:red" />
+                                <input asp-for="MirrorDate"  asp-format="{0:dd/MM/yyyy}" style="color:red" />
                                 <span asp-validation-for="MirrorDate" class="text-danger"></span>
                             </div>
                         </div>
@@ -185,13 +266,13 @@
 
                                         <div id="driversection" class="form-group">
                                             @* <input type="hidden" id="agentid" value="" />*@
-                                            @Html.HiddenFor(model => model.Driver_List[0].agentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.HiddenFor(model => model.Driver_List[0].agentId, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
 
 
 
                                             @Html.LabelFor(model => model.Driver_List[0].Drivername)
                                             @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
-                                            @Html.EditorFor(model => model.Driver_List[0].Drivername, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.EditorFor(model => model.Driver_List[0].Drivername, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                             @Html.ValidationMessageFor(model => model.Driver_List[0].Drivername, "", new { @class = "text-danger" })
 
                                         </div>
@@ -199,14 +280,14 @@
                                     <td  id="driversection_mob"  class="">
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.Driver_List[0].Mob)
-                                            @Html.EditorFor(model => model.Driver_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.EditorFor(model => model.Driver_List[0].Mob, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                             @Html.ValidationMessageFor(model => model.Driver_List[0].Mob, "", new { @class = "text-danger" })
                                         </div>
                                     </td>
                                     <td class="">
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.Driver_List[0].vehicleNo)
-                                            @Html.EditorFor(model => model.Driver_List[0].vehicleNo, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.EditorFor(model => model.Driver_List[0].vehicleNo, new { htmlAttributes = new { @class = "form-control",  placeholder = "Enter ..." } })
                                             @Html.ValidationMessageFor(model => model.Driver_List[0].vehicleNo, "", new { @class = "text-danger" })
                                         </div>
                                     </td>
@@ -287,14 +368,14 @@
                                     <td class="">
                                         <!-- text input -->
                                         <div id="psection"  class="form-group">
-                                            @Html.HiddenFor(model => model.PAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                            @Html.HiddenFor(model => model.PAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control" } })
                                             <label>Principle Agent</label>
-                                            @Html.EditorFor(model => model.PAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                            @Html.EditorFor(model => model.PAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Name ..." } })
                                             @Html.ValidationMessageFor(model => model.PAgentID_List[0].agentname, "", new { @class = "text-danger" })
                                            
                                         </div>
                                         <div id="psection_mob" >
-                                            @Html.EditorFor(model => model.PAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                            @Html.EditorFor(model => model.PAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Mobile ..." } })
                                             @Html.ValidationMessageFor(model => model.PAgentID_List[0].Mob, "", new { @class = "text-danger" })
                                         </div>
                                     </td>
@@ -302,14 +383,14 @@
                                     <td class="">
                                         <div id="esection" class="form-group">
 
-                                            @Html.HiddenFor(model => model.EAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                            @Html.HiddenFor(model => model.EAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control" } })
                                             <label>Excursion Agent</label>
-                                            @Html.EditorFor(model => model.EAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                            @Html.EditorFor(model => model.EAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Name ..." } })
                                             @Html.ValidationMessageFor(model => model.EAgentID_List[0].agentname, "", new { @class = "text-danger" })
                                           
                                         </div>
                                         <div>
-                                            @Html.EditorFor(model => model.EAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                            @Html.EditorFor(model => model.EAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Mobile ..." } })
                                             @Html.ValidationMessageFor(model => model.EAgentID_List[0].Mob, "", new { @class = "text-danger" })
 
                                         </div>
@@ -347,18 +428,18 @@
                                         <td class="">
                                             <!-- text input -->
                                             <div id="gsection" class="form-group">
-                                                @Html.HiddenFor(model => model.GuideAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.HiddenFor(model => model.GuideAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter ..." } })
                                                 <label>Guide Name</label>
 
 
 
-                                                @Html.EditorFor(model => model.GuideAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter  Name..." } })
+                                                @Html.EditorFor(model => model.GuideAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter  Name..." } })
                                                 @Html.ValidationMessageFor(model => model.GuideAgentID_List[0].agentname, "", new { @class = "text-danger" })
                                                
 
                                             </div>
                                             <div>
-                                                @Html.EditorFor(model => model.GuideAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                @Html.EditorFor(model => model.GuideAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Mobile ..." } })
                                                 @Html.ValidationMessageFor(model => model.GuideAgentID_List[0].Mob, "", new { @class = "text-danger" })
                                             </div>
                                         </td>
@@ -375,18 +456,18 @@
                                             <td class="">
                                                 <div id="leadsection" class="form-group">
 
-                                                    @Html.HiddenFor(model => model.LeaderAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                    @Html.HiddenFor(model => model.LeaderAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter ..." } })
                                                     <label>Tour Leader</label>
 
 
 
-                                                    @Html.EditorFor(model => model.LeaderAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                    @Html.EditorFor(model => model.LeaderAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Name ..." } })
                                                     @Html.ValidationMessageFor(model => model.LeaderAgentID_List[0].agentname, "", new { @class = "text-danger" })
                                                    
 
                                                 </div>
                                                 <div>
-                                                    @Html.EditorFor(model => model.LeaderAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                    @Html.EditorFor(model => model.LeaderAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Mobile ..." } })
                                                     @Html.ValidationMessageFor(model => model.LeaderAgentID_List[0].Mob, "", new { @class = "text-danger" })
                                                 </div>
                                             </td>
@@ -404,18 +485,18 @@
                                         <td class="">
                                             <div id="escortsection" class="form-group">
 
-                                                @Html.HiddenFor(model => model.EscortAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required"} })
+                                                @Html.HiddenFor(model => model.EscortAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control"} })
                                                 <label>Tour Escort</label>
 
 
 
-                                                @Html.EditorFor(model => model.EscortAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                @Html.EditorFor(model => model.EscortAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Name ..." } })
                                                 @Html.ValidationMessageFor(model => model.EscortAgentID_List[0].agentname, "", new { @class = "text-danger" })
                                                
 
                                             </div>
                                             <div>
-                                                @Html.EditorFor(model => model.EscortAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                @Html.EditorFor(model => model.EscortAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Mobile ..." } })
                                                 @Html.ValidationMessageFor(model => model.EscortAgentID_List[0].Mob, "", new { @class = "text-danger" })
 
                                             </div>
@@ -449,7 +530,7 @@
                                     <!-- text input -->
                                     <div class="form-group">
                                         <label>Pax</label>
-                                        @Html.EditorFor(model => model.Pax, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                        @Html.EditorFor(model => model.Pax, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter ..." } })
                                         @Html.ValidationMessageFor(model => model.Pax, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -477,18 +558,18 @@
                                             <tr>
                                                 <td class="col-sm-2">
                                                     <div id="demosection" class="form-group">
-                                                        @Html.HiddenFor(model => model.DemoAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control", required = "required"} })
+                                                        @Html.HiddenFor(model => model.DemoAgentID_List[0].agentid, new { htmlAttributes = new { @class = "form-control"} })
                                                         <label>Demo Person</label>
 
 
 
-                                                        @Html.EditorFor(model => model.DemoAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Name ..." } })
+                                                        @Html.EditorFor(model => model.DemoAgentID_List[0].agentname, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Name ..." } })
                                                         @Html.ValidationMessageFor(model => model.DemoAgentID_List[0].agentname, "", new { @class = "text-danger" })
                                                       
 
                                                     </div>
                                                     <div>
-                                                        @Html.EditorFor(model => model.DemoAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter Mobile ..." } })
+                                                        @Html.EditorFor(model => model.DemoAgentID_List[0].Mob, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Mobile ..." } })
                                                         @Html.ValidationMessageFor(model => model.DemoAgentID_List[0].Mob, "", new { @class = "text-danger" })
 
                                                     </div>

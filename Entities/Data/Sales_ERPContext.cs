@@ -56,6 +56,7 @@ namespace SALEERP.Data
         public virtual DbSet<CardTypeMaster> CardTypeMaster { get; set; }
         public virtual DbSet<PayLaterMaster> PayLaterMaster { get; set; }
         public virtual DbSet<PayMethodMaster> PayMethodMaster { get; set; }
+        public virtual DbSet<Directstockpack> Directstockpack { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -866,6 +867,10 @@ namespace SALEERP.Data
                     .HasColumnName("item_type")
                     .HasComment("tobemade|stand|stock");
 
+                entity.Property(e => e.SaleType)
+                  .HasColumnName("sale_type")
+                  .HasComment("used for custom sale|normal sale|cash sale");
+
                 entity.Property(e => e.OrderId).HasColumnName("order_id");
 
                 entity.Property(e => e.OrderType)
@@ -985,9 +990,7 @@ namespace SALEERP.Data
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.SaleType)
-                    .HasColumnName("sale_type")
-                    .HasComment("used for custom sale|normal sale|cash sale");
+              
 
                 entity.Property(e => e.TransactionId)
                     .HasColumnName("transaction_id")
@@ -1845,6 +1848,31 @@ namespace SALEERP.Data
                 entity.Property(e => e.UpdatedDatetime)
                     .HasColumnName("updated_datetime")
                     .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Directstockpack>(entity =>
+            {
+                entity.HasKey(e => e.DId);
+
+                entity.ToTable("DIRECTSTOCKPACK");
+
+                entity.Property(e => e.DId).HasColumnName("D_ID");
+
+                entity.Property(e => e.Dateadded)
+                    .HasColumnName("DATEADDED")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Remark)
+                    .HasColumnName("REMARK")
+                    .HasMaxLength(300)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Stockno).HasColumnName("STOCKNO");
+
+                entity.Property(e => e.Userid).HasColumnName("USERID");
             });
 
             OnModelCreatingPartial(modelBuilder);

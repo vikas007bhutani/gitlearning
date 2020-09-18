@@ -1,0 +1,710 @@
+﻿@model SalesApp.ViewModel.NormalSaleVM;
+
+@{
+    ViewBag.Title = "Add Normal Sale Item";
+
+}
+@*<style>
+        /* CSS comes here */
+        #video {
+            border: 1px solid black;
+            width: 320px;
+            height: 240px;
+        }
+
+        #photo {
+            border: 1px solid black;
+            width: 320px;
+            height: 240px;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        .camera {
+            width: 340px;
+            display: inline-block;
+        }
+
+        .output {
+            width: 340px;
+            display: inline-block;
+        }
+
+        #startbutton {
+            display: block;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            bottom: 36px;
+            padding: 5px;
+            background-color: #6a67ce;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 1.0);
+            cursor: pointer;
+        }
+
+        .contentarea {
+            font-size: 16px;
+            font-family: Arial;
+            text-align: center;
+        }
+    </style>*@
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+    .image-upload > input {
+        visibility: hidden;
+        width: 0;
+        height: 0
+    }
+</style>
+<style>
+    #preview {
+        width: 500px;
+        height: 500px;
+        margin: 0px auto;
+        z-index: 9999999;
+    }
+</style>
+
+
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">*@
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>
+    $("#normalsale").click(function () {
+        $("#camfile").trigger('click');
+    });
+    //    function uploadVistingCard() {
+
+    //    var fileUpload = $("#camfile").get(0);
+
+    //    var compnay = $("#company").val();
+    //    var files = fileUpload.files;
+    //    var formData = new FormData();
+    //    formData.append(files[0].name, files[0]);
+    //    $('#loadingmessage').show();
+    //    $.ajax({
+    //        type: "POST",
+    //        url: "http://103.48.50.253/barcode/AddSale/uploadQRcode",
+    //        data: formData,
+    //        processData: false,
+    //        contentType: false,
+    //        success: function (response) {
+    //            if (response != null) {
+    //       // $('#loadingmessage').hide();
+    //               // $('#msg').text("Customer Ref ID : " + response);
+    //                var finalresposne = response.slice(0, response.indexOf("*"));
+    //                $('#StockNumber').val(finalresposne);
+    //               // $('#msg').css({'color': 'green', 'font-size': '100%' });
+    //            }
+    //            else {$('#msg').text(); }
+    //            // $('#msg').css({'color': 'green', 'font-size': '100%' });}
+
+    //        },
+    //        Error: function (err) {
+    //        console.log(err);
+    //            //  debugger;
+    //        },
+
+    //    });
+
+    //}
+
+    /* JS comes here */
+    //(function () {
+
+    //    var width = 320; // We will scale the photo width to this
+    //    var height = 0; // This will be computed based on the input stream
+
+    //    var streaming = false;
+
+    //    var video = null;
+    //    var canvas = null;
+    //    var photo = null;
+    //    var startbutton = null;
+
+    //    function startup() {
+    //        video = document.getElementById('video');
+    //        canvas = document.getElementById('canvas');
+    //        photo = document.getElementById('photo');
+    //        startbutton = document.getElementById('startbutton');
+
+    //        navigator.mediaDevices.getUserMedia({
+    //            video: true,
+    //            audio: false
+    //        })
+    //            .then(function (stream) {
+    //                video.srcObject = stream;
+    //                video.play();
+    //            })
+    //            .catch(function (err) {
+    //                console.log("An error occurred: " + err);
+    //            });
+
+    //        video.addEventListener('canplay', function (ev) {
+    //            if (!streaming) {
+    //                height = video.videoHeight / (video.videoWidth / width);
+
+    //                if (isNaN(height)) {
+    //                    height = width / (4 / 3);
+    //                }
+
+    //                video.setAttribute('width', width);
+    //                video.setAttribute('height', height);
+    //                canvas.setAttribute('width', width);
+    //                canvas.setAttribute('height', height);
+    //                streaming = true;
+    //            }
+    //        }, false);
+
+    //        startbutton.addEventListener('click', function (ev) {
+    //            takepicture();
+    //            ev.preventDefault();
+    //        }, false);
+
+    //        clearphoto();
+    //    }
+
+
+    //    function clearphoto() {
+    //        var context = canvas.getContext('2d');
+    //        context.fillStyle = "#AAA";
+    //        context.fillRect(0, 0, canvas.width, canvas.height);
+
+    //        var data = canvas.toDataURL('image/png');
+    //        photo.setAttribute('src', data);
+    //    }
+
+    //    function takepicture() {
+    //        var context = canvas.getContext('2d');
+    //        if (width && height) {
+    //            canvas.width = width;
+    //            canvas.height = height;
+    //            context.drawImage(video, 0, 0, width, height);
+
+    //            var data = canvas.toDataURL('image/png');
+    //            photo.setAttribute('src', data);
+    //        } else {
+    //            clearphoto();
+    //        }
+    //    }
+
+    //    window.addEventListener('load', startup, false);
+    //})();
+</script>
+
+<div class="row pad-t-10">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
+        <video id="preview"></video>
+        <a href="#" id="normalsale" class="scan-btn-n"><i class="las la-qrcode"></i> Scan Item</a>
+
+
+
+
+
+        @*<input type="file" accept="image/*" id="camfile" name="camfile" capture="camera" class="form-control" style="display: none;">*@
+
+
+        @*<div class="contentarea" id="qrcodearea">
+
+                <div class="camera">
+                    <video id="video">Video stream not available.</video>
+                </div>
+                <div><button id="startbutton">Take photo</button></div>
+
+                <canvas id="canvas"></canvas>
+                <div class="output">
+                    <img id="photo" alt="The screen capture will appear in this box.">
+                </div>
+            </div>*@
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
+        @*<a asp-controller="CustomSale" asp-action="Index" asp-route-id="@Model.mirrorid" class="custom-btn-n">Add Custom Sale </a>*@
+        @*@Html.ActionLink("Add Custom Sale", "Index", "CustomSale", new { id = Model.mirrorid }, new { @class = "custom-btn-n" })*@
+        <a href="#" onclick="" id="customsale" class="custom-btn-n"><i class="las la-plus"></i> Add Custom Item</a>
+
+    </div>
+</div>
+<div id="NSale" style="display:block">
+    @using (Html.BeginForm("AddSale", "AddSale"))
+    {
+    @Html.AntiForgeryToken()
+    <div class="row pad-rl-20 pad-tb-10">
+        <input type="hidden" asp-for="mirrorid" />
+        <div class="col-lg-12 col-md-12 full-width-col pad-0">
+            <div class="container-fluid pad-0">
+                <div class="row">
+
+                    <!--  <div class="col-lg-12 hide-desktop text-right">
+                      <div class="scanner-image">
+                        <img src="img/scan.png"/>
+                      </div>
+                    </div> -->
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="form-group">
+                            <label for="StockNumber">Stock No.</label>
+                            <input type="text" class="form-control" id="StockNumber" asp-for="stockno" required placeholder="" onforminput="GetItemDetails()" onblur="GetItemDetails()">
+                            <input type="hidden" asp-for="item_desc" />
+
+                        </div>
+                        <div class="description-container mobile-description">
+                            <!-- <h5>Description</h5> -->
+                            <!-- <p><span class="fbold product-name">Buddha</span> <span class="fregular product-info">Sitting Buddha</span></p> -->
+                            <ul>
+                                <li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold" id="itemcategory"> </span><span class="fregular" id="itemname"> </span><span class="divide">/</span><span class="fbold" id="itemsize"></span><span class="divide">/</span><span class="fbold" id="itemstone"></span><span class="divide">/</span><span class="fbold" id="itemcolor"></span></p></li>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-4">
+                        <div class="form-group">
+                            <label for="Qty">Special Addition</label>
+                            <input type="text" class="form-control" asp-for="customspecialaddition" id="addition" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-4">
+                        <div class="form-group">
+                            <label for="Qty">Quantity</label>
+                            <input type="text" class="form-control" asp-for="quantity" disabled id="Qty" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-4 addition-addon clearfix">
+                        <label for="add" class="lable-head">Type</label>
+                        <div class="type-group">
+                            <div class="inputGroup">
+                                @Html.RadioButtonFor(m => m._saletype, SaleType.CM, new { @name = "radio", @type = "radio", @id = "CashMemo" })
+
+
+                                <label for="CashMemo" class="cm-lable">C/M</label>
+                            </div>
+                            <div class="inputGroup">
+                                @Html.RadioButtonFor(m => m._saletype, SaleType.OF, new { @name = "radio", @type = "radio", @id = "OrderForm" })
+                                <label for="OrderForm" class="of-lable">O/F</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row ">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="description-container desktop-description">
+                            <!-- <h5>Description</h5> -->
+                            <!-- <p><span class="fbold product-name">Buddha</span> <span class="fregular product-info">Sitting Buddha</span></p> -->
+                            <ul>
+                                @*<li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold" id="itemcategory"> </span><span class="fregular" id="itemname"> </span><span class="divide">/</span><span class="fbold" id="itemsize"></span><span class="divide">/</span><span class="fbold" id="itemstone"></span><span class="divide">/</span><span class="fbold" id="itemcolor"></span></p></li>*@
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mar-b-10">
+                    <div class="col-lg-6 addition-add-new clearfix">
+                        <label for="add" class="lable-head">Add</label>
+                        <div class="addition-add-input">
+                            @{
+                                @for (int i = 0; i < Model.specialadditions.Count(); i++)
+                                    {
+                                <div class="inputGroup">
+                                    @*<input id="chk@(item.Value)"
+                                        type="checkbox"
+                                        value="@item.Value"
+                                        checked="@item.Selected" />*@
+                                    @*<label for="chk@(item.Value)">@item.Text</label>*@
+                                    <input asp-for="specialadditions[i].Selected" type="checkbox" id="option@(i)">
+                                    <label for="option@(i)" asp-for="specialadditions[i].Text">@Model.specialadditions[i].Text</label>
+                                    <input type="hidden" asp-for="specialadditions[i].Value" />
+                                    <input type="hidden" asp-for="specialadditions[i].Text" />
+                                </div>
+
+                                @*<label for="option1">LED</label>*@
+
+                                    }
+                                @*<div class="inputGroup">
+                                        <input id="option2" name="option2" type="checkbox">
+                                        <label for="option2">Wooden Frame</label>
+                                    </div>
+                                    <div class="inputGroup">
+                                        <input id="option3" name="option3" type="checkbox">
+                                        <label for="option3">Marble Cubes</label>
+                                    </div>
+                                    <div class="inputGroup">
+                                        <input id="option4" name="option4" type="checkbox">
+                                        <label for="option4">Addition</label>
+                                    </div>*@}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mar-b-10">
+                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
+                        <label for="Currecny">Fx</label>
+                        @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.currencyid, "", new { @class = "text-danger" })
+
+                        <div>
+
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
+                        @*<label for="ConversionRate">Conv. Rate</label>*@
+                        @Html.LabelFor(model => model.conversionrate)
+                        @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "", step = "0.01", @class = "form-control", required = "required", placeholder = "Enter ..." })
+                        @Html.ValidationMessageFor(model => model.conversionrate, "", new { @class = "text-danger" })
+                        @*<input type="text" class="form-control" id="ConversionRate" placeholder="">*@
+                    </div>
+                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
+
+                        <div class="total-inra">
+                            @Html.LabelFor(model => model.totalvalue)
+                            @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "", step = "1", @class = "form-control", required = "required", placeholder = "Enter ..." })
+                            @Html.ValidationMessageFor(model => model.totalvalue, "", new { @class = "text-danger" })
+
+                            <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
+                            <input type="hidden"  asp-for="orderid" />
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 text-right col-md-3 col-sm-3 col-xs-6 col-6">
+                        <button type="submit" class="btn-blue">Add Item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    }
+</div>
+<div id="CSale" style="display:none">
+    @using (Html.BeginForm("AddCustomSale", "AddSale", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+    @Html.AntiForgeryToken()
+
+
+    <div class="row pad-rl-20 pad-tb-10">
+        <input type="hidden" asp-for="mirrorid" />
+
+        <div class="col-lg-12 col-md-12 full-width-col pad-0">
+            <div class="container-fluid pad-0">
+                <div class="row">
+
+                    <!--  <div class="col-lg-12 hide-desktop text-right">
+                      <div class="scanner-image">
+                        <img src="img/scan.png"/>
+                      </div>
+                    </div> -->
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div>
+                            <div class=" main-photo-container">
+                                <img id="image" class="object-cover w-full h-32" src="https://placehold.co/300x300/e2e8f0/e2e8f0" />
+
+                                <div class="photo-bg" onClick="document.getElementById('fileInput').click()">
+                                    <button type="button"
+                                            style="background-color: rgba(255, 255, 255, 0.65)"
+                                            class="hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 text-sm border border-gray-300 rounded-lg shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-camera" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
+                                            <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
+                                            <circle cx="12" cy="13" r="3" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <input name="file" id="fileInput" accept="image/*" class="hidden" type="file" onChange="let file = this.files[0];
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            document.getElementById('image').src = e.target.result;
+            document.getElementById('image2').src = e.target.result;
+          };
+
+          reader.readAsDataURL(file);
+        ">
+                        </div>
+
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        <div class="row mar-b-10">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="inputState">Category</label>
+                                    @Html.DropDownListFor(model => model.categoryid, Model.categorydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.categoryid, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="inputState">Shape</label>
+                                    @Html.DropDownListFor(model => model.shapeid, Model.shapesdetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.shapeid, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="inputState">Size</label>
+                                    <input type="text" asp-for="size" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="inputState">Marble Colour</label>
+                                    @Html.DropDownListFor(model => model.marblecolor, Model.marblecolordetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.marblecolor, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row mar-b-10">
+                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
+                        <label for="inputState">Fx</label>
+                        @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.currencyid, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
+                        @*<label for="ConversionRate">Conv. Rate</label>*@
+                        @Html.LabelFor(model => model.conversionrate)
+                        @Html.TextBoxFor(model => model.conversionrate, new { type = "number", min = "0", step = "0.1", @class = "form-control", required = "required", placeholder = "Enter ..." })
+                        @Html.ValidationMessageFor(model => model.conversionrate, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6">
+                        @*<input asp-for="conversionrate" type="number" min="0" step="0.1" required placeholder="Enter....." />*@
+                        @Html.LabelFor(model => model.totalvalue)
+                        @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "0", step = "1", @class = "form-control", required = "required", placeholder = "Enter ..." })
+                        @Html.ValidationMessageFor(model => model.totalvalue, "", new { @class = "text-danger" })
+
+                        <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
+                        <input type="hidden" asp-for="orderid" />
+
+                    </div>
+
+                    <div class="col-lg-3 text-right col-md-3 col-sm-2 col-xs-6 col-6">
+                        <button class="btn-blue">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+
+
+
+<div class="row pad-t-0 pad-rl-20">
+    <div class="col-lg-12 pad-0">
+        <div class="table-responsive table--no-card m-b-30">
+            <table class="table table-borderless table-striped table-earning">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Fx</th>
+                        <th>INR</th>
+                        <th class="text-center">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (Model.cashsaledetails != null)
+                    {
+                    @if (Model.cashsaledetails.Count() > 0)
+                        {
+                    @foreach (var item in Model.cashsaledetails)
+                            {
+                    <tr>
+                        <td class="table-description-td">
+                            <p class="table-description-p">
+                                <span class="table-stock-number">@Html.DisplayFor(modelItem => item.stockid)</span>
+                                @if (item.ordertype == "CM")
+                                            {
+                                <span class="table-type CM">@Html.DisplayFor(modelItem => item.ordertype)</span>
+                                            }
+                                            else
+                                            { <span class="table-type of">@Html.DisplayFor(modelItem => item.ordertype)</span>}
+                            </p>
+                            <p class="table-description">@Html.DisplayFor(modelItem => item.itemdesc)</p>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.symbol)&nbsp; @Html.DisplayFor(modelItem => item.salevalue)</td>
+                        <td><i class="las la-rupee-sign"></i> @Html.DisplayFor(modelItem => item.salevalueinr)</td>
+                        <td class="text-center">
+
+                            @Html.ActionLink("", "DeleteSale", "AddSale", new { itemorderid = item.itemorderid }, new { @class = "delete-item  las la-times" })
+
+
+                        </td>
+                    </tr>
+                            }
+                        }
+                    }
+                    @*<tr>
+                            <td class="table-description-td">
+                                <p class="table-description-p">
+                                    <span class="table-stock-number">A300</span>
+                                    <span class="table-type CM">C/M</span>
+                                </p>
+                                <p class="table-description">Buddha, Sitting Buddha, 0*0*6, White</p>
+
+                            </td>
+
+                            <td><i class="las la-rupee-sign"></i> 200</td>
+                            <td><i class="las la-rupee-sign"></i> 200</td>
+                            <td class="text-center">
+                                <a href="" class="delete-item"><i class="las la-times"></i></a>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+
+
+                                <p>
+                                    <span class="table-stock-number">A300</span>
+                                    <span class="table-type of">O/F</span>
+                                </p>
+
+                                <p class="table-description">Buddha, Sitting Buddha, 0*0*6, White</p>
+
+                            </td>
+
+                            <td><i class="las la-rupee-sign"></i> 200</td>
+                            <td><i class="las la-rupee-sign"></i> 200</td>
+                            <td class="text-center">
+                                <a href="" class="delete-item"><i class="las la-times"></i></a>
+                            </td>
+
+
+                        </tr>*@
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="col-lg-12 text-right">
+        <p class="grand-total"><span class="fregular head">Grand Total:</span> <span class="fbold val"><i class="las la-rupee-sign"> @Html.DisplayFor(model => model.grandtotal)</i></span></p>
+    </div>
+
+
+</div>
+
+<div class="row pad-0 mar-0">
+    <div class="col-lg-12 footer-btn text-right pad-rl-40">
+        <button class="btn-pink" onclick="manaagetab('4')">Continue</button>
+        @*<button class="btn-pink">Finish</button>*@
+    </div>
+</div>
+
+
+<script src="https://103.48.50.253/sale/instascan_cdn.min.js"></script>
+@*<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js" rel="nofollow"></script>*@
+<script type="text/javascript">
+ 
+    function showcamera() {
+        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+        scanner.addListener('scan', function (content) {
+            //  console.log(content);
+            $('#StockNumber').val(content);
+            scanner.stop();
+            $('#preview').hide();
+        });
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[1]);
+            } else {
+                console.error('No cameras found.');
+            }
+        }).catch(function (e) {
+            console.error(e);
+        });
+    }
+    //var scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 5, mirror: false });
+    //scanner.addListener('scan', function (content) {
+    //    $('#StockNumber').val(content);
+    //    scanner.stop();
+    //    scanner.hide();
+
+    //    //window.location.href=content;
+    //});
+    //Instascan.Camera.getCameras().then(function (cameras) {
+    //    if (cameras.length > 0) {
+    //        scanner.start(cameras[0]);
+    //        //if (cameras[0] != "") {
+    //        //    scanner.start(cameras[0]);
+    //        //} else {
+    //        //    alert('No Front camera found!');
+    //        //}
+    //        //if (cameras[1] != "") {
+    //        //    scanner.start(cameras[1]);
+    //        //} else {
+    //        //    alert('No Back camera found!');
+    //        //}
+    //        //$('[name="options"]').on('change', function () {
+    //        //    if ($(this).val() == 1) {
+    //        //        if (cameras[0] != "") {
+    //        //            scanner.start(cameras[0]);
+    //        //        } else {
+    //        //            alert('No Front camera found!');
+    //        //        }
+    //        //    } else if ($(this).val() == 2) {
+    //        //        if (cameras[1] != "") {
+    //        //            scanner.start(cameras[1]);
+    //        //        } else {
+    //        //            alert('No Back camera found!');
+    //        //        }
+    //        //    }
+    //        //});
+    //    } else {
+    //        console.error('No Back cameras found.');
+    //        alert('No cameras found.');
+    //    }
+    //}).catch(function (e) {
+    //    console.error(e);
+    //    alert(e);
+  //  });
+</script>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        $("#CSale").hide();
+        $("#NSale").show();
+        $("#qrcodearea").hide();
+        $("#camfile").hide();
+        $("#preview").hide();
+        $("#normalsale").click(function () {
+            $("#camfile").trigger('click');
+        });
+    });
+
+    $("#customsale").click(function () {
+        $("#CSale").show();
+        $("#NSale").hide();
+        $("#qrcodearea").hide();
+        $("#preview").hide();
+    });
+    $("#normalsale").click(function () {
+        $("#CSale").hide();
+        $("#NSale").show();
+        $("#qrcodearea").show();
+        $("#preview").show();
+        showcamera();
+    });
+</script>

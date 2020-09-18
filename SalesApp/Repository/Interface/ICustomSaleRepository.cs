@@ -9,7 +9,7 @@ namespace SalesApp.Repository.Interface
 {
   public interface ICustomSaleRepository
     {
-        public Task<CustomSaleVM> Init();
+        public Task<CustomSaleVM> Init(long mirrorid);
         public Task<Int64> AddCashSale(CustomSaleVM _sale, int userid);
 
 

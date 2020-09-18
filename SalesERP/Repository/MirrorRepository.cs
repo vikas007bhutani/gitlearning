@@ -32,7 +32,8 @@ namespace SALEERP.Repository
             List<CountriesMaster> _countrymaster =await this._DBERP.CountriesMaster.Where(i => i.IsActive == true).ToListAsync().ConfigureAwait(false);
             List<VehicleMaster> _vehiclemaster =await this._DBERP.VehicleMaster.Where(i => i.IsActive == true).ToListAsync().ConfigureAwait(false);
             List<SeriesMaster> _seriesmaster =await this._DBERP.SeriesMaster.Where(i => i.IsActive == true).ToListAsync().ConfigureAwait(false);
-            _mirror.MirrorDate=Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy hh: mm"));
+            //_mirror.MirrorDate= DateTime.ParseExact(txtexpirydate.Text, "dd/MM/yyyy",
+            //                              CultureInfo.InvariantCulture); Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy hh:mm"));
             var mirrors = await (from m in this._DBERP.MirrorDetails
                                  join ma in this._DBERP.MirrorAgent
                                  on m.Id equals ma.MirrorId

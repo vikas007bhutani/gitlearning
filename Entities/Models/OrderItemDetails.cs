@@ -11,6 +11,7 @@ namespace SALEERP.Models
         public long? OrderId { get; set; }
         public int? OrderType { get; set; }
         public string OrderTypePrefix { get; set; }
+        public int? SaleType { get; set; }
         public int? Qty { get; set; }
         public int? CurrencyType { get; set; }
         public decimal? Price { get; set; }

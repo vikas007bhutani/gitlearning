@@ -65,7 +65,7 @@ namespace SalesApp.Controllers
                             // userid = result.UserId;
                             return RedirectToAction("Index", "Mirror");
                         }
-                        else { ModelState.AddModelError(string.Empty, "Username/Password did not matched.Invalid Login!"); }
+                        else { ModelState.AddModelError(string.Empty, "Username did not matched.Invalid Login!"); }
 
 
                     }
@@ -76,7 +76,7 @@ namespace SalesApp.Controllers
                 {
                     throw;
                 }
-                return View("Index", this._comm.getroles());
+                return View("Index",null);
             }
 
             public async Task<IActionResult> Logout()

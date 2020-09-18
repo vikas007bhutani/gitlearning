@@ -121,12 +121,12 @@
                     <label for="">Tel.No.</label>
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 col-4 pad-r-0">
-                            @Html.TextBoxFor(model => model.cinfo.TeleCountryCode, new { type = "number", min = "0", step = "0.01", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "+1" } })
+                            @Html.TextBoxFor(model => model.cinfo.TeleCountryCode, new { type = "number", min = "0", step = "0.01", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "++" } })
                             @Html.ValidationMessageFor(model => model.cinfo.TeleCountryCode, "", new { @class = "text-danger" })
 
                         </div>
                         <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8 col-8">
-                            @Html.TextBoxFor(model => model.cinfo.Telephone, new { type = "number", min = "0", step = "0.01", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "+1" } })
+                            @Html.TextBoxFor(model => model.cinfo.Telephone, new { type = "number", min = "0", step = "0.01", htmlAttributes = new { @class = "form-control", required = "required", placeholder = "++" } })
                             @Html.ValidationMessageFor(model => model.cinfo.Telephone, "", new { @class = "text-danger" })
 
                         </div>
@@ -180,9 +180,10 @@
 
                     <div class="col-lg-12 col-md-12 col-sm-12 text-right pad-rl-20 btns-group">
 
-                        <button class="btn-dark-gray">Back</button>
+                        <button class="btn-dark-gray" onclick="manaagetab('4')">Back</button>
                         <button class="btn-blue-light">Reset</button>
-                        <button type="submit" class="btn-pink">Continue</button>
+                        <button type="submit" class="btn-dark-gray">Save</button>
+                        <button type="button" class="btn-pink" onclick="manaagetab('3')">Continue</button>
 
                     </div>
                 </div>

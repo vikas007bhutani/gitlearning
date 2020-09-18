@@ -24,7 +24,7 @@
                     <p><span class="fregular flight dblock">Address:</span>  <span class="fbold fdark dblock">@Html.DisplayFor(model => model.cinfo.Address)</span></p>
                     <p><span class=" fregular flight dblock">Contact Numbers: </span>  <span class="fbold fdark dblock">@Html.DisplayFor(model => model.cinfo.Telephone)</span></p>
                     <p><span class="fregular flight dblock">Email Address:</span>  <span class="fbold fdark  dblock">@Html.DisplayFor(model => model.cinfo.Email)</span></p>
-                    <p><span class="fregular flight dblock">Passport Number:</span>  <span class=" dblock fbold fdark ">@Html.DisplayFor(model => model.cinfo.PassportNo)</span></p>
+                    <p><span class="fregular flight dblock">Passport Number:</span>  <span class=" dblock fbold fdark ">@Html.DisplayFor(model => model.dinfo.Passport)</span></p>
 
 
 
@@ -81,7 +81,7 @@
                                             <td class="text-center"><i class="las la-rupee-sign"></i>  @Html.DisplayFor(modelItem => item.salevalue)</td>
                                             <td class="text-center"><i class="las la-rupee-sign"></i> @Html.DisplayFor(modelItem => item.salevalueinr)</td>
                                             <td class="text-center">
-                                                @Html.ActionLink("Delete", "DeleteSale", "CustomSale", new { itemorderid = item.itemorderid }, new { @class = "delete-item" })
+                                                @Html.ActionLink("", "DeleteSale", "CustomSale", new { itemorderid = item.itemorderid }, new { @class = "delete-item  las la-times" })
                                             </td>
 
 
@@ -122,7 +122,7 @@
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.width)</td>
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.height)</td>
                                 <td class="text-center">
-                                    @Html.ActionLink("Delete", "DeleteStand", "CustomSale", new { itemorderid = item.itemorderid }, new { @class = "delete-item" })
+                                    @Html.ActionLink("", "DeleteStand", "CustomSale", new { itemorderid = item.itemorderid }, new { @class = "delete-item  las la-times" })
                                 </td>
 
 
@@ -139,12 +139,17 @@
             </div>
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6 footer-btn text-left pad-l-20 btns-group">
-                <button class="btn-print"><i class="las la-print"></i> Print</button>
+                @using (Html.BeginForm("ExportToPDF", "CustomSale", FormMethod.Post))
+                {
+                    <button type="submit" class="btn-print"><i class="las la-print"></i> Print</button>
+                }
 
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-6 footer-btn text-right pad-r-20 btns-group">
-                <button class="btn-dark-gray">Back</button>
-                <button class="btn-pink">Finish</button>
+                <button class="btn-dark-gray" onclick="manaagetab('3')">Back</button>
+                @Html.ActionLink("Finish", "FinishSale", "CustomSale", new { orderid = Model.orderid }, new { @class = "btn-pink" })
+                @*@Html.ActionLink("Finish", "Index", "Mirror", new { orderId = Model.orderid }, new { @class = "btn-pink" })*@
+                @*<button class="btn-pink">Finish</button>*@
             </div>
         </div>
 

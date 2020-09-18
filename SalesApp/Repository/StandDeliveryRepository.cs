@@ -46,7 +46,6 @@ namespace SalesApp.Repository
                         {
                             MirrorId = 2,
                             SaleDate = DateTime.Now,
-                            SaleType = 3,
                             Unit = 1,
                             Description = "StandSale",
                             TransactionId = Common.GetUnique(),
@@ -76,6 +75,7 @@ namespace SalesApp.Repository
                             Unit = 1,
                             CreatedDatetime = DateTime.Now,
                             IsActive = true,
+                            SaleType = 3
 
                         }).ConfigureAwait(false);
                         //result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;

@@ -25,7 +25,6 @@ G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.runtim
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.runtimeconfig.dev.json
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.dll
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\bin\Debug\netcoreapp3.1\Entities.pdb
-G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.csprojAssemblyReference.cache
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.AssemblyInfoInputs.cache
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.AssemblyInfo.cs
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.csproj.CoreCompileInputs.cache

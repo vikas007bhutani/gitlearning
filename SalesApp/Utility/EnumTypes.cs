@@ -17,7 +17,7 @@ public enum DeliveryType
 
     CashMemo = 1,
     HomeDelivery = 2,
-    PortDelivery = 2,
+    PortDelivery = 3,
 }
 public enum PortType
 {

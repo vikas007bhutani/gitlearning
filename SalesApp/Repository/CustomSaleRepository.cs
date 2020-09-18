@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SalesApp.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SalesApp.Repository
 {
@@ -29,11 +30,22 @@ namespace SalesApp.Repository
         {
             bool result = false, innerresult = false;
             long uid = 0;
+            decimal finalINR = 0, INRvalue = 0;
             try
             {
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync())
                 {
-                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid && i.MirrorId == 2);
+                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid);
+                    INRvalue = Math.Round((decimal)(_sale.totalvalue * _sale.conversionrate), MidpointRounding.AwayFromZero);
+                    decimal resultd = Math.Abs(INRvalue % 10);
+                    if (resultd > 0)
+                    {
+                        finalINR = INRvalue + (10 - resultd);
+                    }
+                    else
+                    {
+                        finalINR = INRvalue;
+                    }
                     if (entityorder != null && entityorder.Id > 0)
                     {
                         uid = entityorder.Id;
@@ -42,17 +54,17 @@ namespace SalesApp.Repository
                     {
                         await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
                         {
-                            MirrorId = 2,
+                            MirrorId = _sale.mirrorid,
                             SaleDate = DateTime.Now,
                             DelieveryType = 0,
-                            SaleType = 3,
+                            
                             PortType = 0,
                             Unit = 1,
                             Description = "CustomSale",
                             TransactionId = Common.GetUnique(),
                             CreatedDatetime = DateTime.Now,
                             IsActive = true,
-                            salestatus = 1
+                          //  salestatus = 1
                             
 
                         });
@@ -68,11 +80,13 @@ namespace SalesApp.Repository
                             OrderId = uid,
                             ItemDesc = _sale.categoryid+"/"+ _sale.size+"/"+ _sale.shapeid+"/"+ _sale.marblecolor,
                             StockId = _sale.stockno,
-                            OrderType = _sale.saletypevalue == "OrderForm" ? (int?)SaleType.OF : (int?)SaleType.CM,
-                            OrderTypePrefix = _sale.saletypevalue == "OrderForm" ?"OF":"CM",
+                           //OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
+                             OrderType =  2 ,
+                           // OrderTypePrefix = _sale.saletypevalue ,
+                            OrderTypePrefix = "OF",
                             ItemType = 1,
                             Price = _sale.totalvalue,
-                            PriceInr =Math.Round(_sale.totalvalue*_sale.conversionrate,MidpointRounding.AwayFromZero),
+                            PriceInr = finalINR,
                             ConversionRate = _sale.conversionrate,
                             Size=_sale.size,
                             Category=_sale.categoryid,
@@ -81,8 +95,9 @@ namespace SalesApp.Repository
                             Unit = 1,
                             CreatedDatetime = DateTime.Now,
                             IsActive = true,
-                            CurrencyType=_sale.currencyid
-                           
+                            CurrencyType=_sale.currencyid,
+                            SaleType = 3
+
 
                         });
                         //result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
@@ -122,7 +137,6 @@ namespace SalesApp.Repository
             Int64? _orderid = 0;
             try
             {
-
 
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
@@ -165,11 +179,8 @@ namespace SalesApp.Repository
             try
             {
 
-
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
-
-
                     var entity = await _SALESDBE.OrderMaster.FirstOrDefaultAsync(item => item.Id == orderid).ConfigureAwait(false);
 
                     if (entity != null)
@@ -182,11 +193,57 @@ namespace SalesApp.Repository
                         innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
                         if (innerresult)
                         {
-                            await dbusertrans.CommitAsync().ConfigureAwait(false);
+
+                            var entityorderitem = await _SALESDBE.OrderItemDetails.Where(item => item.OrderId == orderid).ToListAsync().ConfigureAwait(false);
+                            if (entityorderitem != null && entityorderitem.Count > 0)
+                            {
+
+                                foreach (var item in entityorderitem)
+                                {
+                                    if (!string.IsNullOrEmpty(item.StockId))
+                                    {
+                                        var entitycarpet = await _SALESDBE.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == item.StockId).ConfigureAwait(false);
+                                        if (entitycarpet != null && entitycarpet.StockNo > 0)
+                                        {
+                                            entitycarpet.PackDate = DateTime.Now;
+                                            entitycarpet.Pack = 1;
+                                            entitycarpet.PackSource = "SALE";
+                                            entitycarpet.PackingDetailId = (Int32)item.Id;
+                                            entitycarpet.PackingId = (Int32)item.OrderId;
+                                            this._SALESDBE.OrderMaster.Update(entity);
+                                        }
+                                        await this._SALESDBE.Directstockpack.AddAsync(new Directstockpack()
+                                        {
+                                            Stockno = entitycarpet.StockNo,
+                                            Remark = "SALES",
+                                            Dateadded = DateTime.Now,
+                                        }).ConfigureAwait(false);
+                                        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                    }
+                                    else
+                                    { result = false;  }
+
+
+                                }
+                            }
+                            else
+                            {
+                                result = false;
+
+                            }
+                            if (result)
+                            {
+                                await dbusertrans.CommitAsync().ConfigureAwait(false);
+
+                            }
+                            else
+                            { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
 
                         }
                         else
                         { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+
+
 
                     }
                 }
@@ -207,9 +264,14 @@ namespace SalesApp.Repository
                 _cashsaledetails = new CustomSaleVM();
             }
             CommonRepository _comm = new CommonRepository(_SALESDBE);
-            _cashsaledetails.cashsaledetails = await(from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
+            _cashsaledetails.cashsaledetails = await(from mr in this._SALESDBE.MirrorDetails.Where(c => c.IsActive == true)
+                                                     join m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
+                                                      on mr.Id equals m.MirrorId
                                                      join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
                                                     on m.Id equals od.OrderId
+                                                     join c in this._SALESDBE.CurrencyMaster.Where(c => c.IsActive == true)
+                                                      on od.CurrencyType equals c.Id into currdetails
+                                                     from curr in currdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
 
                                                      where m.Id == _orderid && od.ItemType == 1
                                                      select new customsaledetails
@@ -221,11 +283,13 @@ namespace SalesApp.Repository
                                                          ordertype = od.OrderTypePrefix,
                                                          salevalue = od.Price,
                                                          salevalueinr = od.PriceInr,
-                                                         shape=od.Shape,
-                                                         color=od.Color,
-                                                         category=od.Category,
-                                                         size=od.Size,
-                                                         conversionrate=od.ConversionRate
+                                                         //  salevalueinr = Math.Round((decimal)(od.PriceInr * od.ConversionRate), MidpointRounding.AwayFromZero),
+                                                         mirrorid = mr.Id,
+                                                         mirrordate = mr.Date,
+                                                         conversionrate = od.ConversionRate,
+                                                         symbol = curr.Symbol,
+                                                         currencyid = (int)od.CurrencyType,
+                                                         currency = curr.Type
 
                                                      }).ToListAsync();
             _cashsaledetails.standsaledetails = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
@@ -235,7 +299,7 @@ namespace SalesApp.Repository
                                                       where m.Id == _orderid && od.ItemType==2
                                                       select new standdetails
                                                       {
-                                                          //itemorderid = od.Id,
+                                                          itemorderid = od.Id,
                                                            color=od.Color,
                                                            standdesc=od.ItemDesc,
                                                            ordertype = od.OrderTypePrefix,
@@ -274,7 +338,9 @@ namespace SalesApp.Repository
                                                PortName=m.PortName,
                                                Passport=m.PassportNo,
                                                DeliveryFrom=m.DeliveryFrom,
-                                               DeliveryTo=m.DeliveryTo
+                                               DeliveryTo=m.DeliveryTo,
+                                               DelieveryType=m.DelieveryType,
+                                               PortType=m.PortType
 
                                             }).FirstOrDefaultAsync();
 
@@ -298,18 +364,44 @@ namespace SalesApp.Repository
                                                            payid=od.Id,
                                                            paymode= pm.PayName,
                                                            payamount=od.Amount,
+                                                           payamountinr=od.AmoutHd,
                                                            paytype = (string.IsNullOrEmpty(card.CardName) ? curr.Type  : card.CardName) ,
-                                                          
+                                                           symbol = curr.Symbol != null ? curr.Symbol : "$",
+                                                           currencyid=curr.Id
+
+
                                                        }).ToListAsync();
 
             _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
             _cashsaledetails.grandtotalinr =_cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
             _cashsaledetails.grandtotalcurrency= _cashsaledetails.cashsaledetails.Sum(s => s.salevalue);
-            _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency  - Math.Round(((decimal) _cashsaledetails.cashsaledetails[0].conversionrate * (decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamount)) / 100);
-            _cashsaledetails.balinr = _cashsaledetails.grandtotalinr - Math.Round(((decimal)_cashsaledetails.cashsaledetails[0].conversionrate * (decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamount)));
+            if (_cashsaledetails.paymentdetails.Count > 0)
+            {
+                _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency - ((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamount));
+                _cashsaledetails.balinr = _cashsaledetails.grandtotalinr - Math.Round(((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamountinr)));
+                if (_cashsaledetails.paymentdetails[0].currencyid != 6 )
+                {
+                    _cashsaledetails.currsymbol = _cashsaledetails.paymentdetails[0].symbol;
+                }
+                else
+                { _cashsaledetails.currsymbol = "$"; }
 
+              //  _cashsaledetails.currsymbol = _cashsaledetails.paymentdetails[0].symbol;
+            }
+            else
+            {
+                _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency;
+                _cashsaledetails.balinr = _cashsaledetails.grandtotalinr;
+               
 
+                _cashsaledetails.currsymbol = "$";
+            }
+            if (_cashsaledetails.balcurrency < 0 || _cashsaledetails.balinr < 0)
+            {
+                _cashsaledetails.balcurrency = 0;
+                _cashsaledetails.balinr = 0;
 
+            }
             _cashsaledetails.currencydetails = await _comm.GetCurrency();
             _cashsaledetails.shapesdetails = await _comm.GetShapes();
             _cashsaledetails.categorydetails = await _comm.GetCategory();
@@ -322,6 +414,7 @@ namespace SalesApp.Repository
             _cashsaledetails.standcategory = await _comm.GetItemName();
             _cashsaledetails.cardtypedetails = await _comm.GetCardType();
             _cashsaledetails.paylaterdetails = await _comm.GetPayLaterType();
+            _cashsaledetails.itemcount = _cashsaledetails.cashsaledetails.Count();
             _cashsaledetails.orderid = _orderid;
             _cashsaledetails.cardid = 0;
             _cashsaledetails.cardiddebit = 0;
@@ -333,13 +426,39 @@ namespace SalesApp.Repository
             _cashsaledetails.PayLaterAmount = 0;
             _cashsaledetails.PaytmAmount = 0;
             _cashsaledetails.paymethodvalue = "0";
+            if (_cashsaledetails.cashsaledetails.Count > 0)
+            {
+                _cashsaledetails.conversionrate = _cashsaledetails.cashsaledetails[0].conversionrate;
+                _cashsaledetails.currencyid = _cashsaledetails.cashsaledetails[0].currencyid;
+                List<SelectListItem> newSelectList = new List<SelectListItem>();
+                foreach (var item in _cashsaledetails.cashsaledetails)
+                {
+                    newSelectList.Add(new SelectListItem
+                    {
+                        Value = item.currencyid.ToString(),
+                        Text = item.currency
+                    });
+                }
+                newSelectList.Add(new SelectListItem("INR", "6"));
+                _cashsaledetails.currencydetails = newSelectList;
+            }
+            else
+            {
+                _cashsaledetails.currencydetails = await _comm.GetCurrency();
+
+            }
+            if (_cashsaledetails.dinfo != null)
+
+            {
+                _cashsaledetails.deliverytypevalue = _cashsaledetails.dinfo.DelieveryType.ToString();
+                _cashsaledetails.porttypevalue = _cashsaledetails.dinfo.PortType.ToString();
+
+            }
             return _cashsaledetails;
 
         }
 
-
-
-        public async Task<CustomSaleVM> Init()
+        public async Task<CustomSaleVM> Init(long _mirroid)
         {
             CustomSaleVM _cashsaledetails = new CustomSaleVM();
             CommonRepository _comm = new CommonRepository(_SALESDBE);
@@ -355,6 +474,7 @@ namespace SalesApp.Repository
             _cashsaledetails.sizeinwidth = await _comm.GetWidth();
             _cashsaledetails.sizeinheight = await _comm.GetLenght();
             _cashsaledetails.standcategory = await _comm.GetItemName();
+            _cashsaledetails.mirrorid = _mirroid;
             return _cashsaledetails;
         }
 
@@ -367,7 +487,7 @@ namespace SalesApp.Repository
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
 
-                    var entitycust = await this._SALESDBE.CustomerDetails.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
+                    var entitycust = await this._SALESDBE.CustomerDetails.FirstOrDefaultAsync(i => i.OrderId == _sale.orderid).ConfigureAwait(false);
                     if (entitycust != null && entitycust.Id > 0)
                     {
                         entitycust.Name = _sale.cinfo.Name;
@@ -443,21 +563,33 @@ namespace SalesApp.Repository
             {
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
-                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid && i.MirrorId == 2).ConfigureAwait(false);
+                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
                    
                     if (entityorder != null && entityorder.Id > 0)
                     {
-                        var entityitem = await this._SALESDBE.CarpetNumber.Where(i => i.Prefix == _sale.standcode).OrderByDescending(b=>b.TStockNo).FirstOrDefaultAsync().ConfigureAwait(false);
-                        if (entityitem != null && entityitem.TStockNo != string.Empty)
+                        var entityitem = await (from m in this._SALESDBE.CarpetNumber
+                                                join it in this._SALESDBE.ItemMaster
+                                               on m.Prefix equals it.ItemCode
+
+                                                where m.Prefix == _sale.standcode
+                                                select new standdetails
+                                                {
+                                                    standcode = m.TStockNo,
+                                                    standdesc = it.ItemName
+
+                                                }).OrderByDescending(m => m.standcode).FirstOrDefaultAsync().ConfigureAwait(false);
+
+
+                        if (entityitem != null && entityitem.standcode != string.Empty)
                         {
                             await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
                             {
                                 OrderId = _sale.orderid,
-                                ItemDesc = entityitem.Prefix,
-                                StockId = entityitem.TStockNo,
+                                ItemDesc = entityitem.standdesc,
+                                StockId = entityitem.standcode,
 
-                                OrderType = _sale.saletypevalue == "OrderForm" ? (int?)SaleType.OF : (int?)SaleType.CM,
-                                OrderTypePrefix = _sale.saletypevalue == "OrderForm" ? "OF" : "CM",
+                                OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
+                                OrderTypePrefix = _sale.saletypevalue,
                                 ItemType = 2,
                                 width = _sale.width,
                                 height = _sale.height,
@@ -517,7 +649,7 @@ namespace SalesApp.Repository
 
                 throw;
             }
-            return result;
+            return innerresult;
 
         }
 
@@ -529,7 +661,7 @@ namespace SalesApp.Repository
             {
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
-                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid && i.MirrorId == 2).ConfigureAwait(false);
+                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid ).ConfigureAwait(false);
 
                     if (entityorder != null && entityorder.Id > 0)
                     {
@@ -539,11 +671,8 @@ namespace SalesApp.Repository
                         entityorder.PortName = _sale.dinfo.PortName;
                         entityorder.DeliveryFrom = _sale.dinfo.DeliveryFrom;
                         entityorder.DeliveryTo = _sale.dinfo.DeliveryTo;
-
                         innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
 
-                    
-                        //uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
                     }
                     if (innerresult)
                     {
@@ -551,36 +680,7 @@ namespace SalesApp.Repository
 
                     }
                     else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
-                    //if (uid > 0)
-                    //{
-
-                    //    await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
-                    //    {
-                    //        OrderId = uid,
-                    //        ItemDesc = _sale.item_desc,
-                    //        StockId = _sale.stockno,
-                    //        OrderType = (int?)SaleType.OrderForm,
-                    //        OrderTypePrefix = _sale.saletypevalue,
-                    //        ItemType = 2,
-                    //        Price = _sale.totalvalue,
-                    //        PriceInr = _sale.totalvalue,
-                    //        ConversionRate = _sale.conversionrate,
-                    //        Unit = 1,
-                    //        CreatedDatetime = DateTime.Now,
-                    //        IsActive = true,
-
-                    //    }).ConfigureAwait(false);
-
-                    //    innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                    //    if (innerresult)
-                    //    {
-                    //        await dbusertrans.CommitAsync().ConfigureAwait(false);
-
-                    //    }
-                    //    else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
-
-
-                    //}
+                   
                 }
             }
             catch (Exception ex)
@@ -588,7 +688,7 @@ namespace SalesApp.Repository
 
                 throw;
             }
-            return result;
+            return innerresult;
         }
 
         public async Task<long?> DeleteStandSale(int standid, int userid)
@@ -655,12 +755,24 @@ namespace SalesApp.Repository
                            from item in orderitemdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
                           
 
-                           where m.Id == _sale.orderid select m                                               
+                           where m.Id == _sale.orderid
+                                                select new calucation
+                                                {
+                                                    mirrorid=m.MirrorId,
+                                                     itemorderid=item.Id,
+                                                     orderid=m.Id,
+                                                     TotalAmount=Convert.ToDecimal( pay.Amount),
+                                                     TotalAmountINR= Convert.ToDecimal(pay.AmoutHd),
+                                                     Amount= Convert.ToDecimal(item.Price),
+                                                     AmountINR = Convert.ToDecimal(item.PriceInr),
+                                                     conversionrate=item.ConversionRate
+
+                                                }
 
 
 
                            ).ToListAsync();
-                  
+
 
 
 
@@ -668,44 +780,87 @@ namespace SalesApp.Repository
 
                     //var entitypayment = await this._SALESDBE.OrderPayment.Where(i => i.Id == _sale.orderid).ToListAsync().ConfigureAwait(false);
                     //var entityoderdetails = await this._SALESDBE.OrderItemDetails.Where(i => i.Id == _sale.orderid).ToListAsync().ConfigureAwait(false);
-                    decimal? currencyamount= entityorder.Sum(s => s.OrderPayment.Sum(a=>a.Amount));
-                   decimal? currencyamountinr = entityorder.Sum(s => s.OrderPayment.Sum(a => a.AmoutHd));
-                    if(_sale.paymethodvalue.ToUpper().Contains("CASH") && _sale.currencyid !=6)
+                    decimal currencyamount = entityorder.Sum(s => s.TotalAmount);
+                    decimal currencyamountinr = entityorder.Sum(s => s.TotalAmountINR);
+                    decimal oldamount = entityorder.Sum(s => s.Amount);
+                    decimal oldamountinr = entityorder.Sum(s => s.AmountINR);
+                    decimal convrate = (decimal)entityorder.Where(s => s.conversionrate > 0).FirstOrDefault().conversionrate;
+                    decimal amount = 0;
+                    decimal amounthd = 0;
+                    decimal finalamountinr = 0;
+                    decimal finalINR = 0, INRvalue = 0;
+
+
+                    if (_sale.paymethodvalue.ToUpper().Contains("CASH") && _sale.currencyid != 6)
                     {
 
+
+                        amount = _sale.PayLaterAmount + _sale.CashAmount + _sale.CreditAmount + _sale.DebitAmount + _sale.PaytmAmount;
+
+                        INRvalue = Math.Round((decimal)(amount * convrate), MidpointRounding.AwayFromZero);
+                        decimal resultd = Math.Abs(INRvalue % 10);
+                        if (resultd > 0)
+                        {
+                            finalINR = INRvalue + (10 - resultd);
+                        }
+                        else
+                        {
+                            finalINR = INRvalue;
+                        }
+
+                        finalamountinr = oldamountinr - (currencyamountinr + finalINR);
+                        amounthd = INRvalue;
 
                     }
-
-                    if (entityorder != null && entityorder.Count > 0)
+                    else
                     {
-                     
+                        amounthd = _sale.PayLaterAmount + _sale.CashAmount + _sale.CreditAmount + _sale.DebitAmount + _sale.PaytmAmount;
+
+                        finalamountinr = oldamountinr - (currencyamountinr + amounthd);
+                        amount = (_sale.PayLaterAmount + _sale.CashAmount + _sale.CreditAmount + _sale.DebitAmount + _sale.PaytmAmount) / convrate;
+                        //  amount=
+
+                    }
+                    if (finalamountinr >= 0)
+                    {
+
+
+
+                        if (entityorder != null && entityorder.Count > 0)
+                        {
+
                             await this._SALESDBE.OrderPayment.AddAsync(new OrderPayment()
                             {
-                               
-                               Amount=_sale.PayLaterAmount+ _sale.CashAmount+ _sale.CreditAmount+ _sale.DebitAmount+ _sale.PaytmAmount,
-                                PayMode= (int)(paymethod)Enum.Parse(typeof(paymethod), _sale.paymethodvalue),
-                                CardType= (int)(paymethod)Enum.Parse(typeof(paymethod), _sale.paymethodvalue) == 4?_sale.paylaterid : _sale.cardid+_sale.cardiddebit,
+
+                                // Amount=_sale.PayLaterAmount+ _sale.CashAmount+ _sale.CreditAmount+ _sale.DebitAmount+ _sale.PaytmAmount,
+                                Amount = amount,
+                                PayMode = (int)(paymethod)Enum.Parse(typeof(paymethod), _sale.paymethodvalue),
+                                CardType = (int)(paymethod)Enum.Parse(typeof(paymethod), _sale.paymethodvalue) == 4 ? _sale.paylaterid : _sale.cardid + _sale.cardiddebit,
                                 CreatedDatetime = DateTime.Now,
                                 IsActive = true,
-                                OrderId=_sale.orderid,
-                                PayDate=DateTime.Now,
-                                CurrencyType=_sale.currencyid
+                                OrderId = _sale.orderid,
+                                PayDate = DateTime.Now,
+                                CurrencyType = _sale.currencyid,
+                                AmoutHd = amounthd
 
                             }).ConfigureAwait(false);
                             innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                      
 
 
-                        if (innerresult)
-                        {
-                            await dbusertrans.CommitAsync().ConfigureAwait(false);
-                           
-                           
 
+                            if (innerresult)
+                            {
+                                await dbusertrans.CommitAsync().ConfigureAwait(false);
+
+
+
+                            }
+                            else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+                            //uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
                         }
-                        else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
-                        //uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
                     }
+                    else
+                    { innerresult = false; }
                    
                 }
             }
@@ -714,7 +869,7 @@ namespace SalesApp.Repository
 
                 throw;
             }
-            return result;
+            return innerresult;
         }
 
         public async Task<long?> DeletePayment(int payid, int userid)

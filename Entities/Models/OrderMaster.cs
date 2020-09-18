@@ -17,7 +17,7 @@ namespace SALEERP.Models
         public DateTime? SaleDate { get; set; }
         public string TransactionId { get; set; }
         public int? DelieveryType { get; set; }
-        public int? SaleType { get; set; }
+       
         public int? PortType { get; set; }
         public string Description { get; set; }
         public string PortName { get; set; }

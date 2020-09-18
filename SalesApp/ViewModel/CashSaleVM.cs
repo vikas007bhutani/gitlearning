@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SalesApp.Utility;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace SalesApp.ViewModel
 {
@@ -13,18 +15,23 @@ namespace SalesApp.ViewModel
         public long mirrorid { get; set; }
 
         public long orderid { get; set; }
-        public DateTime mirrordate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime? mirrordate { get; set; }
         public int  specialaddition { get; set; }
         public string customspecialaddition { get; set; }
         public string stockno { get; set; }
+        public string currsymbol { get; set; }
         public string item_desc { get; set; }
+        [DisplayName("Conv. Rate")]
         public decimal conversionrate { get; set; }
         public int currencyid { get; set; }
         public int quantity { get; set; }
         public int sale_type { get; set; }
+        [DisplayName("Sale Value (Fx)")]
         public decimal totalvalue { get; set; }
         public decimal? grandtotal { get; set; }
         public int userid { get; set; }
+        public int itemcount { get; set; }
         public List<cashsaledetails> cashsaledetails { get; set; }
         public List<SelectListItem> currencydetails { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> specialadditions { get; set; } = new List<SelectListItem>();
@@ -42,12 +49,20 @@ namespace SalesApp.ViewModel
     {
         public long itemorderid { get; set; }
         public string ordertype { get; set; }
+        public string symbol { get; set; }
         public string stockid { get; set; }
         public string itemdesc { get; set; }
 
         public decimal? salevalue { get; set; }
 
         public decimal? salevalueinr { get; set; }
+        public long mirrorid { get; set; }
+
+       
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime? mirrordate { get; set; }
+       
+        public decimal? conversionrate { get; set; }
 
     }
 }
