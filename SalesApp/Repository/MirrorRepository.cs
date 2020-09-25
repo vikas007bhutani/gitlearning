@@ -24,7 +24,7 @@ namespace SalesApp.Repository
         {
             MirrorDetailsVM _mirror = new MirrorDetailsVM();
 
-
+           
             List<MirrorDetailVM> _allmirrordetails = new List<MirrorDetailVM>();
             /*List<AgentMaster> _agentmaster = this._DBERP.AgentMaster.Where(i => i.IsActive == true).ToList();
             List<LanguagesMaster> _langmaster = this._DBERP.LanguagesMaster.Where(i => i.IsActive == true).ToList();

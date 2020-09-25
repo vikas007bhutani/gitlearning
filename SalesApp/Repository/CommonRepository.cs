@@ -18,6 +18,7 @@ namespace SalesApp.Repository
     {
         private Sales_ERPContext _DBERP;
         public static int loggedInUserId;
+        public static string loggedInUserName;
         public CommonRepository(Sales_ERPContext dbcontext)
         {
 
@@ -37,8 +38,8 @@ namespace SalesApp.Repository
         }
         public async Task<List<SelectListItem>> GetLenght()
         {
-            List<SelectListItem> _getlength = new List<SelectListItem>();
-            List<Size> _sizemaster = await this._DBERP.Size.Where(a=>a.LengthInch>0).ToListAsync();
+            List<SelectListItem> _getlength = new List<SelectListItem>();          
+            List<Size> _sizemaster = await this._DBERP.Size.Where(a => a.LengthInch >= 15 && a.LengthInch<30 && a.Shapeid==4 ).OrderBy(O=>O.LengthInch).ToListAsync();
             _getlength = BindingListUtillity.GenerateSelectListLength(_sizemaster);
             return _getlength;
         }
@@ -52,7 +53,7 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetCurrency()
         {
             List<SelectListItem> _getcurrency = new List<SelectListItem>();
-            List<CurrencyMaster> _currencymaster = await this._DBERP.CurrencyMaster.Where(i => i.IsActive == true).ToListAsync();
+            List<CurrencyMaster> _currencymaster = await this._DBERP.CurrencyMaster.Where(i => i.IsActive == true).OrderBy(p => p.Priority >0 ? 0 : 1).ThenBy(p => p.Priority).ToListAsync();
             _getcurrency = BindingListUtillity.GenerateSelectList(_currencymaster);
             return _getcurrency;
         }
@@ -83,14 +84,14 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetMarbleColor()
         {
             List<SelectListItem> _getmarble = new List<SelectListItem>();
-            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a=>a.TypeId==13).ToListAsync();
+            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a=>a.TypeId==13).OrderBy(a=>a.Name).ToListAsync();
             _getmarble = BindingListUtillity.GenerateSelectList(allmarblecolor);
             return _getmarble;
         }
         public async Task<List<SelectListItem>> GetStandColor()
         {
             List<SelectListItem> _getmarble = new List<SelectListItem>();
-            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a => a.TypeId == 13).ToListAsync();
+            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a => a.TypeId == 13).OrderBy(a => a.Name).ToListAsync();
             _getmarble = BindingListUtillity.GenerateSelectListcolor(allmarblecolor);
             return _getmarble;
         }
@@ -152,6 +153,14 @@ namespace SalesApp.Repository
         public int GetLoggedInUserId()
         {
             return loggedInUserId;
+        }
+        public void SetLoggedInUserName(string Username)
+        {
+            loggedInUserName = Username;
+        }
+        public string GetLoggedInUserName()
+        {
+            return loggedInUserName;
         }
     }
 }

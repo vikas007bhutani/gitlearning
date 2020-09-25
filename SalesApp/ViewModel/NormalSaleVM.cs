@@ -16,16 +16,26 @@ namespace SalesApp.ViewModel
         public long mirrorid { get; set; }
         public long? orderid { get; set; }
         public long standorderid { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? mirrordate { get; set; }
         public int specialaddition { get; set; }
+        [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? balinr { get; set; }
         public decimal? balcurrency { get; set; }
+        [DisplayFormat(DataFormatString = "{0:G29}")]
+
         public decimal? grandtotalinr { get; set; }
+        [DisplayFormat(DataFormatString = "{0:G29}")]
+        public decimal? grandtotalinrCM { get; set; }
+        [DisplayFormat(DataFormatString = "{0:G29}")]
+        public decimal? grandtotalinrOF { get; set; }
         public decimal? grandtotalcurrency { get; set; }
         public string customspecialaddition { get; set; }
         public string currsymbol { get; set; }
         public string passport { get; set; }
+        [Required]
         public string stockno { get; set; }
+        [Required]
         public string item_desc { get; set; }
         [DisplayName("Conv. Rate")]
         public decimal? conversionrate { get; set; }
@@ -40,6 +50,7 @@ namespace SalesApp.ViewModel
         [DisplayName("Sale Value (Fx)")]
         public decimal? totalvalue { get; set; }
         public decimal totalvalueinr { get; set; }
+        [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? grandtotal { get; set; }
         public int userid { get; set; }
         public string shapeid { get; set; }
@@ -47,13 +58,15 @@ namespace SalesApp.ViewModel
         public string standcode { get; set; }
         public string marblecolor { get; set; }
         public string color { get; set; }
-        public decimal CashAmount { get; set; }
-        public decimal CreditAmount { get; set; }
-        public decimal DebitAmount { get; set; }
-        public decimal PayLaterAmount { get; set; }
-        public decimal PaytmAmount { get; set; }
+        public decimal? CashAmount { get; set; }
+        public decimal? CreditAmount { get; set; }
+        public decimal? DebitAmount { get; set; }
+        public decimal? PayLaterAmount { get; set; }
+        public decimal? PaytmAmount { get; set; }
+        public string standsaletype { get; set; }
 
         public int itemcount { get; set; }
+        public int? saletype { get; set; }
 
         public string width { get; set; }
         public string height { get; set; }
@@ -93,6 +106,7 @@ namespace SalesApp.ViewModel
             get { return _titletype.ToString(); }
             set { _titletype = ((TitleType)Enum.Parse(typeof(TitleType), value.ToUpper().ToString())); }
         }
+        [Required(ErrorMessage = "select any one option")]
         public SaleType _saletype { get; set; }
 
         public string saletypevalue
@@ -132,9 +146,9 @@ namespace SalesApp.ViewModel
         public string symbol { get; set; }
         public string stockid { get; set; }
         public string itemdesc { get; set; }
-
+        public long InvoiceID { get; set; }
         public decimal? salevalue { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? salevalueinr { get; set; }
         public long mirrorid { get; set; }
         public int unitid { get; set; }
@@ -171,6 +185,7 @@ namespace SalesApp.ViewModel
         public string paytype { get; set; }
         public string currency { get; set; }
         public decimal? payamount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? payamountinr { get; set; }
         public string symbol { get; set; }
         public int currencyid { get; set; }

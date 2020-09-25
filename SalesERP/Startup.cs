@@ -75,14 +75,15 @@ namespace SALEERP
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             // who are you?  
-            app.UseAuthentication();
+           // app.UseAuthentication();
 
             // are you allowed?  
-            app.UseAuthorization();
+           
             app.UseRouting();
+            
             app.UseSession();
+            // app.UseAuthorization();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

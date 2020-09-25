@@ -4,150 +4,96 @@
     ViewBag.Title = "Cash Sale";
 
 }
-
     <div class="wrapper">
         <!-- Sidebar  -->
-        <partial name="~/Views/Shared/Sidebar.cshtml" model="Model" />
-    </div>
-<!-- Page Content  -->
-    <div id="content">
-        <div class="header-container clearfix">
-            <button type="button" id="sidebarCollapse" class="btn btn-info">
-                <i class="las la-align-left"></i>
-            </button>
+        <partial name="~/Views/Shared/Sidebar.cshtml" />
 
-            <h1><span class="fbold">Sales</span> <span class="fregular">Application</span></h1>
+        <!-- Page Content  -->
+        <div id="content">
 
-            <div class="account-wrap">
-                <div class="account-item clearfix js-item-menu">
-                    <div class="image">
-                        <img src="~/img/avatar-01.jpg" alt="John Doe" />
-                    </div>
-                    <div class="content-account">
-                        <a class="js-acc-btn" href="#">Parag Tawde</a>
-                    </div>
-                    <div class="account-dropdown js-dropdown">
-                        <div class="info clearfix">
-                            <div class="image">
-                                <a href="#">
-                                    <img src="~/img/avatar-01.jpg" alt="John Doe" />
+
+            <partial name="~/Views/Shared/_headerNormal.cshtml" model="Model" />
+
+
+            <div class="main-container">
+                <div class="container-bg clearfix">
+                    <div class="container-header clearfix"></div>
+
+                    <div class="sale-process-nav" id="menu2">
+                        <ul>
+                            <li id="l_item" class="active">
+                                <a href="#" onclick="manaagetab('1')">
+                                    <span class="nav-icon-container"><i class="las la-shopping-cart"></i></span>
+                                    <span class="nav-txt-container">Add Item</span>
                                 </a>
-                            </div>
-                            <div class="content-account">
-                                <h5 class="name">
-                                    <a href="#">Parag Tawde</a>
-                                </h5>
-                                <span class="email">Sales executive</span>
-                            </div>
+                            </li>
+                            <li id="l_pay">
+                                <a class="active" onclick="manaagetab('4')">
+                                    <span class="nav-icon-container"><i class="las la-credit-card"></i></span>
+                                    <span class="nav-txt-container">Payment</span>
+                                </a>
+                            </li>
+                            <li id="l_customer">
+                                <a class="active" onclick="manaagetab('2')">
+                                    <span class="nav-icon-container"><i class="las la-user-cog"></i></span>
+                                    <span class="nav-txt-container">CustomerInfo</span>
+                                </a>
+                            </li>
+                            <li id="l_stand">
+                                <a class="active" onclick="manaagetab('3')">
+                                    <span class="nav-icon-container"><i class="las la-truck"></i></span>
+                                    <span class="nav-txt-container">Stand & Delivery</span>
+                                </a>
+
+                            </li>
+
+                            <li id="l_review">
+                                <a onclick="manaagetab('5')">
+                                    <span class="nav-icon-container"><i class="las la-print"></i></span>
+                                    <span class="nav-txt-container">Review & Print</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <!-- <div class="container-name-cart-info clearfix">
+                  <p class="clients-name-info"><i class="las la-user-circle"></i> Shomayala Arooz</p>
+                  <p class="clients-cart-info hide-mobile"><i class="las la-shopping-cart"></i> You have <span class="fbold">2 items</span> in your Cart</p>
+
+                </div> -->
+
+                    <div class="container-fluid">
+
+
+                        <!--
+                    <a href="" class="btn-create"><i class="las la-plus"></i></a>
+                    <a href="" class="btn-scan"><i class="las la-qrcode"></i></a> -->
+
+
+
+                        <div id="item">
+
+                            <partial name="~/Views/Shared/NormalSaleItem.cshtml" model="Model" />
+
                         </div>
-                        <div class="account-dropdown__body">
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-account"></i>Account
-                                </a>
-                            </div>
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-settings"></i>Setting
-                                </a>
-                            </div>
-                            <div class="account-dropdown__item">
-                                <a href="#">
-                                    <i class="zmdi zmdi-money-box"></i>Billing
-                                </a>
-                            </div>
+
+                        <div id="customer">
+                            <partial name="~/Views/Shared/NormalCustomerDetails.cshtml" model="Model" />
                         </div>
-                        <div class="account-dropdown__footer">
-                            <a href="#">
-                                <i class="zmdi zmdi-power"></i>Logout
-                            </a>
+                        <div id="stand">
+                            <partial name="~/Views/Shared/Normalstanddelivery.cshtml" model="Model" />
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <div id="payment">
+                            <partial name="~/Views/Shared/NormalOrderPayment.cshtml" model="Model" />
+                        </div>
+                        <div id="review">
+                            <partial name="~/Views/Shared/NormalReview.cshtml" model="Model" />
+                        </div>
 
-
-
-        <div class="main-container">
-            <div class="container-bg clearfix">
-                <div class="container-header clearfix"></div>
-
-                <div class="sale-process-nav" id="menu2">
-                    <ul>
-                        <li id="l_item" class="active">
-                            <a href="#" onclick="manaagetab('1')">
-                                <span class="nav-icon-container"><i class="las la-shopping-cart"></i></span>
-                                <span class="nav-txt-container">Add Item</span>
-                            </a>
-                        </li>
-                        <li id="l_pay">
-                            <a class="active" onclick="manaagetab('4')">
-                                <span class="nav-icon-container"><i class="las la-credit-card"></i></span>
-                                <span class="nav-txt-container">Payment</span>
-                            </a>
-                        </li>
-                        <li id="l_customer">
-                            <a class="active" onclick="manaagetab('2')">
-                                <span class="nav-icon-container"><i class="as la-user-cog"></i></span>
-                                <span class="nav-txt-container">CustomerInfo</span>
-                            </a>
-                        </li>
-                        <li id="l_stand">
-                            <a class="active" onclick="manaagetab('3')">
-                                <span class="nav-icon-container"><i class="las la-truck"></i></span>
-                                <span class="nav-txt-container">Stand & Delivery</span>
-                            </a>
-
-                        </li>
-
-                        <li id="l_review">
-                            <a onclick="manaagetab('5')">
-                                <span class="nav-icon-container"><i class="las la-print"></i></span>
-                                <span class="nav-txt-container">Review & Print</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-
-                <!-- <div class="container-name-cart-info clearfix">
-              <p class="clients-name-info"><i class="las la-user-circle"></i> Shomayala Arooz</p>
-              <p class="clients-cart-info hide-mobile"><i class="las la-shopping-cart"></i> You have <span class="fbold">2 items</span> in your Cart</p>
-
-            </div> -->
-
-                <div class="container-fluid">
-
-
-                    <!--
-                <a href="" class="btn-create"><i class="las la-plus"></i></a>
-                <a href="" class="btn-scan"><i class="las la-qrcode"></i></a> -->
-
-
-
-                    <div id="item">
-
-                        <partial name="~/Views/Shared/NormalSaleItem.cshtml" model="Model" />
-
-                    </div>
-
-                    <div id="customer">
-                        <partial name="~/Views/Shared/NormalCustomerDetails.cshtml" model="Model" />
-                    </div>
-                    <div id="stand">
-                        <partial name="~/Views/Shared/Normalstanddelivery.cshtml" model="Model" />
-                    </div>
-                    <div id="payment">
-                        <partial name="~/Views/Shared/NormalOrderPayment.cshtml" model="Model" />
-                    </div>
-                    <div id="review">
-                        <partial name="~/Views/Shared/NormalReview.cshtml" model="Model" />
                     </div>
 
                 </div>
-
-
                 <div class="container-bg clearfix">
 
 
@@ -157,14 +103,13 @@
             </div>
 
 
-
-
         </div>
 
         <input type="hidden" id="hdnpgno" value="@ViewBag.pgno" />
         <input type="hidden" id="hdnbalance" value="@ViewBag.totalbalance" />
-       
+
         <input type="hidden" asp-for="conversionrate" />
+        <input type="hidden" asp-for="mirrorid" />
     </div>
 <div class="overlay"></div>
 
@@ -248,6 +193,7 @@
     }
 
     $(document).ready(function () {
+        
 
         //$(function () {
         //    $('#conversionrate').blur(function () {
@@ -306,93 +252,114 @@
         }
 
     }
- function manaagetab(id) {
+    function manaagetab(id) {
+       
+        debugger;
 
-     var totalbalance = $('#hdnbalance').val();
-     if (id == "1") {
+        var totalbalance = $('#hdnbalance').val();
+        var pgno = $('#hdnpgno').val();
+         if (id == "1") {
+             //if (checkitem() && pgno==1) {
+                 $('#item').show();
+                 $('#customer').hide();
+                 $('#stand').hide();
+                 $('#payment').hide();
+                 $('#review').hide();
+                // $('#menu2').show();
+                 $('#l_item').addClass('active');
+                 $('#l_customer').removeClass('active');
+                 $('#l_stand').removeClass('active');
+                 $('#l_pay').removeClass('active');
+                 $('#l_review').removeClass('active');
+            // }
 
-             $('#item').show();
-             $('#customer').hide();
-             $('#stand').hide();
-             $('#payment').hide();
-             $('#review').hide();
-             $('#menu2').hide();
-         $('#l_item').addClass('active');
-         $('#l_customer').removeClass('active');
-         $('#l_stand').removeClass('active');
-         $('#l_pay').removeClass('active');
-         $('#l_review').removeClass('active');
-
-            }
-     else if (id == "2") {
-         if (balancecheck(totalbalance)) {
-             $('#customer').show();
-             $('#item').hide();
-             $('#stand').hide();
-             $('#payment').hide();
-             $('#review').hide();
-             $('#menu2').show();
-             $('#l_customer').addClass('active');
-             $('#l_item').removeClass('active');
-             $('#l_stand').removeClass('active');
-             $('#l_pay').removeClass('active');
-             $('#l_review').removeClass('active');
          }
-     } else if (id == "3") {
-         if (balancecheck(totalbalance)) {
-             $('#customer').hide();
-             $('#item').hide();
-             $('#stand').show();
-             $('#payment').hide();
-             $('#review').hide();
-             $('#menu2').show();
-             $('#l_customer').removeClass('active');
-             $('#l_item').removeClass('active');
-             $('#l_stand').addClass('active');
-             $('#l_pay').removeClass('active');
-             $('#l_review').removeClass('active');
+         else if (id == "2") {
+             if (balancecheck(totalbalance)) {
+                 $('#customer').show();
+                 $('#item').hide();
+                 $('#stand').hide();
+                 $('#payment').hide();
+                 $('#review').hide();
+           //      $('#menu2').show();
+                 $('#l_customer').addClass('active');
+                 $('#l_item').removeClass('active');
+                 $('#l_stand').removeClass('active');
+                 $('#l_pay').removeClass('active');
+                 $('#l_review').removeClass('active');
+             }
+         } else if (id == "3") {
+             if (balancecheck(totalbalance)) {
+                 $('#customer').hide();
+                 $('#item').hide();
+                 $('#stand').show();
+                 $('#payment').hide();
+                 $('#review').hide();
+            //     $('#menu2').show();
+                 $('#l_customer').removeClass('active');
+                 $('#l_item').removeClass('active');
+                 $('#l_stand').addClass('active');
+                 $('#l_pay').removeClass('active');
+                 $('#l_review').removeClass('active');
+             }
          }
-            }
-     else if (id == "4") {
-         //if (balancecheck(totalbalance)) {
+         else if (id == "4") {
+             //if (balancecheck(totalbalance)) {
              $('#customer').hide();
              $('#item').hide();
              $('#stand').hide();
              $('#payment').show();
              $('#review').hide();
-         $('#menu2').show();
-         $('#l_pay').addClass('active');
-         $('#l_customer').removeClass('active');
-         $('#l_stand').removeClass('active');
-         $('#l_item').removeClass('active');
-         $('#l_review').removeClass('active');
-        // }
-     } else if (id == "5") {
-         if (balancecheck(totalbalance)) {
+         //   $('#menu2').show();
+             $('#l_pay').addClass('active');
+             $('#l_customer').removeClass('active');
+             $('#l_stand').removeClass('active');
+             $('#l_item').removeClass('active');
+             $('#l_review').removeClass('active');
+             // }
+         } else if (id == "5") {
+             if (balancecheck(totalbalance)) {
+                 $('#customer').hide();
+                 $('#item').hide();
+                 $('#stand').hide();
+                 $('#payment').hide();
+                 $('#review').show();
+              //   $('#menu2').show();
+                 $('#l_review').addClass('active');
+                 $('#l_customer').removeClass('active');
+                 $('#l_stand').removeClass('active');
+                 $('#l_item').removeClass('active');
+                 $('#l_pay').removeClass('active');
+             }
+         }
+         else if (id == "6") {
              $('#customer').hide();
              $('#item').hide();
              $('#stand').hide();
              $('#payment').hide();
              $('#review').show();
-             $('#menu2').show();
+             //$('#menu2').show();
+
              $('#l_review').addClass('active');
              $('#l_customer').removeClass('active');
              $('#l_stand').removeClass('active');
              $('#l_item').removeClass('active');
              $('#l_pay').removeClass('active');
+         } 
+         else {
+             $('#item').show();
+            // $('#menu2').show();
+             $('#l_item').addClass('active');
+             $('#l_customer').removeClass('active');
+             $('#l_stand').removeClass('active');
+             $('#l_pay').removeClass('active');
+             $('#l_review').removeClass('active');
          }
-            }
-     else {
-         $('#item').show(); $('#menu2').hide(); $('#l_item').addClass('active');
-         $('#l_customer').removeClass('active');
-         $('#l_stand').removeClass('active');
-         $('#l_pay').removeClass('active');
-         $('#l_review').removeClass('active');}
-
-        }
+     }
+        
 
         $(document).ready(function () {
-
+            debugger;
             var statesAvailable = $('#hdnpgno').val();
 
 
@@ -407,7 +374,7 @@
                     $('#stand').hide();
                     $('#payment').hide();
                     $('#review').hide();
-                    $('#menu2').hide();
+                  //  $('#menu2').hide();
 
                     $('#l_item').addClass('active');
                     $('#l_customer').removeClass('active');
@@ -422,7 +389,7 @@
                     $('#stand').hide();
                     $('#payment').hide();
                     $('#review').hide();
-                    $('#menu2').show();
+                  //  $('#menu2').show();
 
                     $('#l_customer').addClass('active');
                     $('#l_item').removeClass('active');
@@ -435,7 +402,9 @@
                     $('#stand').show();
                     $('#payment').hide();
                     $('#review').hide();
-                    $('#menu2').show();
+                    //$('#content2').hide();
+                    //$('#content1').show();
+                 //   $('#menu2').show();
                     $('#l_customer').removeClass('active');
                     $('#l_item').removeClass('active');
                     $('#l_stand').addClass('active');
@@ -447,26 +416,43 @@
                     $('#stand').hide();
                     $('#payment').show();
                     $('#review').hide();
-                    $('#menu2').show();
+                   // $('#menu2').show();
                     $('#l_pay').addClass('active');
                     $('#l_customer').removeClass('active');
                     $('#l_stand').removeClass('active');
                     $('#l_item').removeClass('active');
                     $('#l_review').removeClass('active');
-                } else if (id == "5") {
+                } else if (statesAvailable == "5") {
                     $('#customer').hide();
                     $('#item').hide();
                     $('#stand').hide();
                     $('#payment').hide();
                     $('#review').show();
-                    $('#menu2').show();
+                    //$('#menu2').show();
                     $('#l_review').addClass('active');
                     $('#l_customer').removeClass('active');
                     $('#l_stand').removeClass('active');
                     $('#l_item').removeClass('active');
                     $('#l_pay').removeClass('active');
-                } else {
-                    $('#item').show(); $('#menu2').hide(); $('#l_item').addClass('active');
+                }
+                else if (statesAvailable == "6") {
+                    $('#customer').hide();
+                    $('#item').hide();
+                    $('#stand').hide();
+                    $('#payment').hide();
+                    $('#review').show();
+                    //$('#menu2').show();
+                  
+                    $('#l_review').addClass('active');
+                    $('#l_customer').removeClass('active');
+                    $('#l_stand').removeClass('active');
+                    $('#l_item').removeClass('active');
+                    $('#l_pay').removeClass('active');
+                } 
+                else {
+                    $('#item').show();
+                   // $('#menu2').hide();
+                    $('#l_item').addClass('active');
                     $('#l_customer').removeClass('active');
                     $('#l_stand').removeClass('active');
                     $('#l_pay').removeClass('active');

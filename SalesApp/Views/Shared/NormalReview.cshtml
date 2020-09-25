@@ -4,7 +4,7 @@
     ViewBag.Title = "Add Sale Info";
 
 }
-<div class="main-container">
+<div class="main-container-rev">
     <div class="container-bg clearfix">
 
         <div class="container-fluid customer-info-form">
@@ -21,8 +21,8 @@
 
                     <p class="name-nationality"><span class="fbold name"><i class="las la-user-circle"></i>@Html.DisplayFor(model => model.cinfo.Name)</span><span class="fbold nationality fdark">@Html.DisplayFor(model => model.cinfo.Country)</span></p>
 
-                    <p><span class="fregular flight dblock">Address:</span>  <span class="fbold fdark dblock">@Html.DisplayFor(model => model.cinfo.Address)</span></p>
-                    <p><span class=" fregular flight dblock">Contact Numbers: </span>  <span class="fbold fdark dblock">@Html.DisplayFor(model => model.cinfo.Telephone)</span></p>
+                    <p><span class="fregular flight dblock">Address:</span>  <span class="fbold fdark dblock">@Html.DisplayFor(model => model.cinfo.Address),@Html.DisplayFor(model => model.cinfo.City),@Html.DisplayFor(model => model.cinfo.State),@Html.DisplayFor(model => model.cinfo.Country),@Html.DisplayFor(model => model.cinfo.Zipcode)</span></p>
+                    <p><span class=" fregular flight dblock">Contact Numbers: </span>  <span class="fbold fdark dblock">@Html.DisplayFor(model => model.cinfo.TeleCountryCode)-@Html.DisplayFor(model => model.cinfo.Telephone)/@Html.DisplayFor(model => model.cinfo.MobCountryCode)-@Html.DisplayFor(model => model.cinfo.Mobile)</span></p>
                     <p><span class="fregular flight dblock">Email Address:</span>  <span class="fbold fdark  dblock">@Html.DisplayFor(model => model.cinfo.Email)</span></p>
                     <p><span class="fregular flight dblock">Passport Number:</span>  <span class=" dblock fbold fdark ">@Html.DisplayFor(model => model.dinfo.Passport)</span></p>
 
@@ -71,15 +71,36 @@
                                         <tr>
                                             <td>
                                                 <p class="table-description-p">
-                                                    <span class="table-stock-number">A300</span>
-                                                    <span class="table-type of">@Html.DisplayFor(modelItem => item.ordertype)</span>
+                                                    <span class="table-stock-number">@Html.DisplayFor(modelItem => item.stockid)</span>
+                                                    @if (item.ordertype == "CM")
+                                                    {
+                                                        <span class="table-type CM">@Html.DisplayFor(modelItem => item.ordertype)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (item.saletype == 3)
+                                                        {
+                                                            <span class="table-type of">@Html.DisplayFor(modelItem => item.ordertype) </span><i class="table-type CM"> TBM</i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="table-type of">@Html.DisplayFor(modelItem => item.ordertype) </span>
+
+                                                        }
+
+                                                        @*<span class="table-type of">@Html.DisplayFor(modelItem => item.ordertype)</span>*@
+
+
+
+                                                    }
+                                                    @*<span class="table-type of">@Html.DisplayFor(modelItem => item.ordertype)</span>*@
                                                 </p>
-                                                <p class="table-description-item">@Html.DisplayFor(modelItem => item.itemdesc)</p>
+                                                    <p class="table-description-item">@Html.DisplayFor(modelItem => item.itemdesc)</p>
 
-                                            </td>
+                                                </td>
 
-                                            <td class="text-center"><i class="las la-rupee-sign"></i>  @Html.DisplayFor(modelItem => item.salevalue)</td>
-                                            <td class="text-center"><i class="las la-rupee-sign"></i> @Html.DisplayFor(modelItem => item.salevalueinr)</td>
+                                            <td class="text-center">@Html.DisplayFor(modelItem => item.symbol)&nbsp;@Html.DisplayFor(modelItem => item.salevalue)</td>
+                                            <td class="text-center">@Html.DisplayFor(modelItem => item.symbol)&nbsp;@Html.DisplayFor(modelItem => item.salevalueinr)</td>
                                             <td class="text-center">
                                                 @Html.ActionLink("", "DeleteSale", "AddSale", new { itemorderid = item.itemorderid }, new { @class = "delete-item  las la-times" })
                                             </td>
@@ -101,7 +122,7 @@
                             <tr>
                                 <th class="table-desc-col">Stand</th>
                                 <th>Colour</th>
-                                <th class="text-center">Width</th>
+                                @*<th class="text-center">Width</th>*@
                                 <th class="text-center">Height<span class="small-txt-br">(Inch)</span></th>
                                 <th class="text-center">Action</th>
 
@@ -116,10 +137,16 @@
                             <tr>
                                 <td>
                                     <p class="table-description">@Html.DisplayFor(modelItem => item.standdesc)</p>
-                                    <p class="table-type CM">@Html.DisplayFor(modelItem => item.ordertype)</p>
+                                    @if (item.ordertype == "CM")
+                                    {
+                                        <p class="table-type CM">@Html.DisplayFor(modelItem => item.ordertype)</p>
+                                    }
+                                    else
+                                    { <p class="table-type of">@Html.DisplayFor(modelItem => item.ordertype)</p>}
+                                    @*<p class="table-type CM">@Html.DisplayFor(modelItem => item.ordertype)</p>*@
                                 </td>
                                 <td>@Html.DisplayFor(modelItem => item.color)</td>
-                                <td class="text-center">@Html.DisplayFor(modelItem => item.width)</td>
+                                @*<td class="text-center">@Html.DisplayFor(modelItem => item.width)</td>*@
                                 <td class="text-center">@Html.DisplayFor(modelItem => item.height)</td>
                                 <td class="text-center">
                                     @Html.ActionLink("", "DeleteStand", "AddSale", new { itemorderid = item.itemorderid }, new { @class = "delete-item  las la-times" })

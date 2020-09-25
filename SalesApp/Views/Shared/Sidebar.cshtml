@@ -1,7 +1,7 @@
 ﻿<nav id="sidebar">
     <div class="sidebar-header">
-        <a href="" class="big-logo"><img src="img/big-logo.png" /></a>
-        <a href="" class="small-logo"><img src="img/small-logo.png" /></a>
+        <a href="" class="big-logo"><img src=@Url.Content("~/img/big-logo.png") /></a>
+        <a href="" class="small-logo"><img src=@Url.Content("~/img/small-logo.png") /></a>
     </div>
 
     <div class="sidebar-content">
@@ -13,27 +13,28 @@
                 <img src="img/avatar-01.jpg">
             </div>
             <div class="profile-info big-profile-image">
-                <p class="profile-name">Vikram Solomon</p>
+                <p class="profile-name">@ViewBag.UserName</p>
                 <p class="profile-designation">Sales executive</p>
             </div>
         </div>
         <ul class="list-unstyled components">
             <li class="active">
-                @Html.ActionLink("Today's Mirror", "Index", "Mirror", "", new { @class = "las la-chart-bar" })
+                <a href="@Url.Action("Index", "Mirror")"><i class="las la-chart-bar"></i> Today's Mirror</a>
+                @*@Html.ActionLink("Today's Mirror", "Index", "Mirror", "", new { @class = "las la-chart-bar" })*@
 
             </li>
             <li>
                 <a href="#homeSubmenu"><i class="las la-print"></i> Print Sale</a>
 
             </li>
-            <li>
+            @*<li>
                 <a href="#homeSubmenu"><i class="las la-toolbox"></i> Add Custom Category</a>
 
             </li>
             <li>
                 <a href="#homeSubmenu"><i class="las la-shapes"></i> Add new item shapes</a>
 
-            </li>
+            </li>*@
         </ul>
 
     </div>

@@ -23,12 +23,12 @@ namespace SalesApp.ViewModel
         public string currsymbol { get; set; }
         public string item_desc { get; set; }
         [DisplayName("Conv. Rate")]
-        public decimal conversionrate { get; set; }
+        public decimal? conversionrate { get; set; }
         public int currencyid { get; set; }
         public int quantity { get; set; }
         public int sale_type { get; set; }
-        [DisplayName("Sale Value (Fx)")]
-        public decimal totalvalue { get; set; }
+        [DisplayName("Sale Value(Fx)")]
+        public decimal? totalvalue { get; set; }
         public decimal? grandtotal { get; set; }
         public int userid { get; set; }
         public int itemcount { get; set; }
@@ -63,6 +63,7 @@ namespace SalesApp.ViewModel
         public DateTime? mirrordate { get; set; }
        
         public decimal? conversionrate { get; set; }
-
+        public int currencyid { get; set; }
+        public string currency { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace SALEERP.Models
         public string MARBLECOLOR { get; set; }
         public string MARBLETYPE { get; set; }
         public string SizeInch { get; set; }
+        public string HeightInch { get; set; }
 
     }
 }

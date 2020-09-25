@@ -1,56 +1,99 @@
-
 (function ($) {
-    "use strict";
+  // USE STRICT
+  "use strict";
 
-    /*==================================================================
-    [ Validate ]*/
-    var input = $('.validate-input .input100');
+  // Dropdown 
+  try {
+    var menu = $('.js-item-menu');
+    var sub_menu_is_showed = -1;
 
-    $('.validate-form').on('submit',function(){
-        var check = true;
-
-        for(var i=0; i<input.length; i++) {
-            if(validate(input[i]) == false){
-                showValidate(input[i]);
-                check=false;
-            }
-        }
-
-        return check;
-    });
-
-
-    $('.validate-form .input100').each(function(){
-        $(this).focus(function(){
-           hideValidate(this);
-        });
-    });
-
-    function validate (input) {
-        if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
-            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
-                return false;
-            }
+    for (var i = 0; i < menu.length; i++) {
+      $(menu[i]).on('click', function (e) {
+        e.preventDefault();
+        $('.js-right-sidebar').removeClass("show-sidebar");        
+        if (jQuery.inArray(this, menu) == sub_menu_is_showed) {
+          $(this).toggleClass('show-dropdown');
+          sub_menu_is_showed = -1;
         }
         else {
-            if($(input).val().trim() == ''){
-                return false;
-            }
+          for (var i = 0; i < menu.length; i++) {
+            $(menu[i]).removeClass("show-dropdown");
+          }
+          $(this).toggleClass('show-dropdown');
+          sub_menu_is_showed = jQuery.inArray(this, menu);
         }
+      });
     }
+    $(".js-item-menu, .js-dropdown").click(function (event) {
+      event.stopPropagation();
+    });
 
-    function showValidate(input) {
-        var thisAlert = $(input).parent();
+    $("body,html").on("click", function () {
+      for (var i = 0; i < menu.length; i++) {
+        menu[i].classList.remove("show-dropdown");
+      }
+      sub_menu_is_showed = -1;
+    });
 
-        $(thisAlert).addClass('alert-validate');
-    }
+  } catch (error) {
+    console.log(error);
+  }
 
-    function hideValidate(input) {
-        var thisAlert = $(input).parent();
+  var wW = $(window).width();
+    // Right Sidebar
+    var right_sidebar = $('.js-right-sidebar');
+    var sidebar_btn = $('.js-sidebar-btn');
 
-        $(thisAlert).removeClass('alert-validate');
-    }
-    
-    
+    sidebar_btn.on('click', function (e) {
+      e.preventDefault();
+      for (var i = 0; i < menu.length; i++) {
+        menu[i].classList.remove("show-dropdown");
+      }
+      sub_menu_is_showed = -1;
+      right_sidebar.toggleClass("show-sidebar");
+    });
 
+    $(".js-right-sidebar, .js-sidebar-btn").click(function (event) {
+      event.stopPropagation();
+    });
+
+    $("body,html").on("click", function () {
+      right_sidebar.removeClass("show-sidebar");
+
+    });
+ 
+
+  // Sublist Sidebar
+  try {
+    var arrow = $('.js-arrow');
+    arrow.each(function () {
+      var that = $(this);
+      that.on('click', function (e) {
+        e.preventDefault();
+        that.find(".arrow").toggleClass("up");
+        that.toggleClass("open");
+        that.parent().find('.js-sub-list').slideToggle("250");
+      });
+    });
+
+  } catch (error) {
+    console.log(error);
+  }
+
+
+  try {
+    // Hamburger Menu
+    $('.hamburger').on('click', function () {
+      $(this).toggleClass('is-active');
+      $('.navbar-mobile').slideToggle('500');
+    });
+    $('.navbar-mobile__list li.has-dropdown > a').on('click', function () {
+      var dropdown = $(this).siblings('ul.navbar-mobile__dropdown');
+      $(this).toggleClass('active');
+      $(dropdown).slideToggle('500');
+      return false;
+    });
+  } catch (error) {
+    console.log(error);
+  }
 })(jQuery);

@@ -50,20 +50,21 @@ namespace SalesApp.Controllers
                         bool result = this._acc.ManageUser(_usr, out userid);
                         if (result)
                         {
-                            var userClaims = new List<Claim>()
+                            var uClaims = new List<Claim>()
                 {
                 new Claim(ClaimTypes.Name, _usr.UserName),
                 new Claim(ClaimTypes.PrimarySid, userid.ToString()),
                  };
 
-                            var SalesIdentity = new ClaimsIdentity(userClaims, "User Identity");
+                        var UIdentity = new ClaimsIdentity(uClaims, "User Identity");
 
-                            var userPrincipal = new ClaimsPrincipal(new[] { SalesIdentity });
-                            await HttpContext.SignInAsync(userPrincipal);
+                            var uPrincipal = new ClaimsPrincipal(new[] { UIdentity });
+                            await HttpContext.SignInAsync(uPrincipal);
                         //---
                         _comm.SetLoggedInUserId(userid);
-                            // userid = result.UserId;
-                            return RedirectToAction("Index", "Mirror");
+                        _comm.SetLoggedInUserName (_usr.UserName);
+                        // userid = result.UserId;
+                        return RedirectToAction("Index", "Mirror");
                         }
                         else { ModelState.AddModelError(string.Empty, "Username did not matched.Invalid Login!"); }
 

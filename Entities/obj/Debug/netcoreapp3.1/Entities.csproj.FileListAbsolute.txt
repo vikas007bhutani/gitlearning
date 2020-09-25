@@ -31,3 +31,4 @@ G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.csproj
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.dll
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.pdb
 G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.genruntimeconfig.cache
+G:\enableIT\SALEERP_OLD\SALEERP\Entities\obj\Debug\netcoreapp3.1\Entities.csprojAssemblyReference.cache

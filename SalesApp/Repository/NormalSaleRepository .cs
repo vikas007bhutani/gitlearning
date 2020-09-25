@@ -37,92 +37,103 @@ namespace SalesApp.Repository
             {
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
-                    //if (_sale.orderid > 0)
-                    //{
-                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
-                    INRvalue = Math.Round((decimal)(_sale.totalvalue * _sale.conversionrate), MidpointRounding.AwayFromZero);
-                    decimal resultd = Math.Abs(INRvalue % 10);
-                    if (resultd > 0)
+                    var entitystock = await this._SALESDBE.OrderItemDetails.FirstOrDefaultAsync(i => i.StockId == _sale.stockno && i.IsActive == true).ConfigureAwait(false);
+                    if (entitystock == null)
                     {
-                        finalINR = INRvalue + (10 - resultd);
-                    }
-                    else
-                    {
-                        finalINR = INRvalue;
-                    }
-                    if (entityorder != null && entityorder.Id > 0)
-                    {
-                        uid = entityorder.Id;
-                    }
-                    else
-                    {
-                        await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
+                        var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
+                        INRvalue = Math.Round((decimal)(_sale.totalvalue * _sale.conversionrate), MidpointRounding.AwayFromZero);
+                        if (INRvalue > 10)
                         {
-                            MirrorId = _sale.mirrorid,
-                            SaleDate = DateTime.Now,
-                            DelieveryType = 0,
-                           
-                            PortType = 0,
-                            Unit = 1,
-                            Description = "NormalSale",
-                            TransactionId = Common.GetUnique(),
-                            CreatedDatetime = DateTime.Now,
-                            CreatedBy=userid,
-                            IsActive = true,
-                           // salestatus = 1
-
-                        }).ConfigureAwait(false);
-
-                        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                        uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
-                    }
-                    //  }
-                    if (uid > 0)
-                    {
-
-
-                        await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
-                        {
-                            OrderId = uid,
-                            ItemDesc = _sale.item_desc,
-                            StockId = _sale.stockno,
-                            OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
-                            OrderTypePrefix = _sale.saletypevalue,
-                            ItemType = 1,
-                            Price = _sale.totalvalue,
-                            PriceInr = finalINR,
-                            ConversionRate = _sale.conversionrate,
-                            Unit = 1,
-                            CreatedDatetime = DateTime.Now,
-                            CreatedBy = userid,
-                            IsActive = true,
-                            CurrencyType = _sale.currencyid,
-                            SaleType = 1
-
-                        }).ConfigureAwait(false);
-                        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                        long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
-                        foreach (var item in _sale.specialadditions)
-                        {
-                            if (item.Selected)
+                            decimal resultd = Math.Abs(INRvalue % 10);
+                            if (resultd > 0)
                             {
-                                if (item != null)
-                                {
-                                    await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
-                                    innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                                }
+                                finalINR = INRvalue + (10 - resultd);
+                            }
+                            else
+                            {
+                                finalINR = INRvalue;
                             }
                         }
-
-                        if (oid > 0)
+                        else
                         {
-                            await dbusertrans.CommitAsync().ConfigureAwait(false);
+                            finalINR = INRvalue;
+                        }
+                        if (entityorder != null && entityorder.Id > 0)
+                        {
+                            uid = entityorder.Id;
+                        }
+                        else
+                        {
+                            await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
+                            {
+                                MirrorId = _sale.mirrorid,
+                                SaleDate = DateTime.Now,
+                                DelieveryType = 0,
+
+                                PortType = 0,
+                                Unit = 1,
+                                Description = "NormalSale",
+                                TransactionId = Common.GetUnique(),
+                                CreatedDatetime = DateTime.Now,
+                                CreatedBy = userid,
+                                IsActive = true,
+                                // salestatus = 1
+
+                            }).ConfigureAwait(false);
+
+                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                        }
+                        //  }
+                        if (uid > 0)
+                        {
+
+
+                            await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
+                            {
+                                OrderId = uid,
+                                ItemDesc = _sale.item_desc,
+                                StockId = _sale.stockno,
+                                OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
+                                OrderTypePrefix = _sale.saletypevalue,
+                                ItemType = 1,
+                                Price = _sale.totalvalue,
+                                PriceInr = finalINR,
+                                ConversionRate = _sale.conversionrate,
+                                Unit = 1,
+                                CreatedDatetime = DateTime.Now,
+                                CreatedBy = userid,
+                                IsActive = true,
+                                CurrencyType = _sale.currencyid,
+                                SaleType = 1
+
+                            }).ConfigureAwait(false);
+                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
+                            foreach (var item in _sale.specialadditions)
+                            {
+                                if (item.Selected)
+                                {
+                                    if (item != null)
+                                    {
+                                        await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
+                                        innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                    }
+                                }
+                            }
+
+                            if (oid > 0)
+                            {
+                                await dbusertrans.CommitAsync().ConfigureAwait(false);
+
+                            }
+                            else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+
 
                         }
-                        else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
-
-
                     }
+                    else { return -1; }
+
                 }
             }
             catch (Exception ex)
@@ -354,28 +365,30 @@ namespace SalesApp.Repository
                                                       join m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
                                                        on mr.Id equals m.MirrorId
                                                       join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
-                                                     on m.Id equals od.OrderId
+                                                     on m.Id equals od.OrderId into itemdetails
+                                                      from item in itemdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
                                                       join c in this._SALESDBE.CurrencyMaster.Where(c => c.IsActive == true)
-                                                       on od.CurrencyType equals c.Id into currdetails
+                                                       on item.CurrencyType equals c.Id into currdetails
                                                       from curr in currdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
 
-                                                      where m.Id == _orderid && od.ItemType == 1
+                                                      where m.Id == _orderid && item.ItemType == 1
                                                       select new Ncashsaledetails
                                                       {
-                                                          itemorderid = od.Id,
-                                                          stockid = od.StockId,
+                                                          itemorderid = item.Id,
+                                                          stockid = item.StockId,
                                                           //  itemdesc = od.category.Concat(",").Concat(st.itemname).Concat(",").Concat(st.marble).Concat(",").Concat(st.size).Concat(",").Concat(st.marblestone).ToString(),
-                                                          itemdesc = od.ItemDesc,
-                                                          ordertype = od.OrderTypePrefix,
-                                                          salevalue = od.Price,
-                                                          salevalueinr =od.PriceInr,
+                                                          itemdesc = item.ItemDesc,
+                                                          ordertype = item.OrderTypePrefix,
+                                                          salevalue = item.Price,
+                                                          salevalueinr = item.PriceInr,
                                                         //  salevalueinr = Math.Round((decimal)(od.PriceInr * od.ConversionRate), MidpointRounding.AwayFromZero),
                                                           mirrorid = mr.Id,
                                                           mirrordate = mr.Date,
-                                                          conversionrate = od.ConversionRate,
+                                                          conversionrate = item.ConversionRate,
                                                           symbol = curr.Symbol,
-                                                          currencyid=(int)od.CurrencyType,
-                                                          currency=curr.Type
+                                                          currencyid=(int)item.CurrencyType,
+                                                          currency=curr.Type,
+                                                          saletype=item.SaleType
                                                           
 
                                                       }).ToListAsync();
@@ -399,12 +412,15 @@ namespace SalesApp.Repository
                                            on m.Id equals od.OrderId
                                            join c in this._SALESDBE.CustomerDetails.Where(c => c.Isactive == true)
                                             on od.OrderId equals c.OrderId
+                                            join cn in this._SALESDBE.CountriesMaster
+                                            on c.countryid equals cn.Id into countrydetails
+                                            from country in countrydetails.Where(c => c.IsActive == true).DefaultIfEmpty()
                                             where m.Id == _orderid 
                                             select new Ncustomerinfo
                                             {
                                                 Name=c.Name,
                                                 countryid=c.countryid,
-                                                Country=c.Country,
+                                                Country=country.Name,
                                                 Title=c.Title,
                                                 City=c.City,
                                                 Zipcode=c.Zipcode,
@@ -414,7 +430,8 @@ namespace SalesApp.Repository
                                                 MobCountryCode=c.MobCountryCode,
                                                 Mobile=c.Mobile,
                                                  Address=c.Address,
-                                                 Email=c.Email
+                                                 Email=c.Email,
+                                                nationality = country.Name
 
                                             }).FirstOrDefaultAsync();
 
@@ -519,15 +536,18 @@ namespace SalesApp.Repository
             _cashsaledetails.cardiddebit = 0;
             _cashsaledetails.paylaterid = 0;
             _cashsaledetails.currencyid = 0;
-            _cashsaledetails.CashAmount = 0;
-            _cashsaledetails.DebitAmount = 0;
-            _cashsaledetails.CreditAmount = 0;
-            _cashsaledetails.PayLaterAmount = 0;
-            _cashsaledetails.PaytmAmount = 0;
+            _cashsaledetails.CashAmount = null;
+            _cashsaledetails.DebitAmount = null;
+            _cashsaledetails.CreditAmount = null;
+            _cashsaledetails.PayLaterAmount = null;
+            _cashsaledetails.PaytmAmount = null;
             _cashsaledetails.paymethodvalue = "0";
             _cashsaledetails.stockno = string.Empty;
+            _cashsaledetails.standcode = string.Empty;
+            _cashsaledetails.color = string.Empty;
+            _cashsaledetails.height = string.Empty;
             _cashsaledetails._saletype = 0;
-            _cashsaledetails._saletype = 0;
+           // _cashsaledetails._saletype = 0;
             _cashsaledetails.customspecialaddition = string.Empty;
             _cashsaledetails.specialadditions = await _comm.GetSpecialAddition();
             //  _cashsaledetails.specialaddition = 0;
@@ -537,7 +557,13 @@ namespace SalesApp.Repository
             {
                 _cashsaledetails.conversionrate = (decimal)_cashsaledetails.cashsaledetails[0].conversionrate;
                 _cashsaledetails.currencyid = _cashsaledetails.cashsaledetails[0].currencyid;
-                List<SelectListItem> newSelectList = new List<SelectListItem>();
+                _cashsaledetails.mirrorid = _cashsaledetails.cashsaledetails[0].mirrorid;
+                _cashsaledetails.mirrordate = _cashsaledetails.cashsaledetails[0].mirrordate;
+                if (_cashsaledetails.cashsaledetails[0].itemorderid > 0)
+                {
+                    _cashsaledetails.saletype = _cashsaledetails.cashsaledetails[0].saletype;
+                }
+                    List<SelectListItem> newSelectList = new List<SelectListItem>();
                 foreach (var item in _cashsaledetails.cashsaledetails)
                 {
                     newSelectList.Add(new SelectListItem
@@ -560,6 +586,17 @@ namespace SalesApp.Repository
             {
                 _cashsaledetails.deliverytypevalue = _cashsaledetails.dinfo.DelieveryType.ToString();
                 _cashsaledetails.porttypevalue = _cashsaledetails.dinfo.PortType.ToString();
+
+            }
+            if (_cashsaledetails.cashsaledetails.Count > 0)
+            {
+
+                var saletype = _cashsaledetails.cashsaledetails.FirstOrDefault(a => a.ordertype == "OF");
+                if (saletype != null)
+                {
+                    _cashsaledetails.standsaletype = "OF";
+                }
+                else { _cashsaledetails.standsaletype = "CM"; }
 
             }
 
@@ -588,6 +625,13 @@ namespace SalesApp.Repository
             _cashsaledetails.standcolordetails = await _comm.GetStandColor();
             _cashsaledetails.nationalitydetails = await _comm.GetNationality();
             _cashsaledetails.conversionrate = null;
+            _cashsaledetails.CreditAmount = null;
+            _cashsaledetails.DebitAmount = null;
+            _cashsaledetails.PayLaterAmount = null;
+            _cashsaledetails.CashAmount = null;
+            _cashsaledetails.PaytmAmount = null;
+
+
 
             //_cashsaledetails.sizeinwidth = await _comm.GetWidth();
             //_cashsaledetails.sizeinheight = await _comm.GetLenght();
@@ -881,16 +925,16 @@ namespace SalesApp.Repository
                     decimal oldamount = entityorder.Sum(s => s.Amount);
                     decimal oldamountinr = entityorder.Sum(s => s.AmountINR);
                     decimal convrate = (decimal)entityorder.Where(s => s.conversionrate > 0).FirstOrDefault().conversionrate;
-                    decimal amount = 0;
-                    decimal amounthd = 0;
-                    decimal finalamountinr = 0;
+                    decimal? amount = 0;
+                    decimal? amounthd = 0;
+                    decimal? finalamountinr = 0;
                     decimal finalINR = 0, INRvalue = 0;
 
                     if (_sale.paymethodvalue.ToUpper().Contains("CASH") && _sale.currencyid != 6)
                     {
-                       
 
-                        amount = _sale.PayLaterAmount + _sale.CashAmount + _sale.CreditAmount + _sale.DebitAmount + _sale.PaytmAmount;
+
+                        amount = Convert.ToDecimal(_sale.PayLaterAmount) + Convert.ToDecimal(_sale.CashAmount) + Convert.ToDecimal(_sale.CreditAmount) + Convert.ToDecimal(_sale.DebitAmount) + Convert.ToDecimal(_sale.PaytmAmount);
 
                         INRvalue = Math.Round((decimal)(amount * convrate), MidpointRounding.AwayFromZero);
                         decimal resultd = Math.Abs(INRvalue % 10);
@@ -904,15 +948,20 @@ namespace SalesApp.Repository
                         }
 
                         finalamountinr = oldamountinr - (currencyamountinr + finalINR);
+                        if(finalamountinr<0)
+                        {
+                            finalamountinr = finalINR;
+
+                        }
                         amounthd = finalINR;
 
                     }
                     else
                     {
-                        amounthd = _sale.PayLaterAmount + _sale.CashAmount + _sale.CreditAmount + _sale.DebitAmount + _sale.PaytmAmount;
+                        amounthd =Convert.ToDecimal( _sale.PayLaterAmount) + Convert.ToDecimal(_sale.CashAmount) + Convert.ToDecimal(_sale.CreditAmount) + Convert.ToDecimal(_sale.DebitAmount) + Convert.ToDecimal(_sale.PaytmAmount);
 
                         finalamountinr = oldamountinr - (currencyamountinr + amounthd);
-                        amount = (_sale.PayLaterAmount + _sale.CashAmount + _sale.CreditAmount + _sale.DebitAmount + _sale.PaytmAmount) / convrate;
+                        amount = (Convert.ToDecimal(_sale.PayLaterAmount) + Convert.ToDecimal(_sale.CashAmount) + Convert.ToDecimal(_sale.CreditAmount) + Convert.ToDecimal(_sale.DebitAmount) + Convert.ToDecimal(_sale.PaytmAmount)) / convrate;
                         //  amount=
 
                     }
@@ -1022,7 +1071,7 @@ namespace SalesApp.Repository
                                    itemname = vf.ITEM_NAME,
                                    marblecolor = vf.MARBLECOLOR,
                                    price = c.Price,
-                                   size = vf.SizeInch,
+                                   size = vf.SizeInch + "x" + Convert.ToString(vf.HeightInch),
                                    marblestone = vf.MARBLETYPE
 
 
@@ -1178,7 +1227,8 @@ namespace SalesApp.Repository
                                                           currencyid=(int) od.CurrencyType,
                                                           currency= curr.Type,
                                                           unitid=(int)od.Unit,
-                                                          username=user.Name
+                                                          username=user.Name,
+                                                          InvoiceID =m.Id
 
 
                                                       }).ToListAsync();
@@ -1271,12 +1321,15 @@ namespace SalesApp.Repository
                                            on m.Id equals od.OrderId
                                             join c in this._SALESDBE.CustomerDetails.Where(c => c.Isactive == true)
                                              on od.OrderId equals c.OrderId
+                                            join cn in this._SALESDBE.CountriesMaster
+                                            on c.countryid equals cn.Id into countrydetails
+                                            from country in countrydetails.Where(c => c.IsActive == true).DefaultIfEmpty()
                                             where m.Id == orderid
                                             select new Ncustomerinfo
                                             {
                                                 Name = c.Name,
                                                 countryid = c.countryid,
-                                                Country = c.Country,
+                                                Country = country.Name,
                                                 Title = c.Title,
                                                 City = c.City,
                                                 Zipcode = c.Zipcode,
@@ -1287,7 +1340,8 @@ namespace SalesApp.Repository
                                                 Mobile = c.Mobile,
                                                 Address = c.Address,
                                                 Email = c.Email,
-                                                PassportNo=m.PassportNo
+                                                PassportNo=m.PassportNo,
+                                                nationality=country.Name
 
                                             }).FirstOrDefaultAsync();
 
@@ -1320,8 +1374,9 @@ namespace SalesApp.Repository
                                                      }).ToListAsync();
 
            // _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
-            _cashsaledetails.grandtotalinr = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
-            
+            _cashsaledetails.grandtotalinrCM = _cashsaledetails.cashsaledetailsCM.Sum(s => s.salevalueinr);
+            _cashsaledetails.grandtotalinrOF = _cashsaledetails.cashsaledetailsOF.Sum(s => s.salevalueinr);
+
             // _cashsaledetails.grandtotalcurrency = _cashsaledetails.cashsaledetails.Sum(s => s.salevalue);
 
             if (_cashsaledetails.paymentdetails.Count > 0)

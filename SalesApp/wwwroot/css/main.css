@@ -607,7 +607,7 @@ float:right;
 }
 
 .account-dropdown .info {
-    padding: 25px;
+  /*  padding: 25px;*/
     border-top: 1px solid #f5f5f5;
     border-bottom: 1px solid rgba(242, 242, 242, 0.2);
 }
@@ -755,7 +755,18 @@ float:right;
   padding:20px;
   margin-top:70px;
 }
-
+.main-container-pay {
+    padding: 10px;
+    margin-top: 10px;
+}
+.main-container-cus {
+    padding: 10px;
+    margin-top: 10px;
+}
+.main-container-rev {
+    padding: 10px;
+    margin-top: 10px;
+}
 .container-bg{
   background:#fff;
   border-radius:8px;
@@ -902,6 +913,21 @@ display:none;
 .form-control{
   font-size:18px;
   font-weight:600;
+}
+.form-control-up {
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.form-control-cap {
+    font-size: 18px;
+    font-weight: 600;
+    text-transform:capitalize;
+}
+.form-control-lo {
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: lowercase;
 }
 .form-group label{
   font-weight:700;
@@ -2021,11 +2047,11 @@ width: 32px;
 }
 
 .date-input input{
-  padding-right:35px;
+  padding-right:0px;
 }
 
 .date-input:after{
-   content: "\f133";
+  
     font-family: 'Line Awesome Free';
     display: inline-block;
     font-weight: 900;
@@ -3229,12 +3255,12 @@ background-image: linear-gradient(to bottom, #fefefe, #dddddd);
 
 }
 
-
+/*
  #tab1:checked ~  #content1,
  #tab2:checked ~ #content2
  {
   display: block;
-}
+}*/
 
 @media screen and (max-width: 650px) {
   .stand-delivery-tabs-container > label {

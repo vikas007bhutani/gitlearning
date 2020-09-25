@@ -40,8 +40,11 @@ namespace SalesApp.Repository
                 _cashsaledetails.mirrordate = entityorder.Date;
             }
                 _cashsaledetails.mirrorid = mirrorId;
+            _cashsaledetails.quantity = 1;
             _cashsaledetails.currencydetails = await _comm.GetCurrency();
             _cashsaledetails.specialadditions = await _comm.GetSpecialAddition();
+            _cashsaledetails.conversionrate = null;
+
             return _cashsaledetails;
 
         }
@@ -60,99 +63,106 @@ namespace SalesApp.Repository
             {
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
-                    //if (_sale.orderid > 0)
-                    //{
-                    var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
-                    INRvalue = Math.Round((decimal)(_sale.totalvalue * _sale.conversionrate), MidpointRounding.AwayFromZero);
-                    decimal resultd =  Math.Abs(INRvalue % 10);
-                    if(resultd>0)
+                    var entitystock = await this._SALESDBE.OrderItemDetails.FirstOrDefaultAsync(i => i.StockId == _sale.stockno && i.IsActive==true).ConfigureAwait(false);
+                    if (entitystock == null )
                     {
-                        finalINR =INRvalue +(10 - resultd);
-                    }
-                    else
-                    {
-                        finalINR = INRvalue;
-                    }
-                    //if (INRvalue > 0)
-                    //{
-                    //    digitvalue = Convert.ToString(INRvalue);
-                    //     lastdigit = digitvalue.Substring(digitvalue.Length - 1);
-                    //}
-                 
-                  //  if(INRvalue>0)
-                    if (entityorder != null && entityorder.Id > 0)
-                    {
-                        uid = entityorder.Id;
-                    }
-                    else
-                    {
-                        await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
+                        var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
+                        INRvalue = Math.Round((decimal)(_sale.totalvalue * _sale.conversionrate), MidpointRounding.AwayFromZero);
+                        if (INRvalue > 10)
                         {
-                            MirrorId = _sale.mirrorid,
-                            SaleDate = DateTime.Now,
-                            DelieveryType = 0,
-                            PortType = 0,
-                            Unit = 1,
-                            Description = "CashSale",
-                            TransactionId = new Guid().ToString(),//Common.GetUnique(),
-                            CreatedDatetime = DateTime.Now,
-                            IsActive = true,
-                          //  salestatus = 1
-
-                        }).ConfigureAwait(false);
-
-                        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                        uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
-                    }
-                    //  }
-                    if (uid > 0)
-                    {
-
-
-                        await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
-                        {
-                            OrderId = uid,
-                            ItemDesc = _sale.item_desc,
-                            StockId = _sale.stockno,
-                            OrderType = (int?)SaleType.CM,
-                            OrderTypePrefix = "CM",
-                            ItemType = 1,
-                            Price = _sale.totalvalue,
-                            PriceInr = finalINR,
-                            ConversionRate = _sale.conversionrate,
-                            Unit = 1,
-                            CreatedDatetime = DateTime.Now,
-                            IsActive = true,
-                            CurrencyType=_sale.currencyid,
-                            SaleType=2
-
-
-
-
-                        }).ConfigureAwait(false);
-                        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                        long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
-                        foreach (var item in _sale.specialadditions)
-                        {
-                            if (item.Selected)
+                            decimal resultd = Math.Abs(INRvalue % 10);
+                            if (resultd > 0)
                             {
-                                if (item != null)
-                                {
-                                    await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
-                                    innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                                }
+                                finalINR = INRvalue + (10 - resultd);
+                            }
+                            else
+                            {
+                                finalINR = INRvalue;
                             }
                         }
+                        else { finalINR = INRvalue; }
+                        //if (INRvalue > 0)
+                        //{
+                        //    digitvalue = Convert.ToString(INRvalue);
+                        //     lastdigit = digitvalue.Substring(digitvalue.Length - 1);
+                        //}
 
-                        if (oid > 0)
+                        //  if(INRvalue>0)
+                        if (entityorder != null && entityorder.Id > 0)
                         {
-                            await dbusertrans.CommitAsync().ConfigureAwait(false);
+                            uid = entityorder.Id;
+                        }
+                        else
+                        {
+                            await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
+                            {
+                                MirrorId = _sale.mirrorid,
+                                SaleDate = DateTime.Now,
+                                DelieveryType = 0,
+                                PortType = 0,
+                                Unit = 1,
+                                Description = "CashSale",
+                                TransactionId = new Guid().ToString(),//Common.GetUnique(),
+                                CreatedDatetime = DateTime.Now,
+                                IsActive = true,
+                                //  salestatus = 1
+
+                            }).ConfigureAwait(false);
+
+                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                        }
+                        //  }
+                        if (uid > 0)
+                        {
+
+
+                            await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
+                            {
+                                OrderId = uid,
+                                ItemDesc = _sale.item_desc,
+                                StockId = _sale.stockno,
+                                OrderType = (int?)SaleType.CM,
+                                OrderTypePrefix = "CM",
+                                ItemType = 1,
+                                Price = _sale.totalvalue,
+                                PriceInr = finalINR,
+                                ConversionRate = _sale.conversionrate,
+                                Unit = 1,
+                                CreatedDatetime = DateTime.Now,
+                                IsActive = true,
+                                CurrencyType = _sale.currencyid,
+                                SaleType = 2
+
+
+
+
+                            }).ConfigureAwait(false);
+                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
+                            foreach (var item in _sale.specialadditions)
+                            {
+                                if (item.Selected)
+                                {
+                                    if (item != null)
+                                    {
+                                        await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
+                                        innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                    }
+                                }
+                            }
+
+                            if (oid > 0)
+                            {
+                                await dbusertrans.CommitAsync().ConfigureAwait(false);
+
+                            }
+                            else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+
 
                         }
-                        else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
-
-
                     }
+                    else { return -1; }
                 }
             }
             catch (Exception ex)
@@ -273,45 +283,73 @@ namespace SalesApp.Repository
         #region Common Methods
         public async Task<CashSaleVM> GetSales(long _orderid,CashSaleVM _saledetails)
         {
-            CashSaleVM _cashsaledetails = new CashSaleVM();
+            CashSaleVM _cash = new CashSaleVM();
             CommonRepository _comm = new CommonRepository(_SALESDBE);
-            _cashsaledetails.cashsaledetails = await (from mr in this._SALESDBE.MirrorDetails.Where(c => c.IsActive == true)
+            _cash.cashsaledetails = await (from mr in this._SALESDBE.MirrorDetails.Where(c => c.IsActive == true)
                                                       join m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
                                                        on mr.Id equals m.MirrorId
                                                       join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
-                                                      on m.Id equals od.OrderId
+                                                      on m.Id equals od.OrderId into itemdetails
+                                                      from item in itemdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
                                                       join c in this._SALESDBE.CurrencyMaster.Where(c => c.IsActive == true)
-                                                      on od.CurrencyType equals c.Id into currdetails
+                                                      on item.CurrencyType equals c.Id into currdetails
                                                       from curr in currdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
 
                                                       where m.Id == _orderid
                                                       select new cashsaledetails
                                                       {
-                                                          itemorderid = od.Id,
-                                                          stockid = od.StockId,
+                                                          itemorderid = item.Id,
+                                                          stockid = item.StockId,
                                                           //  itemdesc = od.category.Concat(",").Concat(st.itemname).Concat(",").Concat(st.marble).Concat(",").Concat(st.size).Concat(",").Concat(st.marblestone).ToString(),
-                                                          itemdesc = od.ItemDesc,
-                                                          ordertype = od.OrderTypePrefix,
-                                                          salevalue = od.Price,
-                                                          salevalueinr = od.PriceInr ,
+                                                          itemdesc = item.ItemDesc,
+                                                          ordertype = item.OrderTypePrefix,
+                                                          salevalue = item.Price,
+                                                          salevalueinr = item.PriceInr ,
                                                           mirrorid=mr.Id,
                                                           mirrordate=mr.Date,
-                                                          symbol=curr.Symbol
+                                                          symbol=curr.Symbol,
+                                                           conversionrate = item.ConversionRate,
+                                                          currencyid = (int)item.CurrencyType,
+                                                          currency = curr.Type
 
 
                                                       }).ToListAsync();
 
 
-            _cashsaledetails.currencydetails = await _comm.GetCurrency();
-            _cashsaledetails.mirrorid = _cashsaledetails.cashsaledetails[0].mirrorid;
-            _cashsaledetails.mirrordate = _cashsaledetails.cashsaledetails[0].mirrordate;
-            _cashsaledetails.specialadditions = await _comm.GetSpecialAddition();
-            _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
-            _cashsaledetails.itemcount = _cashsaledetails.cashsaledetails.Count();
-            _cashsaledetails.stockno = _cashsaledetails.cashsaledetails.OrderByDescending(a=>a.itemorderid).FirstOrDefault().stockid;
-            _cashsaledetails.item_desc = _cashsaledetails.cashsaledetails.OrderByDescending(a => a.itemorderid).FirstOrDefault().itemdesc;
-            _cashsaledetails.orderid = _orderid;
-            return _cashsaledetails;
+            _cash.currencydetails = await _comm.GetCurrency();
+
+            _cash.specialadditions = await _comm.GetSpecialAddition();
+
+
+
+            _cash.orderid = _orderid;
+            _cash.totalvalue = null;
+            _cash.quantity = 1;
+            _cash.stockno = string.Empty;
+            _cash.grandtotal = 0;
+
+
+            if (_cash.cashsaledetails.Count > 0)
+            {
+                _cash.mirrorid = _cash.cashsaledetails[0].mirrorid;
+                _cash.mirrordate = _cash.cashsaledetails[0].mirrordate;
+                if (_cash.cashsaledetails[0].itemorderid > 0)
+                {
+                    _cash.conversionrate = (decimal)_cash.cashsaledetails[0].conversionrate;
+                    _cash.currencyid = _cash.cashsaledetails[0].currencyid;
+                    _cash.itemcount = _cash.cashsaledetails.Count();
+
+                    _cash.grandtotal = _cash.cashsaledetails.Sum(s => s.salevalueinr);
+                    //_cash.stockno = _cash.cashsaledetails.OrderByDescending(a => a.itemorderid).FirstOrDefault().stockid;
+                    //_cash.item_desc = _cash.cashsaledetails.OrderByDescending(a => a.itemorderid).FirstOrDefault().itemdesc;
+                }
+               
+            }
+            else {
+                _cash.mirrorid = _saledetails.mirrorid;
+                _cash.mirrordate = _saledetails.mirrordate;
+            }
+                return _cash;
 
         }
 
@@ -331,7 +369,7 @@ namespace SalesApp.Repository
                                    itemname = vf.ITEM_NAME,
                                    marblecolor = vf.MARBLECOLOR,
                                    price = c.Price,
-                                   size = vf.SizeInch,
+                                   size = vf.SizeInch+"x"+Convert.ToString(vf.HeightInch),
                                    marblestone = vf.MARBLETYPE
 
 

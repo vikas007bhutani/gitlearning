@@ -51,6 +51,7 @@ namespace SalesApp.ViewModel
         public DateTime? Updateddatetime { get; set; }
         public int? Createdby { get; set; }
         public bool? IsActive { get; set; }
+        public string Username { get; set; }
         public List<SelectListItem> vehicledetails { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> seriesdetails { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> countrydetails { get; set; } = new List<SelectListItem>();

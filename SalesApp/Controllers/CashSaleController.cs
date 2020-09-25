@@ -60,7 +60,17 @@ namespace SalesApp.Controllers
                 else
                 {
                     _orderid = await _csale.AddCashSale(saleetails, _comm.GetLoggedInUserId());
-                    cashdetails = await _csale.GetSales(_orderid, saleetails);
+                    if (_orderid == -1)
+                    {
+
+                        TempData["CashMessage"] = new MessageVM() { title = "Please enter", msg = "Stock No. Already Added!!!" };
+                        cashdetails = await _csale.GetSales(saleetails.orderid, saleetails);
+
+                    }
+                    else
+                    {
+                        cashdetails = await _csale.GetSales(_orderid, saleetails);
+                    }
                 }
              
             }

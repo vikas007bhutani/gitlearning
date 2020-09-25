@@ -45,47 +45,50 @@
                                         <tr>
                                             <th class="text-center">Pure Cash</th>
                                             @*<th>Mirror ID</th>*@
-                                            <th>Demo Person</th>
-                                            <th>Normal Sale</th>
-                                            <th>Language</th>
+                                            <th class="text-center">Demo</th>
+                                            <th class="text-center">Normal Sale</th>
+                                            <th class="text-center">Lang.</th>
                                             <th class="text-center">PAX</th>
-                                            <th>Guide</th>
-                                            <th>Tour Escort</th>
-                                            <th>Company</th>
+                                            <th class="text-center">Guide</th>
+                                            <th class="text-center">Tour Escort</th>
+                                            <th class="text-center">Company</th>
                                             @*<th>Date of Visit</th>*@
                                         </tr>
                                     </thead>
+                                  
                                     <tbody>
                                         <!-- Mirrors loop here-->
                                         @foreach (var item in Model.Mirrors)
                                         {
-                                        <tr>
-                                            <td class="text-center action-td">
-                                                <!-- <a href=""><i class="las la-plus" data-toggle="modal" data-target="#chooseType"></i></a> -->
-                                                @*<a href="../add-cash-sale.html" class="btn btn-primary btn-dark-gray">Add Cash Sale</a>
-            <a href="../add-sale.html" class="btn btn-primary btn-blue">Add Sale</a>*@
-                                                <a asp-controller="CashSale" asp-action="Index" asp-route-id="@item.mirrorid" class="btn btn-primary btn-dark-gray">Add Cash Sale </a>
+                                            <tr>
+                                                <td class="text-center action-td">
+                                                    <!-- <a href=""><i class="las la-plus" data-toggle="modal" data-target="#chooseType"></i></a> -->
+                                                    @*<a href="../add-cash-sale.html" class="btn btn-primary btn-dark-gray">Add Cash Sale</a>
+                        <a href="../add-sale.html" class="btn btn-primary btn-blue">Add Sale</a>*@
+                                                    <a asp-controller="CashSale" asp-action="Index" asp-route-id="@item.mirrorid" class="btn btn-primary btn-dark-gray">Add Cash Sale </a>
 
 
+                                                </td>
+                                                @*<td> <p><span class="fbold val">@item.mirrorid</span></p></td>*@
+                                                <td>
+                                                    <p><span class="text-center action-td">@item.driver?.FirstOrDefault().name</span></p>
+
+
+                                                </td>
+
+                                                <td class="text-center action-td"> <a asp-controller="AddSale" asp-action="Index" asp-route-id="@item.mirrorid" class="btn btn-primary btn-dark-gray">Add Sale </a></td>
+                                                <td>@item.Languageid</td>
+                                                <td class="text-center">@item.Pax</td>
+                                                <td>@item.guide?.FirstOrDefault().name</td>
+                                                <td>@item.teamescort?.FirstOrDefault().name</td>
+                                                <td>
+                                                    @if (item.principle != null && item.principle.Count > 0)
+                                                    {@item.principle.FirstOrDefault().name}
                                             </td>
-                                            @*<td> <p><span class="fbold val">@item.mirrorid</span></p></td>*@
-                                            <td>
-                                                <p><span class="fbold val">@item.driver?.FirstOrDefault().name</span></p>
-
-
-                                            </td>
-
-                                            <td class="text-center action-td"> <a asp-controller="AddSale" asp-action="Index" asp-route-id="@item.mirrorid" class="btn btn-primary btn-dark-gray">Add Sale </a></td>
-                                            <td>@item.Languageid</td>
-                                            <td class="text-center">@item.Pax</td>
-                                            <td>@item.guide?.FirstOrDefault().name</td>
-                                            <td>@item.teamescort?.FirstOrDefault().name</td>
-                                            <td>@if (item.principle != null && item.principle.Count > 0)
-                                            {@item.principle.FirstOrDefault().name}</td>
                                             @*<td>@item.mirrordate.Value.ToShortDateString()</td>*@
                                         </tr>
-                                        }
-                                        </tbody>
+                                    }
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
