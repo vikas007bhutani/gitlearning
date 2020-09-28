@@ -57,7 +57,23 @@ namespace SalesApp.Controllers
             return _stock;
 
         }
+        public async Task<string> GetTeleCodeDetails(int countryid)
+        {
+            string _telecode = string.Empty;
+            try
+            {
+                _telecode = await _csale.GetTeleCode(countryid);
+                _telecode = "+" + _telecode;
+            }
+            catch (Exception ex)
+            {
 
+                ModelState.AddModelError("Error", "TeleCode Not Found!!");
+            }
+
+            return _telecode;
+
+        }
         public async Task<IActionResult> AddSale(NormalSaleVM saleetails)
         {
             NormalSaleVM cashdetails = new NormalSaleVM();
@@ -71,7 +87,7 @@ namespace SalesApp.Controllers
                     if (_orderid == -1)
                     {
 
-                        TempData["NormalMessage"] = new MessageVM() { title = "Please enter", msg = "Stock No. Already Added!!!" };
+                        TempData["NormalMessage"] = new MessageVM() { title = "Please enter", msg = "This stock no. already added!!!" };
                         cashdetails = await _csale.GetSales(saleetails.orderid, saleetails);
 
                     }
@@ -194,12 +210,12 @@ namespace SalesApp.Controllers
                     result = await _csale.AddStandSale(standdetails, _comm.GetLoggedInUserId());
                     if (result)
                     {
-                        TempData["StandMessage"] = new MessageVM() { title = "Success!", msg = "Operation Done." };
+                        //TempData["StandMessage"] = new MessageVM() { title = "Success!", msg = "Operation Done." };
 
                     }
                     else
                     {
-                        TempData["StandMessage"] = new MessageVM() { title = "Error!", msg = "First,Add Order Item,before addding stand." };
+                        TempData["StandMessage"] = new MessageVM() { title = "Error!", msg = "Please,Add Item,before addding stand." };
                         // return View("Index", standdetails);
 
                     }
@@ -208,7 +224,7 @@ namespace SalesApp.Controllers
                 else
                 {
                     // ModelState.IsValid;
-                    TempData["StandMessage"] = new MessageVM() { title = "Error!", msg = "First,Add Order Item,before addding stand." };
+                    TempData["StandMessage"] = new MessageVM() { title = "Error!", msg = "Please,Add  Item,before addding stand." };
                     // return View("Index", standdetails);
 
                 }
@@ -254,7 +270,7 @@ namespace SalesApp.Controllers
                     result = await _csale.AddDeliveryDetails(standdetails, _comm.GetLoggedInUserId());
                     if (result)
                     {
-                        TempData["DeliveryMessage"] = new MessageVM() { title = "Success!", msg = "Operation Done." };
+                        //TempData["DeliveryMessage"] = new MessageVM() { title = "Success!", msg = "Operation Done." };
 
                     }
                     else

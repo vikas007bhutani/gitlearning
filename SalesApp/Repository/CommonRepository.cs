@@ -75,7 +75,8 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetShapes()
         {
             List<SelectListItem> _getshapes = new List<SelectListItem>();
-            List<Shape> allshapes = await this._DBERP.Shape.Where(a=>a.Type !=null).OrderBy(T=>T.Type).ToListAsync();
+            List<Shape> allshapes = await this._DBERP.Shape.Where(a=>a.Type !=null).OrderBy(T=>T.ShapeName).ToListAsync();
+           // List<Shape> allshapes = await this._DBERP.Shape.Where(a => a.Type != null).OrderBy(T => T.Type).ToListAsync();
             _getshapes = BindingListUtillity.GenerateSelectList(allshapes);
             return _getshapes;
            // throw new NotImplementedException();
@@ -119,7 +120,8 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetNationality()
         {
             List<SelectListItem> _getnationality = new List<SelectListItem>();
-            List<Nationality> _nationalitymaster = await this._DBERP.Nationality.ToListAsync();
+         //   List<Nationality> _nationalitymaster = await this._DBERP.Nationality.ToListAsync();
+            List<CountriesMaster> _nationalitymaster = await this._DBERP.CountriesMaster.Where(i => i.IsActive == true).OrderBy(p => p.Priority > 0 ? 0 : 1).ThenBy(p => p.Priority).ToListAsync();
             _getnationality = BindingListUtillity.GenerateSelectList(_nationalitymaster);
             return _getnationality;
         }
@@ -141,7 +143,8 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetCountries()
         {
             List<SelectListItem> _getcountry = new List<SelectListItem>();
-            List<CountriesMaster> _countrymaster = await this._DBERP.CountriesMaster.Where(c=>c.IsActive==true).ToListAsync();
+            //  List<CountriesMaster> _countrymaster = await this._DBERP.CountriesMaster.Where(c=>c.IsActive==true).ToListAsync();
+            List<CountriesMaster> _countrymaster = await this._DBERP.CountriesMaster.Where(i => i.IsActive == true).OrderBy(p => p.Priority > 0 ? 0 : 1).ThenBy(p => p.Priority).ToListAsync();
             _getcountry = BindingListUtillity.GenerateSelectList(_countrymaster);
             return _getcountry;
         }

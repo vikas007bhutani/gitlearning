@@ -31,7 +31,7 @@ namespace SalesApp
             services.AddAuthentication("CookieAuthentication")
                 .AddCookie("CookieAuthentication", config =>
                 {
-                    config.Cookie.Name = "UserLoginCookie";
+                    config.Cookie.Name = "SalesCookie";
                     config.LoginPath = "/Account/Login";
                 });
             services.AddControllersWithViews();
@@ -69,7 +69,7 @@ namespace SalesApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();

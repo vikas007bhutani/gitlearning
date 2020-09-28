@@ -28,5 +28,6 @@ namespace SalesApp.Repository.Interface
         public Task<Int64> AddCustomSale(NormalSaleVM _sale, int userid);
         public  Task<NormalSaleVM> Invoice(long orderid);
         public Task<string> IsExist(string stockno);
+        public  Task<string> GetTeleCode(int countryid);
     }
 }

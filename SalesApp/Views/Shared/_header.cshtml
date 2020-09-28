@@ -30,7 +30,7 @@
                     </div>
                     <div class="content-account">
                         <h5 class="name">
-                            <a href="#">@ViewBag.UserName</a>
+                            <a href="#">@User.Identity.Name</a>
                         </h5>
                         <span class="email">Sales executive</span>
                     </div>
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="account-dropdown__footer">
-                    <a href="#">
+                    <a href="@Url.Action("Index", "Account")">
                         <i class="zmdi zmdi-power"></i>Logout
                     </a>
                 </div>

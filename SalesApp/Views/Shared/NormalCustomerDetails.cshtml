@@ -173,7 +173,7 @@
 
                                 <button type="button" class="btn-dark-gray" onclick="manaagetab('4')">Back</button>
                                 <button type="button" class="btn-blue-light">Reset</button>
-                                <button  id="custsubmit" class="btn-dark-gray">Continue</button>
+                                <button  id="custsubmit" class="btn-pink">Continue</button>
                                 @*<button type="button" class="btn-pink" onclick="manaagetab('3')">Continue</button>*@
 
                             </div>
@@ -203,6 +203,50 @@
                 }
                 function country_SelectedIndexChanged() {
                     $('#cinfo_State').focus();
+                    Gettelecode();
                 }
-               
-    </script>
+                   function Gettelecode() {
+                       var countryid = $('#countryid').val();
+                       if (countryid != '') {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTeleCodeDetails", "AddSale")',
+                //contentType: false,
+                //processData: false,
+                data: { "countryid": countryid },
+                success: function (data) {
+                    if (data != null) {
+                        debugger;
+                        var response = JSON.stringify(data);
+                        if (response != null) {
+                           
+                            $('#cinfo_MobCountryCode').val(data);
+                            $('#cinfo_TeleCountryCode').val(data); 
+                        }
+                        else {
+                           
+                        }
+                    }
+                    else {
+                       
+                    }
+
+
+
+                },
+                Error: function (err) {
+                    $('#itemcategory').append(err);
+                    //  debugger;
+                },
+                /* beforeSend: function () {
+                     $(".progress").show();
+                 },
+                 complete: function () {
+                    $(".progress").hide();
+                 }*/
+            });
+
+        }
+    }
+
+            </script>

@@ -26,7 +26,7 @@ namespace SalesApp.Controllers
             this._DBERP = dbcontext;
             this._comm = commonRepository;
         }
-       
+       [Authorize]
         public IActionResult Index()
         {
             ViewBag.UserName = _comm.GetLoggedInUserName();

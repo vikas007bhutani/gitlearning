@@ -43,8 +43,8 @@ namespace SalesApp.Utility
                 newSelectList.Add(new SelectListItem
                 {
                     Value = item.LengthInch.ToString(),
-                    Text = item.LengthInch.ToString()
-                });
+                    Text = item.LengthInch.ToString()+"''"
+                }); ;
             }
             return newSelectList;
         }

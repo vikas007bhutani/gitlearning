@@ -75,7 +75,7 @@ namespace SALEERP
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             // who are you?  
-           // app.UseAuthentication();
+            app.UseAuthentication();
 
             // are you allowed?  
            

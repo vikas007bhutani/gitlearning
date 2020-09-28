@@ -58,6 +58,7 @@ namespace SalesApp.ViewModel
         public string standcode { get; set; }
         public string marblecolor { get; set; }
         public string color { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Cash Amount Must Be Numeric")]
         public decimal? CashAmount { get; set; }
         public decimal? CreditAmount { get; set; }
         public decimal? DebitAmount { get; set; }
@@ -188,6 +189,7 @@ namespace SalesApp.ViewModel
         [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? payamountinr { get; set; }
         public string symbol { get; set; }
+        public string mainsymbol { get; set; }
         public int currencyid { get; set; }
 
     }

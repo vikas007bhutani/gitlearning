@@ -1145,7 +1145,6 @@ G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\runtimes\win\li
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\Entities.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\bin\Debug\netcoreapp3.1\Entities.pdb
-G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.csprojAssemblyReference.cache
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.AssemblyInfoInputs.cache
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.AssemblyInfo.cs
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.csproj.CoreCompileInputs.cache
@@ -1197,3 +1196,4 @@ G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\staticwebassets
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.dll
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.pdb
 G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.genruntimeconfig.cache
+G:\enableIT\SALEERP_OLD\SALEERP\SalesApp\obj\Debug\netcoreapp3.1\SalesApp.csprojAssemblyReference.cache

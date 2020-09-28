@@ -2575,7 +2575,7 @@ padding:0px;
 .summary-container{
     border: 1px solid #ffeded;
     background: #fff6f6;
-  display: flex;
+ /* display: flex;*/
     align-items: center;
     justify-content: flex-end;
     text-align: right;

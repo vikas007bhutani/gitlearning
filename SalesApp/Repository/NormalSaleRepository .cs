@@ -470,8 +470,9 @@ namespace SalesApp.Repository
                                                            payamount=od.Amount,
                                                            payamountinr = od.AmoutHd,
                                                            paytype = (string.IsNullOrEmpty(card.CardName) ? curr.Type  : card.CardName) ,
-                                                           symbol= curr.Symbol !=null ?curr.Symbol: "$",
-                                                           currencyid=curr.Id
+                                                           symbol=od.PayMode ==1 ?  curr.Symbol !=null ?curr.Symbol: "$": "₹",
+                                                           mainsymbol = curr.Symbol != null ? curr.Symbol : "$",
+                                                           currencyid =curr.Id
 
 
                                                        }).ToListAsync();
@@ -480,24 +481,24 @@ namespace SalesApp.Repository
             _cashsaledetails.grandtotalinr =_cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
             _cashsaledetails.grandtotalcurrency= _cashsaledetails.cashsaledetails.Sum(s => s.salevalue);
 
-            if (_cashsaledetails.paymentdetails.Count > 0)
+            if (_cashsaledetails.paymentdetails.Count > 0 && _cashsaledetails.cashsaledetails.Count>0)
             {
                 _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency - ((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamount));
                 _cashsaledetails.balinr = _cashsaledetails.grandtotalinr - Math.Round(((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamountinr)));
-                if (_cashsaledetails.paymentdetails[0].currencyid != 6)
+                if (_cashsaledetails.paymethodvalue.ToUpper().Contains("CASH")  && _cashsaledetails.paymentdetails[0].currencyid != 6)
                 {
-                    _cashsaledetails.currsymbol = _cashsaledetails.paymentdetails[0].symbol;
+                    _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol;
 
                 }
                 else
-                { _cashsaledetails.currsymbol = "$"; }
+                { _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol; }
 
             }
             else
             {
                 _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency;
                 _cashsaledetails.balinr = _cashsaledetails.grandtotalinr;
-                _cashsaledetails.currsymbol = "$";
+                _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol;
             }
             if(_cashsaledetails.balcurrency<0 || _cashsaledetails.balinr<0)
             {
@@ -974,8 +975,8 @@ namespace SalesApp.Repository
                             await this._SALESDBE.OrderPayment.AddAsync(new OrderPayment()
                             {
                                
-                               Amount=amount,
-                               PayMode= (int)(paymethod)Enum.Parse(typeof(paymethod), _sale.paymethodvalue),
+                                Amount=amount,
+                                PayMode= (int)(paymethod)Enum.Parse(typeof(paymethod), _sale.paymethodvalue),
                                 CardType= (int)(paymethod)Enum.Parse(typeof(paymethod), _sale.paymethodvalue) == 4?_sale.paylaterid : _sale.cardid+_sale.cardiddebit,
                                 CreatedDatetime = DateTime.Now,
                                 IsActive = true,
@@ -1085,6 +1086,23 @@ namespace SalesApp.Repository
             //StockDetailVM _sdetails = new StockDetailVM();
 
             return _list;
+        }
+        public async Task<string> GetTeleCode(int countryid)
+        {
+            string resultcode = string.Empty;
+            try
+            {
+               var CTelecode= await this._SALESDBE.CountriesMaster.Where(a=>a.Id==countryid).FirstOrDefaultAsync();
+                resultcode = CTelecode.Code;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            //StockDetailVM _sdetails = new StockDetailVM();
+
+            return resultcode;
         }
 
         public async Task<Int64> AddCustomSale([Bind("orderid")] NormalSaleVM _sale, int userid)

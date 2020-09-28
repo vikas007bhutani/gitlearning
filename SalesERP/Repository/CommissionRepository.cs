@@ -777,7 +777,7 @@ namespace SALEERP.Repository
                             on ma.AgentId equals v.AgentId into vehicledetails
                             from vh in vehicledetails.Where(f => f.IsActive == true).DefaultIfEmpty()
 
-                            where ma.IsActive == true && ((cm.fromdate == null ? m.Date >= DateTime.Now && m.Date <= DateTime.Now: m.Date >= cm.fromdate && m.Date <= cm.Todate) || (m.Date >= cm.fromdate && m.Date <= cm.Todate))
+                            where m.IsActive == true && ((cm.fromdate == null ? m.Date >= DateTime.Now && m.Date <= DateTime.Now: m.Date >= cm.fromdate && m.Date <= cm.Todate) || (m.Date >= cm.fromdate && m.Date <= cm.Todate))
                                select new MirrorDetailVM
                                {
                                    mirrorid = m.Id,

@@ -463,6 +463,7 @@ namespace SALEERP.Data
                     .HasColumnName("code")
                     .HasMaxLength(10)
                     .IsUnicode(false);
+                entity.Property(e => e.Priority).HasColumnName("priority");
 
                 entity.Property(e => e.CreatedBy)
                     .HasColumnName("created_by")

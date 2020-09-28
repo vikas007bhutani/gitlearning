@@ -93,7 +93,7 @@
                         <div class="">
                             <!-- <p><span class="fbold fdark conversion-head">Conversion Rate:</span> <span class="fbold conversion-val">USD 76</span></p> -->
                             <p><span class="fbold fdark grand-total-head">Grand Total:</span> <span class="fbold grand-total-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.grandtotalinr)/@Html.DisplayFor(model => model.currsymbol)&nbsp;@Html.DisplayFor(model => model.grandtotalcurrency)</span></p>
-                            <p><span class="fbold fdark conversion-head">Balance:</span> <span class="fbold conversion-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.balinr)/@Html.DisplayFor(model => model.currsymbol)&nbsp;@Html.DisplayFor(model => model.balcurrency)</span></p>
+                            <p><span class="fbold fdark conversion-head">Balance:</span> <span class="fbold conversion-val" style="color:lawngreen;"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.balinr)/@Html.DisplayFor(model => model.currsymbol)&nbsp;@Html.DisplayFor(model => model.balcurrency)</span></p>
 
                         </div>
                     </div>
@@ -109,8 +109,8 @@
                             <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12 col-12 form-group">
                                 <label for="">Amount(INR)</label>
                                 <div class="amount-input">
-                                    @Html.TextBoxFor(model => model.PayLaterAmount, new { @class = "form-control", htmlAttributes = new { placeholder = "Enter ..." } })
-                                    @Html.ValidationMessageFor(model => model.cinfo.Address, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.PayLaterAmount, new { type = "number", @class = "form-control", htmlAttributes = new { placeholder = "Enter ..." } })
+                                    @Html.ValidationMessageFor(model => model.PayLaterAmount, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12 col-12">
@@ -130,8 +130,8 @@
                             <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12 col-12 form-group">
                                 <label for="">Amount</label>
                                 <div class="">
-                                    @Html.TextBoxFor(model => model.CashAmount, new { @class = "form-control", htmlAttributes = new { required = "required", placeholder = "Enter ..." } })
-                                    @Html.ValidationMessageFor(model => model.cinfo.Address, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.CashAmount, new { type = "number", @class = "form-control", htmlAttributes = new { required = "required", placeholder = "Enter ..." } })
+                                    @Html.ValidationMessageFor(model => model.CashAmount, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12 col-12">
@@ -151,8 +151,8 @@
                             <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12 col-12 form-group">
                                 <label for="">Amount</label>
                                 <div class="amount-input">
-                                    @Html.TextBoxFor(model => model.DebitAmount, new { @class = "form-control", htmlAttributes = new { placeholder = "Enter ..." } })
-                                    @Html.ValidationMessageFor(model => model.cinfo.Address, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.DebitAmount, new { type = "number", @class = "form-control", htmlAttributes = new { placeholder = "Enter ..." } })
+                                    @Html.ValidationMessageFor(model => model.DebitAmount, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12 col-12">
@@ -172,8 +172,8 @@
                             <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12 col-12 form-group">
                                 <label for="">Amount</label>
                                 <div class="amount-input">
-                                    @Html.TextBoxFor(model => model.CreditAmount, new {@Value = (Model.CreditAmount > 0 ? Model.CreditAmount.ToString() : string.Empty), @class = "form-control", htmlAttributes = new { placeholder = "Enter ..." } })
-                                    @Html.ValidationMessageFor(model => model.cinfo.Address, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(model => model.CreditAmount, new { type = "number", @class = "form-control", htmlAttributes = new { placeholder = "Enter ..." } })
+                                    @Html.ValidationMessageFor(model => model.CreditAmount, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12 col-12">
@@ -189,8 +189,8 @@
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 col-8 form-group">
                                 <label for="">Paytm Number</label>
 
-                                @Html.TextBoxFor(model => model.PaytmAmount, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter ..." } })
-                                @Html.ValidationMessageFor(model => model.cinfo.Address, "", new { @class = "text-danger" })
+                                @Html.TextBoxFor(model => model.PaytmAmount, new { type = "number", htmlAttributes = new { @class = "form-control", placeholder = "Enter ..." } })
+                                @Html.ValidationMessageFor(model => model.PaytmAmount, "", new { @class = "text-danger" })
 
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 col-4">
