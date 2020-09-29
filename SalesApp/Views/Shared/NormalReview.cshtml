@@ -19,11 +19,11 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6">
 
-                    <p class="name-nationality"><span class="fbold name"><i class="las la-user-circle"></i>@Html.DisplayFor(model => model.cinfo.Name)</span><span class="fbold nationality fdark">Nationality: @Html.DisplayFor(model => model.cinfo.Country)</span></p>
+                    <p class="name-nationality"><span class="fbold name" style="text-transform:capitalize"><i class="las la-user-circle"></i>@Html.DisplayFor(model => model.cinfo.Name)</span><span class="fbold nationality fdark">Nationality: @Html.DisplayFor(model => model.cinfo.Country)</span></p>
 
-                    <p><span class="fregular flight dblock">Address:</span>  <span class="fbold fdark dblock">@Html.DisplayFor(model => model.cinfo.Address),@Html.DisplayFor(model => model.cinfo.City),@Html.DisplayFor(model => model.cinfo.State),@Html.DisplayFor(model => model.cinfo.Country),@Html.DisplayFor(model => model.cinfo.Zipcode)</span></p>
+                    <p><span class="fregular flight dblock">Address:</span>  <span class="fbold fdark dblock" style="text-transform:capitalize">@Html.DisplayFor(model => model.cinfo.Address),@Html.DisplayFor(model => model.cinfo.City),@Html.DisplayFor(model => model.cinfo.State),@Html.DisplayFor(model => model.cinfo.Country)</span><span style="text-transform:uppercase">,@Html.DisplayFor(model => model.cinfo.Zipcode)</span></p>
                     <p><span class=" fregular flight dblock">Contact Numbers: </span>  <span class="fbold fdark dblock">@Html.DisplayFor(model => model.cinfo.TeleCountryCode)-@Html.DisplayFor(model => model.cinfo.Telephone)/@Html.DisplayFor(model => model.cinfo.MobCountryCode)-@Html.DisplayFor(model => model.cinfo.Mobile)</span></p>
-                    <p><span class="fregular flight dblock">Email Address:</span>  <span class="fbold fdark  dblock">@Html.DisplayFor(model => model.cinfo.Email)</span></p>
+                    <p><span class="fregular flight dblock">Email Address:</span>  <span class="fbold fdark  dblock" style="text-transform:lowercase">@Html.DisplayFor(model => model.cinfo.Email)</span></p>
                     <p><span class="fregular flight dblock">Passport Number:</span>  <span class=" dblock fbold fdark ">@Html.DisplayFor(model => model.dinfo.Passport)</span></p>
 
 
@@ -80,7 +80,7 @@
                                                     {
                                                         @if (item.saletype == 3)
                                                         {
-                                                            <span class="table-type of">@Html.DisplayFor(modelItem => item.ordertype) </span><i class="table-type CM"> TBM</i>
+                                                            <span class="table-type of">@Html.DisplayFor(modelItem => item.ordertype) </span><i class="table-type CM" style="background-color:blue"> TBM</i>
                                                         }
                                                         else
                                                         {

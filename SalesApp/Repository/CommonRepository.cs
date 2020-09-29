@@ -84,8 +84,9 @@ namespace SalesApp.Repository
 
         public async Task<List<SelectListItem>> GetMarbleColor()
         {
+            var ids = new List<int?> { 963,  44, 74, 43, 6 };
             List<SelectListItem> _getmarble = new List<SelectListItem>();
-            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a=>a.TypeId==13).OrderBy(a=>a.Name).ToListAsync();
+            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a=> ids.Contains(a.Id)).OrderBy(a=> ids.Contains(a.Id)).ToListAsync();
             _getmarble = BindingListUtillity.GenerateSelectList(allmarblecolor);
             return _getmarble;
         }
@@ -121,7 +122,7 @@ namespace SalesApp.Repository
         {
             List<SelectListItem> _getnationality = new List<SelectListItem>();
          //   List<Nationality> _nationalitymaster = await this._DBERP.Nationality.ToListAsync();
-            List<CountriesMaster> _nationalitymaster = await this._DBERP.CountriesMaster.Where(i => i.IsActive == true).OrderBy(p => p.Priority > 0 ? 0 : 1).ThenBy(p => p.Priority).ToListAsync();
+            List<CountriesMaster> _nationalitymaster = await this._DBERP.CountriesMaster.Where(i => i.IsActive == true).OrderBy(p => p.Priority > 0 ? 0 : 1).ThenBy(p => p.Priority).ThenBy(a => a.Name).ToListAsync();
             _getnationality = BindingListUtillity.GenerateSelectList(_nationalitymaster);
             return _getnationality;
         }
@@ -144,7 +145,7 @@ namespace SalesApp.Repository
         {
             List<SelectListItem> _getcountry = new List<SelectListItem>();
             //  List<CountriesMaster> _countrymaster = await this._DBERP.CountriesMaster.Where(c=>c.IsActive==true).ToListAsync();
-            List<CountriesMaster> _countrymaster = await this._DBERP.CountriesMaster.Where(i => i.IsActive == true).OrderBy(p => p.Priority > 0 ? 0 : 1).ThenBy(p => p.Priority).ToListAsync();
+            List<CountriesMaster> _countrymaster = await this._DBERP.CountriesMaster.Where(i => i.IsActive == true).OrderBy(p => p.Priority > 0 ? 0 : 1).ThenBy(p => p.Priority).ThenBy(a=>a.Name).ToListAsync();
             _getcountry = BindingListUtillity.GenerateSelectList(_countrymaster);
             return _getcountry;
         }

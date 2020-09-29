@@ -589,8 +589,6 @@ namespace SALEERP.Repository
         {
 
             CommissionVM _cms = new CommissionVM();
-
-
             // List<UnitMaster> _unitmaster = new List<UnitMaster>();
             _cms.unitdetails = _comm.getunits();
             var sale_details = (from m in this._DBERP.MirrorDetails
@@ -609,10 +607,9 @@ namespace SALEERP.Repository
                                     saleamount = pay.Amount,
                                     hdcharge = pay.AmoutHd,
                                     saleid = pay.OrderId,
-                                    sale_type = pay.PayMode,
+                                    paymode = pay.PayMode,
                                     gst = pay.Gst,
                                     cardpercentage = pay.Igst
-
 
                                 }
 
@@ -620,17 +617,14 @@ namespace SALEERP.Repository
                                {
                                    MirrorId = g.Key,
                                    MirrorDate=g.FirstOrDefault().mirrodate,
-                                   cashamount = g.Where(s => s.sale_type == 1).Sum(c => c.saleamount),
-                                   HDamount = g.Sum(c => c.hdcharge),
-                                   cardamount = g.Where(s => s.sale_type == 2).Sum(c => c.saleamount),
-                                   paylateramount = g.Where(s => s.sale_type == 3).Sum(c => c.saleamount),
+                                   cashamount = g.Where(s => s.paymode == 1).Sum(c => c.hdcharge),
+                                   HDamount = 0,
+                                   cardamount = g.Where(s => s.paymode == 2 && s.paymode==3).Sum(c => c.hdcharge),
+                                   paylateramount = g.Where(s => s.paymode == 4).Sum(c => c.hdcharge),
                                    gst = g.FirstOrDefault().gst,
                                    cardper = g.FirstOrDefault().cardpercentage
-
-
                                    // p= g.Where(c => c.agentcode == "pi").SelectMany(a=>a.name).SingleOrDefault().ToString()
                                }).ToList();
-
             
             foreach (var item in sale_details)
             {

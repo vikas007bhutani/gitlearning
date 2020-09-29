@@ -387,9 +387,6 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
 <div id="CSale" style="display:none">
     @using (Html.BeginForm("AddCustomSale", "AddSale", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -444,14 +441,14 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
                                     <label for="inputState">Category</label>
-                                    @Html.DropDownListFor(model => model.categoryid, Model.categorydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                                    @Html.DropDownListFor(model => model.categoryid, Model.categorydetails as IEnumerable<SelectListItem>, "Select",new{ onchange = "category_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
                                     @Html.ValidationMessageFor(model => model.categoryid, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
                                     <label for="inputState">Shape</label>
-                                    @Html.DropDownListFor(model => model.shapeid, Model.shapesdetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                                    @Html.DropDownListFor(model => model.shapeid, Model.shapesdetails as IEnumerable<SelectListItem>, "Select",new { onchange = "shape_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new {  required = "required" } })
                                     @Html.ValidationMessageFor(model => model.shapeid, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -466,7 +463,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
                                     <label for="inputState">Marble Colour</label>
-                                    @Html.DropDownListFor(model => model.marblecolor, Model.marblecolordetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                                    @Html.DropDownListFor(model => model.marblecolor, Model.marblecolordetails as IEnumerable<SelectListItem>, "Select",new { onchange = "marblecolor_SelectedIndexChanged()", @class = "form-control", htmlAttributes= new { required = "required" } })
                                     @Html.ValidationMessageFor(model => model.marblecolor, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -479,7 +476,7 @@
                 <div class="row mar-b-10">
                     <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
                         <label for="inputState">Fx</label>
-                        @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                        @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", new { onchange = "curr_SelectedIndexChanged()", @class = "form-control", htmlAttributes= new { required = "required" } })
                         @Html.ValidationMessageFor(model => model.currencyid, "", new { @class = "text-danger" })
 
                     </div>
@@ -639,6 +636,21 @@
 <script src="https://103.48.50.253/sale/instascan_cdn.min.js"></script>
 @*<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js" rel="nofollow"></script>*@
 <script type="text/javascript">
+    function category_SelectedIndexChanged() {
+        $('#shapeid').focus();
+    }
+    function shape_SelectedIndexChanged() {
+        $('#marblecolor').focus();
+       
+    }
+    function marblecolor_SelectedIndexChanged() {
+        $('#currencyid').focus();
+       
+    }
+    function curr_SelectedIndexChanged() {
+        $('#conversionrate').focus();
+       
+    }
     function SelectedIndexChanged() {
         $('#conversionrate').focus();
     }

@@ -325,7 +325,7 @@ namespace SalesApp.Repository
             _cash.orderid = _orderid;
             _cash.totalvalue = null;
             _cash.quantity = 1;
-            _cash.stockno = string.Empty;
+          //  _cash.stockno = string.Empty;
             _cash.grandtotal = 0;
 
 

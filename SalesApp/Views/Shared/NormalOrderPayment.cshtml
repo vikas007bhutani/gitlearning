@@ -93,7 +93,7 @@
                         <div class="">
                             <!-- <p><span class="fbold fdark conversion-head">Conversion Rate:</span> <span class="fbold conversion-val">USD 76</span></p> -->
                             <p><span class="fbold fdark grand-total-head">Grand Total:</span> <span class="fbold grand-total-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.grandtotalinr)/@Html.DisplayFor(model => model.currsymbol)&nbsp;@Html.DisplayFor(model => model.grandtotalcurrency)</span></p>
-                            <p><span class="fbold fdark conversion-head">Balance:</span> <span class="fbold conversion-val" style="color:lawngreen;"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.balinr)/@Html.DisplayFor(model => model.currsymbol)&nbsp;@Html.DisplayFor(model => model.balcurrency)</span></p>
+                            <p><span class="fbold fdark conversion-head">Balance:</span> <span class="fbold conversion-val" style="color:blue;"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.balinr)/@Html.DisplayFor(model => model.currsymbol)&nbsp;@Html.DisplayFor(model => model.balcurrency)</span></p>
 
                         </div>
                     </div>
@@ -194,7 +194,7 @@
 
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 col-4">
-                                <button type="submit" class="btn-blue">Add Amount</button>
+                                <button  id="btnaddpay" class="btn-blue">Add Amount</button>
                             </div>
                         </div>
                     </div>
@@ -285,10 +285,15 @@
     } 
     
     $(document).ready(function () {
-        $("#paymentsubmit").click(function () {
+        $("#btnaddpay").click(function () {
             $("#paymentinfo").submit();
         });
     });
+    function validate() {
+
+
+
+    }
     function paylater() {
         document.getElementById('paylater').style.display = 'block';
         document.getElementById('cash').style.display = 'none';

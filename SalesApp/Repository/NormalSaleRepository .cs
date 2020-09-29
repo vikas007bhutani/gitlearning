@@ -481,24 +481,44 @@ namespace SalesApp.Repository
             _cashsaledetails.grandtotalinr =_cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
             _cashsaledetails.grandtotalcurrency= _cashsaledetails.cashsaledetails.Sum(s => s.salevalue);
 
-            if (_cashsaledetails.paymentdetails.Count > 0 && _cashsaledetails.cashsaledetails.Count>0)
+            if (_cashsaledetails.paymentdetails.Count > 0 )
             {
                 _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency - ((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamount));
                 _cashsaledetails.balinr = _cashsaledetails.grandtotalinr - Math.Round(((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamountinr)));
                 if (_cashsaledetails.paymethodvalue.ToUpper().Contains("CASH")  && _cashsaledetails.paymentdetails[0].currencyid != 6)
                 {
-                    _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol;
+                    if (_cashsaledetails.cashsaledetails.Count > 0)
+                    {
+                        _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol;
+                    }
+                    else
+                    { _cashsaledetails.currsymbol = "$"; }
 
                 }
                 else
-                { _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol; }
+                {
+                    if (_cashsaledetails.cashsaledetails.Count > 0)
+                    {
+                        _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol;
+                    }
+                    else
+                    { _cashsaledetails.currsymbol = "$"; }
+                  //  _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol; 
+                
+                }
 
             }
             else
             {
                 _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency;
                 _cashsaledetails.balinr = _cashsaledetails.grandtotalinr;
-                _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol;
+                if (_cashsaledetails.cashsaledetails.Count > 0)
+                {
+                    _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol;
+                }
+                else
+                { _cashsaledetails.currsymbol = "$"; }
+               // _cashsaledetails.currsymbol = _cashsaledetails.cashsaledetails[0].symbol;
             }
             if(_cashsaledetails.balcurrency<0 || _cashsaledetails.balinr<0)
             {
@@ -1156,7 +1176,7 @@ namespace SalesApp.Repository
                         await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
                         {
                             OrderId = uid,
-                            ItemDesc = _sale.categoryid + "/" + _sale.size + "/" + _sale.shapeid + "/" + _sale.marblecolor,
+                            ItemDesc = _sale.categoryid + "," + _sale.size + "," + _sale.shapeid + "," + _sale.marblecolor,
                             StockId = _sale.stockno,
                             //OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
                             OrderType = 2,
