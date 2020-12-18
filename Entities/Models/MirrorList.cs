@@ -18,6 +18,7 @@ namespace SALEERP.Models
         public int? CreatedBy { get; set; }
         public string UpdatedDatetime { get; set; }
         public bool? IsActive { get; set; }
+        public int? unitid { get; set; }
 
         public virtual ICollection<OrderMaster> OrderMaster { get; set; }
     }

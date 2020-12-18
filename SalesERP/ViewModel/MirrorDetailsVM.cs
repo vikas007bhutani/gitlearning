@@ -25,6 +25,7 @@ namespace SALEERP.ViewModel
         public int? TourEscortId { get; set; }
         public List<multiagent> EscortAgentID_List { get; set; } 
         public int? TourGuideId { get; set; }
+        public int? UnitId { get; set; }
         public List<multiagent> GuideAgentID_List { get; set; } 
         public List<DriverDetails> Driver_List { get; set; }
         

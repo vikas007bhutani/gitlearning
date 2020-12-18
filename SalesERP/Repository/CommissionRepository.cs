@@ -585,7 +585,7 @@ namespace SALEERP.Repository
             return result;
         }
 
-        public CommissionVM EditCommission(long uid)
+        public CommissionVM EditCommission(long uid,decimal gst,decimal card)
         {
 
             CommissionVM _cms = new CommissionVM();
@@ -605,11 +605,12 @@ namespace SALEERP.Repository
                                     mirror = m.Id,
                                     mirrodate = m.Date,
                                     saleamount = pay.Amount,
-                                    hdcharge = pay.AmoutHd,
+                                    INRcharge = pay.AmoutHd,
                                     saleid = pay.OrderId,
                                     paymode = pay.PayMode,
-                                    gst = pay.Gst,
-                                    cardpercentage = pay.Igst
+                                    gst = m.GstCharges,
+                                    cardpercentage = m.CardCharges,
+                                    //saletype=om.SaleValue
 
                                 }
 
@@ -617,12 +618,13 @@ namespace SALEERP.Repository
                                {
                                    MirrorId = g.Key,
                                    MirrorDate=g.FirstOrDefault().mirrodate,
-                                   cashamount = g.Where(s => s.paymode == 1).Sum(c => c.hdcharge),
+                                   cashamount = g.Where(s => s.paymode == (int)paymethod.Cash).Sum(c => c.INRcharge),
                                    HDamount = 0,
-                                   cardamount = g.Where(s => s.paymode == 2 && s.paymode==3).Sum(c => c.hdcharge),
-                                   paylateramount = g.Where(s => s.paymode == 4).Sum(c => c.hdcharge),
-                                   gst = g.FirstOrDefault().gst,
-                                   cardper = g.FirstOrDefault().cardpercentage
+                                   cardamount = g.Where(s => s.paymode ==(int)paymethod.Credit && s.paymode== (int)paymethod.Credit).Sum(c => c.INRcharge),
+                                   paylateramount = g.Where(s => s.paymode == (int)paymethod.Later).Sum(c => c.INRcharge),
+                                   gst = gst,
+                                   cardper = card,
+                                 //  saletype=
                                    // p= g.Where(c => c.agentcode == "pi").SelectMany(a=>a.name).SingleOrDefault().ToString()
                                }).ToList();
             
@@ -678,7 +680,7 @@ namespace SALEERP.Repository
          excursion = g.Where(c => c.agentcode == "ex").ToList(),
          guide = g.Where(c => c.agentcode == "gu").ToList(),
          teamescort = g.Where(c => c.agentcode == "ec").ToList(),
-         teamlead = g.Where(c => c.agentcode == "le").ToList(),
+         teamlead = g.Where(c => c.agentcode == "te").ToList(),
          demo = g.Where(c => c.agentcode == "de").ToList()
          // p= g.Where(c => c.agentcode == "pi").SelectMany(a=>a.name).SingleOrDefault().ToString()
      }).ToList();
@@ -759,7 +761,7 @@ namespace SALEERP.Repository
            // List<UnitMaster> _unitmaster = new List<UnitMaster>();
             _cms.unitdetails = _comm.getunits();
 
-            _cms.Mirrors = (from m in this._DBERP.MirrorDetails
+            var mirrors  = (from m in this._DBERP.MirrorDetails
                             join ma in this._DBERP.MirrorAgent
                             on m.Id equals ma.MirrorId
                             join au in this._DBERP.AgentUser
@@ -770,35 +772,59 @@ namespace SALEERP.Repository
                             join v in this._DBERP.VehicleDetails
                             on ma.AgentId equals v.AgentId into vehicledetails
                             from vh in vehicledetails.Where(f => f.IsActive == true).DefaultIfEmpty()
+                            join vm in this._DBERP.VehicleMaster
+                            on vh.VehicleId equals vm.Id into vehiclemaster
+                            from vm in vehiclemaster.Where(f => f.IsActive == true).DefaultIfEmpty()
+                            //join om in this._DBERP.OrderMaster
+                            //on m.Id equals om.MirrorId into order
+                            //from om in order.Where(f => f.IsActive == true).DefaultIfEmpty()
+                            //join item in this._DBERP.OrderItemDetails
+                            //on om.Id equals item.OrderId into itemmaster
+                            //from item in itemmaster.Where(f => f.IsActive == true).DefaultIfEmpty()
 
-                            where m.IsActive == true && ((cm.fromdate == null ? m.Date >= DateTime.Now && m.Date <= DateTime.Now: m.Date >= cm.fromdate && m.Date <= cm.Todate) || (m.Date >= cm.fromdate && m.Date <= cm.Todate))
-                               select new MirrorDetailVM
-                               {
-                                   mirrorid = m.Id,
-                                   mirrordate = m.Date,
-                                   name = au.Name,
-                                   mob = d.Mobile,
-                                   agentcode = au.Code,
+
+                            where ma.IsActive == true && m.unitid == cm.unitid && ((cm.fromdate == null ? m.Date > DateTime.Now && m.Date < DateTime.Now : m.Date > cm.fromdate && m.Date < cm.Todate) || (m.Date > cm.fromdate && m.Date < cm.Todate))
+                            select new MirrorDetailVM
+                            {
+                                mirrorid = m.Id,
+                                mirrordate = m.Date,
+                                name = au.Name,
+                                mob = d.Mobile,
+                                agentcode = au.Code,
+                                vehicleNo = vh.Number,
+                                vehicle = vm.Type,
+                                SaleValue = 0
 
 
-                               }).ToList().GroupBy(c => c.mirrorid)
+
+
+                            }).ToList();
+    _cms.Mirrors=mirrors.GroupBy(m => m.mirrorid)
     .Select(g => new MirrorDetailVM
     {
         mirrorid = g.Key,
         mirrordate = g.FirstOrDefault().mirrordate,
+        Unit = g.FirstOrDefault().Unit,
         principle = g.Where(c => c.agentcode == "pi").ToList(),
         driver = g.Where(c => c.agentcode == "dr").ToList(),
-        excursion = g.Where(c => c.agentcode == "gu").ToList()
+        guide = g.Where(c => c.agentcode == "gu").ToList(),
+        excursion = g.Where(c => c.agentcode == "ex").ToList(),
+        teamescort = g.Where(c => c.agentcode == "ec").ToList(),
+        teamlead = g.Where(c => c.agentcode == "te").ToList(),
+        demo = g.Where(c => c.agentcode == "de").ToList(),
+        SaleValue =this._DBERP.OrderMaster.Where(a=>a.MirrorId==g.Key).Sum(s=>s.SaleValue)
         // p= g.Where(c => c.agentcode == "pi").SelectMany(a=>a.name).SingleOrDefault().ToString()
     }).ToList();
 
-
+        
+            //if(_cms.Mirrors)
+            //_cms.Mirrors =
             //_mirror.Mirrors = this._DBERP.MirrorDetails.ToList().Where(i => i.IsActive == true).Select(u => new MirrorDetailVM { mirrordate = u.MirrorDate, d_list = this._DBERP.AgentUser.Include("AgentContact").Where(d => d.IsActive == true && d.AgentCode == "pi").Include("VehicleDetails").Select(a=>new driverdetails { name=a.Name,mob=a.AgentContact.Where(b=>b.AgentId==a.AgentId).FirstOrDefault().Mobile }).ToList(), mirrorid = u.MirrorId }).ToList();
 
 
             //Vehicle = this._DBERP.AgentUser.Include("VehicleDetails").Where(d => d.IsActive == true && d.AgentTypeId == 1 && d.AgentId == u.DriverId).SingleOrDefault().VehicleDetails.Where(v => v.IsActive == true).SingleOrDefault().VehicleNo, DriverMobile = this._DBERP.AgentUser.Include("AgentContact").Where(d => d.IsActive == true && d.AgentTypeId == 1 && d.AgentId == u.DriverId).SingleOrDefault().AgentContact.Where(v => v.IsActive == true).SingleOrDefault().Mobile, VehicleTypeid = this._DBERP.AgentUser.Include("VehicleDetails").Where(d => d.IsActive == true && d.AgentTypeId == 1 && d.AgentId == u.DriverId).SingleOrDefault().VehicleDetails.Where(v => v.IsActive == true).SingleOrDefault().VehicleId
             // _mirror = this._DBERP.MirrorDetails.Where(i => i.IsActive == true).Select(u=>new MirrorDetailsVM { MirrorDate = u.MirrorDate, vehicledetails = BindingListUtillity.GenerateSelectList(_vehiclemaster) } ).SingleOrDefault();
-            
+
 
 
             return _cms;
@@ -993,5 +1019,7 @@ namespace SALEERP.Repository
 
 
         }
+
+        
     }
 }

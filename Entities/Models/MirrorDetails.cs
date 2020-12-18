@@ -24,7 +24,12 @@ namespace SALEERP.Models
         public DateTime? UpdatedDatetime { get; set; }
         public int? CreatedBy { get; set; }
         public int? UpdatedBy { get; set; }
+        public int? unitid { get; set; }
         public bool? IsActive { get; set; }
+        public Decimal? CardCharges { get; set; }
+        public Decimal? GstCharges { get; set; }
+        public Decimal? HdAmount { get; set; }
+
 
         public virtual CountriesMaster Country { get; set; }
         public virtual UserLogin CreatedByNavigation { get; set; }

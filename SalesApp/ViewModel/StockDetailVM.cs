@@ -10,6 +10,7 @@ namespace SalesApp.ViewModel
     {
         public string category { get; set; }
         public string itemname { get; set; }
+        public string shape { get; set; }
         public string stockid { get; set; }
         public string size { get; set; }
         public string marblecolor { get; set; }

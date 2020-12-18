@@ -13,6 +13,7 @@ namespace SalesApp.Repository
     public class MirrorRepository : IMirrorRepository
     {
         private Sales_ERPContext _DBERP;
+      
         public MirrorRepository(Sales_ERPContext dbcontext)
         {
 

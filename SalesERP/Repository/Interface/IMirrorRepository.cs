@@ -14,6 +14,7 @@ namespace SALEERP.Repository.Interface
         //public Task<List<AgentUserVM>> GetNames1(string terms);
         public Task<MirrorDetailsVM> getAllMirrors();
         public Task<bool> AddMirror(MirrorDetailsVM _mirror, int userid);
+        public bool DeleteMirror(int mirrorid, int userid);
         MirrorDetailsVM EditMirror(Int64 uid);
         public Task<bool> UpdateMirror(MirrorDetailsVM _agent, int uid);
 

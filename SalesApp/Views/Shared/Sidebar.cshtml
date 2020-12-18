@@ -24,17 +24,31 @@
 
             </li>
             <li>
-                <a href="#homeSubmenu"><i class="las la-print"></i> Print Sale</a>
-
-            </li>
-            @*<li>
-                <a href="#homeSubmenu"><i class="las la-toolbox"></i> Add Custom Category</a>
+                <a href="@Url.Action("Index", "Print")"><i class="las la-print"></i>Re-Print Sale</a>
 
             </li>
             <li>
-                <a href="#homeSubmenu"><i class="las la-shapes"></i> Add new item shapes</a>
+                <a href="@Url.Action("Index", "Edit")"><i class="las la-print"></i>Edit Sale</a>
 
-            </li>*@
+            </li>
+            <li>
+                <a href="@Url.Action("Temp", "Edit")"><i class="las la-print"></i>Temp. Sale</a>
+
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Account")">
+
+                    <i class="las la-print"></i>Logout
+                </a>
+            </li>
+            @*<li>
+            <a href="#homeSubmenu"><i class="las la-toolbox"></i> Add Custom Category</a>
+
+        </li>
+        <li>
+            <a href="#homeSubmenu"><i class="las la-shapes"></i> Add new item shapes</a>
+
+        </li>*@
         </ul>
 
     </div>

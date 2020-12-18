@@ -33,7 +33,7 @@ namespace SALEERP.Repository
                 this._DBERP.UserLogin.Add(new UserLogin()
                 {
                     Name = _user.UserName,
-                    Email = _user.UserEmail,
+                  //  Email = _user.UserEmail,
                     Password = _user.UserPass,
                     Phone = _user.UserPhone,
                     CreatedDatetime = DateTime.Now,
@@ -75,7 +75,7 @@ namespace SALEERP.Repository
                 {
 
                     entity.Name = _user.UserName;
-                    entity.Email = _user.UserEmail;
+                 //   entity.Email = _user.UserEmail;
                     entity.Password = _user.UserPass;
                     entity.Phone = _user.UserPhone;
                     entity.UpdatedDatetime = DateTime.Now;
@@ -125,10 +125,10 @@ namespace SALEERP.Repository
             _userdetails.loginroles = BindingListUtillity.GenerateSelectList(userroles);
             _userdetails.UserName = user.Name;
             _userdetails.UserPass = user.Password;
-            _userdetails.UserEmail = user.Email;
+           // _userdetails.UserEmail = user.Email;
             _userdetails.UserPhone = user.Phone;
             _userdetails.UserId = user.Id;
-            _userdetails.RoleId = user.Roleclaim.Where(r => r.UserId == uid).FirstOrDefault()?.RoleId;
+            _userdetails.RoleId = this._DBERP.Roleclaim.FirstOrDefault(r => r.UserId == uid).RoleId;
 
             return _userdetails;
             //.Where(u => u.UserId == uid).Select(u => new UserLoginVM { UserName = u.UserName, UserEmail = u.UserEmail, UserPass = u.UserPass, roleid = u.Roleclaim.FirstOrDefault().RoleId })

@@ -31,7 +31,7 @@ namespace SALEERP.Repository
             if (!string.IsNullOrWhiteSpace(_user.UserName))
             {
                 //var result = this._DBERP.UserLogin.FirstOrDefault(us => us.Name == _user.UserName && us.Password==_user.UserPass  && us.IsActive==true);
-                var result = this._DBERP.UserLogin.FirstOrDefault(us => us.Name == _user.UserName  && us.IsActive == true);
+                var result = this._DBERP.UserLogin.FirstOrDefault(us => us.Password == _user.UserName  && us.IsActive == true);
 
                 if (result != null)
                 {

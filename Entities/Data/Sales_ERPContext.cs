@@ -515,6 +515,9 @@ namespace SALEERP.Data
                     .HasColumnName("country")
                     .HasMaxLength(50);
 
+                entity.Property(e => e.BillId)
+                  .HasColumnName("bill_id");
+
                 entity.Property(e => e.nationality)
                    .HasColumnName("nationality")
                    .HasMaxLength(50);
@@ -542,7 +545,7 @@ namespace SALEERP.Data
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
-                    .HasMaxLength(50);
+                    .HasMaxLength(300);
 
                 entity.Property(e => e.OrderId).HasColumnName("order_id");
 
@@ -735,6 +738,9 @@ namespace SALEERP.Data
                     .HasColumnName("is_active")
                     .HasDefaultValueSql("((1))");
 
+                entity.Property(e => e.unitid)
+                   .HasColumnName("unit_id");
+
                 entity.Property(e => e.LanguageId).HasColumnName("language_id");
 
                 entity.Property(e => e.Pax).HasColumnName("pax");
@@ -759,6 +765,18 @@ namespace SALEERP.Data
                     .HasColumnName("updated_datetime")
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.GstCharges)
+                    .HasColumnName("gst_charges")
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.CardCharges)
+                    .HasColumnName("card_charges")
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.HdAmount)
+                    .HasColumnName("hd_amount")
+                    .HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.MirrorDetails)
@@ -800,6 +818,9 @@ namespace SALEERP.Data
                     .HasColumnName("created_by")
                     .HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.unitid)
+                   .HasColumnName("unit_id");
+
                 entity.Property(e => e.CreatedDatetime)
                     .HasColumnName("created_datetime")
                     .HasColumnType("datetime")
@@ -840,6 +861,8 @@ namespace SALEERP.Data
                 entity.Property(e => e.Color)
                     .HasColumnName("color")
                     .HasMaxLength(20);
+                entity.Property(e => e.BillId)
+                  .HasColumnName("bill_id");
 
                 entity.Property(e => e.ConversionRate)
                     .HasColumnName("conversion_rate")
@@ -863,6 +886,9 @@ namespace SALEERP.Data
                 entity.Property(e => e.ItemDesc)
                     .HasColumnName("item_desc")
                     .HasMaxLength(100);
+                entity.Property(e => e.CustomSpecialAddition)
+                   .HasColumnName("custom_special_edition")
+                   .HasMaxLength(100);
 
                 entity.Property(e => e.ItemType)
                     .HasColumnName("item_type")
@@ -947,6 +973,12 @@ namespace SALEERP.Data
                     .HasColumnName("created_by")
                     .HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.Session_Year)
+                    .HasColumnName("session_year");
+
+                entity.Property(e => e.BillId)
+                    .HasColumnName("bill_id");
+
                 entity.Property(e => e.CreatedDatetime)
                     .HasColumnName("created_datetime")
                     .HasColumnType("datetime")
@@ -1010,6 +1042,9 @@ namespace SALEERP.Data
 
                 entity.Property(e => e.salestatus)
                     .HasColumnName("sale_status");
+                entity.Property(e => e.SaleValue)
+                 .HasColumnName("sale_value")
+                 .HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Mirror)
                     .WithMany(p => p.OrderMaster)
@@ -1026,6 +1061,9 @@ namespace SALEERP.Data
                 entity.Property(e => e.Amount)
                     .HasColumnName("amount")
                     .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.BillId)
+                   .HasColumnName("bill_id");
 
                 entity.Property(e => e.AmoutHd)
                     .HasColumnName("amout_hd")
@@ -1682,6 +1720,7 @@ namespace SALEERP.Data
                     .HasMaxLength(50);
 
                 entity.Property(e => e.TypeId).HasColumnName("TypeID");
+                entity.Property(e => e.OrderType).HasColumnName("ORDERTYPE");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
             });

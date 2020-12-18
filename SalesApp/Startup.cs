@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +13,9 @@ using SALEERP.Data;
 using SalesApp.Repository;
 using SalesApp.Repository.Interface;
 using Microsoft.EntityFrameworkCore.Design;
+using System.Globalization;
+using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace SalesApp
 {
@@ -34,6 +37,23 @@ namespace SalesApp
                     config.Cookie.Name = "SalesCookie";
                     config.LoginPath = "/Account/Login";
                 });
+            services.AddCors(options =>
+            {
+                   options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    );
+            });
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddControllersWithViews();
             services.AddDbContext<Sales_ERPContext>(options =>
                options.UseSqlServer(
@@ -50,13 +70,24 @@ namespace SalesApp
             services.AddScoped<ICommonRepository, CommonRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<INormalSaleRepository, NormalSaleRepository>();
+            services.AddScoped<IPrintRepository,PrintRepository>();
+            services.AddScoped<IEditRepository, EditRepository>();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddDirectoryBrowser();
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var cultureInfo = new CultureInfo("hi-IN");
+            //  cultureInfo.NumberFormat.CurrencySymbol = "₹";
+
+            //var path = Directory.GetCurrentDirectory();
+            
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -67,13 +98,14 @@ namespace SalesApp
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+           
+            //  app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseRouting();
-
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

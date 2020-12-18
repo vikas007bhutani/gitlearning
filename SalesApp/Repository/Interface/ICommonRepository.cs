@@ -11,8 +11,14 @@ namespace SalesApp.Repository.Interface
     {
         void SetLoggedInUserId(int UserId);
         void SetLoggedInUserName(string username);
+        void SetLoggedIP(string IPAddress);
+        void SetUnitId(int UnitId);
+        void SetBillId(int BillId);
+        int GetUnitId();
+        int GetBillId();
         int GetLoggedInUserId();
         string GetLoggedInUserName();
+        string GetLoggedIP();
         Task<List<SelectListItem>> GetCurrency();
         Task<List<SelectListItem>> GetShapes();
         Task<List<SelectListItem>> GetMarbleColor();

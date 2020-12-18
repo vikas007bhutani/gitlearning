@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,8 @@ namespace SALEERP.ViewModel
     public class MirrorDetailVM
     {
         public long mirrorid { get; set; } = 0;
-        public int? agentid { get; set; } 
+        public int? agentid { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm}")]
         public DateTime? mirrordate { get; set; } = null;
         public string name { get; set; } = string.Empty;
         public string language { get; set; } = string.Empty;
@@ -29,14 +31,17 @@ namespace SALEERP.ViewModel
         public string searchstring { get; set; } = string.Empty;
         public List<AgentContactVM> a = new List<AgentContactVM>();
         public int? Pax { get; set; }
+        public int? Unit { get; set; }
         public int? Countryid { get; set; }
         public int? Languageid { get; set; }
         public long? PoolId { get; set; }
         public int? SeriesId { get; set; }
         public string vehicleNo { get; set; }
-       
+        public string vehicle { get; set; }
+
         public int? vehicletypeid { get; set; }
         public bool? Isparchi { get; set; }
+        public Decimal? SaleValue { get; set; }
     }
     public class driverdetails
     {

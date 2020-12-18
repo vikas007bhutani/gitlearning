@@ -12,6 +12,8 @@ using SalesApp.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text;
+using System.Globalization;
+using Microsoft.Extensions.Configuration;
 
 namespace SalesApp.Repository
 {
@@ -19,122 +21,244 @@ namespace SalesApp.Repository
     {
         private ExportErpDbContext _ERPDB;
         private Sales_ERPContext _SALESDBE;
+        private readonly ICommonRepository _comm;
+        public IConfiguration Configuration { get; }
 
-        public NormalSaleRepository(Sales_ERPContext salesdbcontext, ExportErpDbContext exporterpdbcontext)
+        public NormalSaleRepository(Sales_ERPContext salesdbcontext, ExportErpDbContext exporterpdbcontext, ICommonRepository comm, IConfiguration _config)
         {
 
             this._ERPDB = exporterpdbcontext;
             this._SALESDBE = salesdbcontext;
+            this._comm = comm;
+            this.Configuration = _config;
 
         }
-        public async Task<Int64> AddCashSale([Bind("orderid")] NormalSaleVM _sale, int userid)
+        public async Task<Int64> AddCashSale([Bind("orderid,elephantid,billid")] NormalSaleVM _sale, int userid)
         {
-            bool result = false, innerresult = false;
-            long uid = 0;
+            bool result = false, innerresult = false,status=true;
+            long uid = 0, bill_id=0;
+            Int32 unitid = 0;
             decimal finalINR = 0, INRvalue = 0;
+            string STOCKID = string.Empty;
 
             try
             {
-                using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
-                {
-                    var entitystock = await this._SALESDBE.OrderItemDetails.FirstOrDefaultAsync(i => i.StockId == _sale.stockno && i.IsActive == true).ConfigureAwait(false);
-                    if (entitystock == null)
+                unitid = _comm.GetUnitId();
+                //if (unitid > 0 && unitid<=2)
+                //{
+                    using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                     {
-                        var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
-                        INRvalue = Math.Round((decimal)(_sale.totalvalue * _sale.conversionrate), MidpointRounding.AwayFromZero);
-                        if (INRvalue > 10)
+                        if (!string.IsNullOrEmpty(_sale.elephantid))
                         {
-                            decimal resultd = Math.Abs(INRvalue % 10);
-                            if (resultd > 0)
+                            _sale.stockno = _sale.elephantid;
+                        }
+                        var entitystock = await this._SALESDBE.OrderItemDetails.FirstOrDefaultAsync(i => i.StockId == _sale.stockno && i.IsActive==true).ConfigureAwait(false);
+
+                        if (entitystock != null)
+                        {
+                            // status = true;
+                            if (entitystock.IsActive == true)
                             {
-                                finalINR = INRvalue + (10 - resultd);
+                                status = false;
+
+                            }
+
+                        }
+
+                        if (status)
+                        {
+
+                            var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
+                            INRvalue = Math.Round((decimal)(_sale.totalvalue * _sale.conversionrate), MidpointRounding.AwayFromZero);
+                            if (INRvalue > 10)
+                            {
+                                decimal resultd = Math.Abs(INRvalue % 10);
+                                if (resultd > 0)
+                                {
+                                    finalINR = INRvalue + (10 - resultd);
+                                }
+                                else
+                                {
+                                    finalINR = INRvalue;
+                                }
                             }
                             else
                             {
                                 finalINR = INRvalue;
                             }
-                        }
-                        else
-                        {
-                            finalINR = INRvalue;
-                        }
-                        if (entityorder != null && entityorder.Id > 0)
-                        {
-                            uid = entityorder.Id;
-                        }
-                        else
-                        {
-                            await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
+                            if (entityorder != null && entityorder.Id > 0)
                             {
-                                MirrorId = _sale.mirrorid,
-                                SaleDate = DateTime.Now,
-                                DelieveryType = 0,
-
-                                PortType = 0,
-                                Unit = 1,
-                                Description = "NormalSale",
-                                TransactionId = Common.GetUnique(),
-                                CreatedDatetime = DateTime.Now,
-                                CreatedBy = userid,
-                                IsActive = true,
-                                // salestatus = 1
-
-                            }).ConfigureAwait(false);
-
-                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
-                        }
-                        //  }
-                        if (uid > 0)
-                        {
-
-
-                            await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
+                                uid = entityorder.Id;
+                            }
+                            else
                             {
-                                OrderId = uid,
-                                ItemDesc = _sale.item_desc,
-                                StockId = _sale.stockno,
-                                OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
-                                OrderTypePrefix = _sale.saletypevalue,
-                                ItemType = 1,
-                                Price = _sale.totalvalue,
-                                PriceInr = finalINR,
-                                ConversionRate = _sale.conversionrate,
-                                Unit = 1,
-                                CreatedDatetime = DateTime.Now,
-                                CreatedBy = userid,
-                                IsActive = true,
-                                CurrencyType = _sale.currencyid,
-                                SaleType = 1
-
-                            }).ConfigureAwait(false);
-                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                            long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
-                            foreach (var item in _sale.specialadditions)
-                            {
-                                if (item.Selected)
+                                await this._SALESDBE.OrderMaster.AddAsync(new OrderMaster()
                                 {
-                                    if (item != null)
+                                    MirrorId = _sale.mirrorid,
+                                    SaleDate = DateTime.Now,
+                                    DelieveryType = 0,
+
+                                    PortType = 0,
+                                    Unit = 1,
+                                    Description = "NormalSale",
+                                    TransactionId = Common.GetUnique(),
+                                    CreatedDatetime = DateTime.Now,
+                                    CreatedBy = userid,
+                                    IsActive = true,
+                                    // salestatus = 1
+
+                                }).ConfigureAwait(false);
+
+                                result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                            }
+                            //  }
+                            if (uid > 0)
+                            {
+                                //string unit1billCM = Configuration.GetSection("BillNo").GetSection("UNIT1CM").Value;
+                                //string unit2billCM = Configuration.GetSection("BillNo").GetSection("UNIT2CM").Value;
+                                //string unit1billOF = Configuration.GetSection("BillNo").GetSection("UNIT1OF").Value;
+                                //string unit2billOF = Configuration.GetSection("BillNo").GetSection("UNIT2OF").Value;
+
+                                //if (_sale.billid == 0 || _sale.billid.ToString() == "")
+                                //{
+
+
+                                //    long finalbillid = await this._SALESDBE.OrderItemDetails.Where(i => i.OrderTypePrefix == _sale.saletypevalue && i.Unit == unitid && i.IsActive == true).DefaultIfEmpty().MaxAsync(b => (long?)b.BillId) ?? 0;
+                                //    if (finalbillid == 0)
+                                //    {
+                                //        if (unitid == 1 && _sale.saletypevalue == "OF")
+                                //        {
+                                //            bill_id = Convert.ToInt64(unit1billOF);
+
+                                //        }
+                                //        else if (unitid == 2 && _sale.saletypevalue == "OF")
+                                //        {
+                                //            bill_id = Convert.ToInt64(unit2billOF);
+
+                                //        }
+                                //        else if (unitid == 1 && _sale.saletypevalue == "CM")
+                                //        {
+                                //            bill_id = Convert.ToInt64(unit1billCM);
+                                //        }
+                                //        else if (unitid == 2 && _sale.saletypevalue == "CM")
+                                //        {
+                                //            bill_id = Convert.ToInt64(unit2billCM);
+                                //        }
+
+
+                                //    }
+                                //    else { bill_id = finalbillid + 1; }
+
+                                //}
+                                //else
+                                //{
+
+                                //    var billdetails = this._SALESDBE.OrderItemDetails.Where(i => i.BillId == _sale.billid && i.OrderTypePrefix == _sale.saletypevalue && i.IsActive == true);
+                                //    if (billdetails != null && billdetails.Count() > 0)
+                                //    {
+                                //        bill_id = billdetails.FirstOrDefault().BillId;
+
+
+
+                                //    }
+                                //    else
+                                //    {
+
+                                //        long finalbillid = await this._SALESDBE.OrderItemDetails.Where(i => i.OrderTypePrefix == _sale.saletypevalue && i.Unit == unitid && i.IsActive == true).DefaultIfEmpty().MaxAsync(b => (long?)b.BillId) ?? 0;
+
+                                //        if (finalbillid == 0)
+                                //        {
+                                //            if (unitid == 1 && _sale.saletypevalue == "OF")
+                                //            {
+                                //                bill_id = Convert.ToInt64(unit1billOF);
+
+                                //            }
+                                //            else if (unitid == 2 && _sale.saletypevalue == "OF")
+                                //            {
+                                //                bill_id = Convert.ToInt64(unit2billOF);
+
+                                //            }
+                                //            else if (unitid == 1 && _sale.saletypevalue == "CM")
+                                //            {
+                                //                bill_id = Convert.ToInt64(unit1billCM);
+                                //            }
+                                //            else if (unitid == 2 && _sale.saletypevalue == "CM")
+                                //            {
+                                //                bill_id = Convert.ToInt64(unit2billCM);
+                                //            }
+
+
+                                //        }
+                                //        else { bill_id = finalbillid + 1; }
+                                //    }
+
+
+
+                                //}
+
+                                await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
+                                {
+                                    OrderId = uid,
+                                    BillId = bill_id,
+                                    ItemDesc = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_sale.item_desc),
+                                    StockId = _sale.stockno,
+                                    OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
+                                    OrderTypePrefix = _sale.saletypevalue,
+                                    ItemType = 1,
+                                    Price = _sale.totalvalue,
+                                    PriceInr = finalINR,
+                                    ConversionRate = _sale.conversionrate,
+                                    Unit = 1,
+                                    CreatedDatetime = DateTime.Now,
+                                    CreatedBy = userid,
+                                    IsActive = true,
+                                    CurrencyType = _sale.currencyid,
+                                    SaleType = 1,
+                                    Qty = 1,
+                                    CustomSpecialAddition=_sale.customspecialaddition
+
+                                }).ConfigureAwait(false);
+                                result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
+                                foreach (var item in _sale.specialadditions)
+                                {
+                                    if (item.Selected)
                                     {
-                                        await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
-                                        innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                        if (item != null)
+                                        {
+                                            await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
+                                            innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                        }
                                     }
                                 }
+                                var entitycarpet = await _SALESDBE.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == _sale.stockno).ConfigureAwait(false);
+                                if (entitycarpet != null && entitycarpet.StockNo > 0)
+                                {
+                                    entitycarpet.PackDate = DateTime.Now;
+                                    entitycarpet.Pack = 2;
+                                    entitycarpet.PackSource = "SALEELEPHANT";
+                                    entitycarpet.PackingDetailId = (Int32)oid;
+                                  //   entitycarpet.PackingId = (Int32)item.OrderId;
+                                    this._SALESDBE.CarpetNumber.Update(entitycarpet);
+                                    result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                }
+                                if (oid > 0)
+                                {
+                                    await dbusertrans.CommitAsync().ConfigureAwait(false);
+
+                                }
+                                else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+
+
                             }
-
-                            if (oid > 0)
-                            {
-                                await dbusertrans.CommitAsync().ConfigureAwait(false);
-
-                            }
-                            else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
-
-
                         }
-                    }
-                    else { return -1; }
+                        else { return -1; }
 
-                }
+                    }
+                //}
+                //else
+                //{ return -2; }
             }
             catch (Exception ex)
             {
@@ -164,9 +288,26 @@ namespace SalesApp.Repository
                         entity.CreatedDatetime = DateTime.Now;
                         entity.IsActive = false;
                         entity.UpdatedBy = userid;
+                        entity.BillId = 0;
                         // entity.UpdatedBy=
                         this._SALESDBE.OrderItemDetails.Update(entity);
                         innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        if (entity.StockId != null || entity.StockId != "")
+                        {
+                            var entitycarpet = await _SALESDBE.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == entity.StockId).ConfigureAwait(false);
+                            if (entitycarpet != null && entitycarpet.StockNo > 0)
+                            {
+                                entitycarpet.PackDate = null;
+                                entitycarpet.Pack = 0;
+                                entitycarpet.PackSource = "";
+                                entitycarpet.PackingDetailId = 0;
+                                //   entitycarpet.PackingId = (Int32)item.OrderId;
+                                this._SALESDBE.CarpetNumber.Update(entitycarpet);
+                                innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            }
+                        }
+
+
                         if (innerresult)
                         {
                             await dbusertrans.CommitAsync().ConfigureAwait(false);
@@ -202,13 +343,9 @@ namespace SalesApp.Repository
                     if (entity != null)
                     {
 
-                        entity.CreatedDatetime = DateTime.Now;
-                        entity.salestatus = 1;
-                        // entity.UpdatedBy=
-                        this._SALESDBE.OrderMaster.Update(entity);
-                        innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                        if (innerresult)
-                        {
+                      
+                        //if (innerresult)
+                        //{
                             _cashsaledetails.cashsaledetails = await (from  od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
                                                                      
 
@@ -293,52 +430,62 @@ namespace SalesApp.Repository
                                 }
                             if (_cashsaledetails.balinr == 0)
                             {
-                                if ((_cashsaledetails.dinfo.DeliveryFrom != null && _cashsaledetails.cashsaledetails[0].saletype == 2) || _cashsaledetails.cashsaledetails[0].saletype == 1)
-                                {
+                                //if ((_cashsaledetails.dinfo.DeliveryFrom != null && _cashsaledetails.cashsaledetails[0].saletype == 2) || _cashsaledetails.cashsaledetails[0].saletype == 1)
+                                //{
 
                                     var entityorderitem = await _SALESDBE.OrderItemDetails.Where(item => item.OrderId == orderid).ToListAsync().ConfigureAwait(false);
 
-                                    foreach (var item in entityorderitem)
-                                    {
-                                        var entitycarpet = await _SALESDBE.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == item.StockId).ConfigureAwait(false);
-                                        if (entitycarpet != null && entitycarpet.StockNo > 0)
-                                        {
-                                            entitycarpet.PackDate = DateTime.Now;
-                                            entitycarpet.Pack = 1;
-                                            entitycarpet.PackSource = "SALE";
-                                            entitycarpet.PackingDetailId = (Int32)item.Id;
-                                            entitycarpet.PackingId = (Int32)item.OrderId;
-                                            this._SALESDBE.OrderMaster.Update(entity);
+                                //foreach (var item in entityorderitem)
+                                //{
+                                //    var entitycarpet = await _SALESDBE.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == item.StockId).ConfigureAwait(false);
+                                //    if (entitycarpet != null && entitycarpet.StockNo > 0)
+                                //    {
+                                //        entitycarpet.PackDate = DateTime.Now;
+                                //        entitycarpet.Pack = 1;
+                                //        entitycarpet.PackSource = "SALE";
+                                //        entitycarpet.PackingDetailId = (Int32)item.Id;
+                                //        entitycarpet.PackingId = (Int32)item.OrderId;
+                                //        this._SALESDBE.OrderMaster.Update(entity);
 
-                                            await this._SALESDBE.Directstockpack.AddAsync(new Directstockpack()
-                                            {
-                                                Stockno = entitycarpet.StockNo,
-                                                Remark = "SALES",
-                                                Dateadded = DateTime.Now,
-                                            }).ConfigureAwait(false);
-                                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                                        }
+                                //        await this._SALESDBE.Directstockpack.AddAsync(new Directstockpack()
+                                //        {
+                                //            Stockno = entitycarpet.StockNo,
+                                //            Remark = "SALES",
+                                //            Dateadded = DateTime.Now,
+                                //        }).ConfigureAwait(false);
+                                //        result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //    }
 
 
 
-                                    }
-                                    if (result)
+                                //}
+                                if (entityorderitem != null)
+                                {
+                                    entity.CreatedDatetime = DateTime.Now;
+                                    entity.salestatus = 1;
+                                    entity.SaleValue = _cashsaledetails.grandtotalinr;
+                                    entity.BillId = _cashsaledetails.billid;
+                                    // entity.UpdatedBy=
+                                    this._SALESDBE.OrderMaster.Update(entity);
+                                    innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                    if (innerresult)
                                     {
                                         await dbusertrans.CommitAsync().ConfigureAwait(false);
-
                                     }
-                                    else
-                                    { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+
+                                }
+                                else
+                                { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
                                 }
 
 
 
-                            }
+                           // }
                             
 
-                        }
-                        else
-                        { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+                        //}
+                        //else
+                        //{ await dbusertrans.RollbackAsync().ConfigureAwait(false); }
 
 
 
@@ -356,6 +503,10 @@ namespace SalesApp.Repository
 
         public async Task<NormalSaleVM> GetSales(Int64? _orderid,NormalSaleVM _cashsaledetails)
         {
+            try
+            {
+
+           
             if (_cashsaledetails == null)
             {
                 _cashsaledetails = new NormalSaleVM();
@@ -377,7 +528,7 @@ namespace SalesApp.Repository
                                                           itemorderid = item.Id,
                                                           stockid = item.StockId,
                                                           //  itemdesc = od.category.Concat(",").Concat(st.itemname).Concat(",").Concat(st.marble).Concat(",").Concat(st.size).Concat(",").Concat(st.marblestone).ToString(),
-                                                          itemdesc = item.ItemDesc,
+                                                          itemdesc =item.ItemDesc,
                                                           ordertype = item.OrderTypePrefix,
                                                           salevalue = item.Price,
                                                           salevalueinr = item.PriceInr,
@@ -388,7 +539,10 @@ namespace SalesApp.Repository
                                                           symbol = curr.Symbol,
                                                           currencyid=(int)item.CurrencyType,
                                                           currency=curr.Type,
-                                                          saletype=item.SaleType
+                                                          saletype=item.SaleType,
+                                                          billid=item.BillId
+                                                          
+
                                                           
 
                                                       }).ToListAsync();
@@ -432,6 +586,8 @@ namespace SalesApp.Repository
                                                  Address=c.Address,
                                                  Email=c.Email,
                                                 nationality = country.Name
+                                               
+                                               
 
                                             }).FirstOrDefaultAsync();
 
@@ -476,8 +632,15 @@ namespace SalesApp.Repository
 
 
                                                        }).ToListAsync();
+            CultureInfo CInfo = new CultureInfo("hi-IN");
+           
 
-            _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
+            string grandfinal =Convert.ToString( _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr));
+
+            _cashsaledetails.grandtotal = Convert.ToDecimal(Convert.ToDecimal(grandfinal).ToString("N", CInfo));
+
+           // _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
+
             _cashsaledetails.grandtotalinr =_cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
             _cashsaledetails.grandtotalcurrency= _cashsaledetails.cashsaledetails.Sum(s => s.salevalue);
 
@@ -544,6 +707,8 @@ namespace SalesApp.Repository
             _cashsaledetails.marblecolordetails = await _comm.GetMarbleColor();
             _cashsaledetails.standcolordetails = await _comm.GetStandColor();
             _cashsaledetails.nationalitydetails = await _comm.GetNationality();
+            _cashsaledetails.unitid = _comm.GetUnitId();
+                _cashsaledetails.IPaddress = _comm.GetLoggedIP();
            
             _cashsaledetails.sizeinwidth = await _comm.GetWidth();
             _cashsaledetails.sizeinheight = await _comm.GetLenght();
@@ -583,7 +748,9 @@ namespace SalesApp.Repository
                 if (_cashsaledetails.cashsaledetails[0].itemorderid > 0)
                 {
                     _cashsaledetails.saletype = _cashsaledetails.cashsaledetails[0].saletype;
-                }
+                    _cashsaledetails.billid = _cashsaledetails.cashsaledetails[0].billid;
+                        _cashsaledetails.standbillid = _cashsaledetails.cashsaledetails[0].billid;
+                    }
                     List<SelectListItem> newSelectList = new List<SelectListItem>();
                 foreach (var item in _cashsaledetails.cashsaledetails)
                 {
@@ -609,7 +776,22 @@ namespace SalesApp.Repository
                 _cashsaledetails.porttypevalue = _cashsaledetails.dinfo.PortType.ToString();
 
             }
-            if (_cashsaledetails.cashsaledetails.Count > 0)
+            if (_cashsaledetails.cinfo != null)
+
+            {
+                    //if (_cashsaledetails.cinfo.Title.ToUpper() == "MR")
+                    //{
+                    //    _cashsaledetails.titletypevalue = "1";
+
+                    //}
+                    //else
+                    //{ _cashsaledetails.titletypevalue = "1"; }
+                    int title=(int)(TitleType)Enum.Parse(typeof(TitleType), _cashsaledetails.cinfo.Title);
+                    _cashsaledetails.titletypevalue = title.ToString();
+                    _cashsaledetails.countryid =(int)_cashsaledetails.cinfo.countryid;
+                    _cashsaledetails.nationalityid =(int)_cashsaledetails.cinfo.countryid;
+            }
+                if (_cashsaledetails.cashsaledetails.Count > 0)
             {
 
                 var saletype = _cashsaledetails.cashsaledetails.FirstOrDefault(a => a.ordertype == "OF");
@@ -620,8 +802,14 @@ namespace SalesApp.Repository
                 else { _cashsaledetails.standsaletype = "CM"; }
 
             }
+            }
+            catch (Exception ex)
+            {
 
-                return _cashsaledetails;
+              
+            }
+
+            return _cashsaledetails;
 
         }
 
@@ -739,7 +927,7 @@ namespace SalesApp.Repository
             }
             return result;
         }
-        public async Task<bool> AddStandSale([Bind("orderid")] NormalSaleVM _sale, int userid)
+        public async Task<bool> AddStandSale([Bind("orderid,sbillid")] NormalSaleVM _sale, int userid)
         {
 
             bool result = false, innerresult = false;
@@ -756,7 +944,7 @@ namespace SalesApp.Repository
                                                 join it in this._SALESDBE.ItemMaster
                                                on m.Prefix equals it.ItemCode
 
-                                                where m.Prefix == _sale.standcode
+                                                where m.Prefix == _sale.standcode && m.Pack==0
                                                 select new Nstanddetails
                                                 {
                                                     standcode = m.TStockNo,
@@ -770,9 +958,9 @@ namespace SalesApp.Repository
                             await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
                             {
                                 OrderId = _sale.orderid,
-                                ItemDesc = entityitem.standdesc,
+                                ItemDesc =BindingListUtillity.UppercaseFirst(entityitem.standdesc),
                                 StockId = entityitem.standcode,
-
+                                BillId=_sale.billid,
                                 OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
                                 OrderTypePrefix = _sale.saletypevalue,
                                 ItemType = 2,
@@ -781,11 +969,24 @@ namespace SalesApp.Repository
                                 CreatedDatetime = DateTime.Now,
                                 IsActive = true,
                                 Color = _sale.color,
-                                Unit=1,
-                                CreatedBy=userid
+                                Unit=_comm.GetUnitId(),
+                                CreatedBy=userid,
+                                Qty=1
 
                             }).ConfigureAwait(false);
                             innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
+                            var entitycarpet = await _SALESDBE.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == entityitem.standcode).ConfigureAwait(false);
+                            if (entitycarpet != null && entitycarpet.StockNo > 0)
+                            {
+                                entitycarpet.PackDate = DateTime.Now;
+                                entitycarpet.Pack = 2;
+                                entitycarpet.PackSource = "SALESTAND";
+                                entitycarpet.PackingDetailId = (Int32)oid;
+                                //   entitycarpet.PackingId = (Int32)item.OrderId;
+                                this._SALESDBE.CarpetNumber.Update(entitycarpet);
+                                result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            }
                         }
                         else
                         { innerresult = false;  }
@@ -876,6 +1077,21 @@ namespace SalesApp.Repository
                         entity.UpdatedBy = userid;
                         this._SALESDBE.OrderItemDetails.Update(entity);
                         innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+
+                        if (entity.StockId != null || entity.StockId != "")
+                        {
+                            var entitycarpet = await _SALESDBE.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == entity.StockId).ConfigureAwait(false);
+                            if (entitycarpet != null && entitycarpet.StockNo > 0)
+                            {
+                                entitycarpet.PackDate = null;
+                                entitycarpet.Pack = 0;
+                                entitycarpet.PackSource = "";
+                                entitycarpet.PackingDetailId = 0;
+                                //   entitycarpet.PackingId = (Int32)item.OrderId;
+                                this._SALESDBE.CarpetNumber.Update(entitycarpet);
+                                innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            }
+                        }
                         if (innerresult)
                         {
                             await dbusertrans.CommitAsync().ConfigureAwait(false);
@@ -954,8 +1170,7 @@ namespace SalesApp.Repository
                     if (_sale.paymethodvalue.ToUpper().Contains("CASH") && _sale.currencyid != 6)
                     {
 
-
-                        amount = Convert.ToDecimal(_sale.PayLaterAmount) + Convert.ToDecimal(_sale.CashAmount) + Convert.ToDecimal(_sale.CreditAmount) + Convert.ToDecimal(_sale.DebitAmount) + Convert.ToDecimal(_sale.PaytmAmount);
+                         amount = Convert.ToDecimal(_sale.PayLaterAmount) + Convert.ToDecimal(_sale.CashAmount) + Convert.ToDecimal(_sale.CreditAmount) + Convert.ToDecimal(_sale.DebitAmount) + Convert.ToDecimal(_sale.PaytmAmount);
 
                         INRvalue = Math.Round((decimal)(amount * convrate), MidpointRounding.AwayFromZero);
                         decimal resultd = Math.Abs(INRvalue % 10);
@@ -969,9 +1184,17 @@ namespace SalesApp.Repository
                         }
 
                         finalamountinr = oldamountinr - (currencyamountinr + finalINR);
-                        if(finalamountinr<0)
+
+                       
+                        if(finalamountinr>=0)
                         {
                             finalamountinr = finalINR;
+
+                        }
+
+                        else
+                        {
+                            return false;
 
                         }
                         amounthd = finalINR;
@@ -1081,22 +1304,51 @@ namespace SalesApp.Repository
             List<StockDetailVM> _list;
             try
             {
-                _list = await (from c in this._ERPDB.CarpetNumber
-                               join vf in this._ERPDB.V_FinishedItemDetail
-                               on c.item_finished_id equals vf.ITEM_FINISHED_ID
-                               where c.TStockNo == stockid && c.Pack == 0
-                               select new StockDetailVM
-                               {
-                                   stockid = c.TStockNo,
-                                   category = vf.CATEGORY_NAME,
-                                   itemname = vf.ITEM_NAME,
-                                   marblecolor = vf.MARBLECOLOR,
-                                   price = c.Price,
-                                   size = vf.SizeInch + "x" + Convert.ToString(vf.HeightInch),
-                                   marblestone = vf.MARBLETYPE
+                if (stockid.ToUpper() == "EW" || stockid.ToUpper() == "EG")
+                {
+                    _list = await (from c in this._ERPDB.CarpetNumber
+                                   join vf in this._ERPDB.V_FinishedItemDetail
+                                   on c.item_finished_id equals vf.ITEM_FINISHED_ID
+                                   where c.Prefix == stockid && c.Pack == 0
+                                   select new StockDetailVM
+                                   {
+                                       stockid = c.TStockNo,
+                                       category = vf.CATEGORY_NAME,
+                                       marblecolor = vf.MARBLECOLOR,
+                                       size = Convert.ToString(vf.HeightInch)+"''",
+                                       
+
+                                   }).ToListAsync();
+                    if (_list != null)
+                    {
+                        if (_list.Count > 0)
+                        {
+                            _list = _list.Take(1).ToList();
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    _list = await (from c in this._ERPDB.CarpetNumber
+                                   join vf in this._ERPDB.V_FinishedItemDetail
+                                   on c.item_finished_id equals vf.ITEM_FINISHED_ID
+                                   where c.TStockNo == stockid && c.Pack == 0
+                                   select new StockDetailVM
+                                   {
+                                       stockid = c.TStockNo,
+                                       category = vf.CATEGORY_NAME,
+                                       itemname = vf.ITEM_NAME,
+                                       marblecolor = vf.MARBLECOLOR,
+                                       price = c.Price,
+                                       size = vf.SizeInch + "x" + Convert.ToString(vf.HeightInch),
+                                       marblestone = vf.MARBLETYPE,
+                                       shape = vf.ShapeName
 
 
-                               }).ToListAsync();
+                                   }).ToListAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -1125,13 +1377,15 @@ namespace SalesApp.Repository
             return resultcode;
         }
 
-        public async Task<Int64> AddCustomSale([Bind("orderid")] NormalSaleVM _sale, int userid)
+        public async Task<Int64> AddCustomSale([Bind("orderid,billid")] NormalSaleVM _sale, int userid)
         {
             bool result = false, innerresult = false;
-            long uid = 0;
+            long uid = 0,bill_id=0;
+            Int32 unitid = 0;
             decimal finalINR = 0, INRvalue = 0;
             try
             {
+                unitid = _comm.GetUnitId();
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync())
                 {
                     var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid);
@@ -1157,7 +1411,7 @@ namespace SalesApp.Repository
                             SaleDate = DateTime.Now,
                             DelieveryType = 0,
                             PortType = 0,
-                            Unit = 1,
+                            Unit = unitid,
                             Description = "CustomSale",
                             TransactionId = Common.GetUnique(),
                             CreatedDatetime = DateTime.Now,
@@ -1172,12 +1426,87 @@ namespace SalesApp.Repository
                     }
                     if (uid > 0)
                     {
+                        string unit1billCM = Configuration.GetSection("BillNo").GetSection("UNIT1CM").Value;
+                        string unit2billCM = Configuration.GetSection("BillNo").GetSection("UNIT2CM").Value;
+                        string unit1billOF = Configuration.GetSection("BillNo").GetSection("UNIT1OF").Value;
+                        string unit2billOF = Configuration.GetSection("BillNo").GetSection("UNIT2OF").Value;
+
+                        if (_sale.billid==0 || _sale.billid.ToString()=="")
+                        {
+
+
+                           long finalbillid =await this._SALESDBE.OrderItemDetails.Where(i => i.OrderTypePrefix == "OF" && i.Unit == unitid).DefaultIfEmpty().MaxAsync(b => (long?)b.BillId) ?? 0 ;
+                            if(finalbillid == 0)
+                            {
+                                  if (unitid == 1)
+                                {
+                                 bill_id=Convert.ToInt64(unit1billOF);
+
+                                }
+                                else if (unitid == 2)
+                                {
+                                  bill_id= Convert.ToInt64(unit2billOF);
+
+                                }
+
+                            }
+                            else { bill_id = finalbillid + 1; }
+
+
+                        }
+                        else { 
+
+                            var billdetails =  this._SALESDBE.OrderItemDetails.Where(i => i.BillId == _sale.billid && i.OrderTypePrefix == "OF");
+                            if (billdetails != null )
+                            {
+                                bill_id = billdetails.FirstOrDefault().BillId;
+                               
+                            
+                            
+                            }
+                            else
+                            {
+                                long finalbillid = await this._SALESDBE.OrderItemDetails.Where(i => i.BillId == _sale.billid && i.OrderTypePrefix == "CM").DefaultIfEmpty().MaxAsync(b => (long?)b.BillId) ?? 0;
+
+                                if (finalbillid == 0)
+                                {
+                                    if (unitid == 1 && _sale.saletypevalue == "OF")
+                                    {
+                                        bill_id = Convert.ToInt64(unit1billOF);
+
+                                    }
+                                    else if (unitid == 2 && _sale.saletypevalue == "OF")
+                                    {
+                                        bill_id = Convert.ToInt64(unit2billOF);
+
+                                    }
+                                    else if (unitid == 1 && _sale.saletypevalue == "CM")
+                                    {
+                                        bill_id = Convert.ToInt64(unit1billCM);
+                                    }
+                                    else if (unitid == 2 && _sale.saletypevalue == "CM")
+                                    {
+                                        bill_id = Convert.ToInt64(unit2billCM);
+                                    }
+
+
+                                }
+                                else { bill_id = finalbillid + 1; }
+
+                                //long finalbillid = await this._SALESDBE.OrderItemDetails.Where(i => i.BillId == _sale.billid && i.OrderTypePrefix == "CM" && i.Unit == unitid).DefaultIfEmpty().MaxAsync(b => (long?)b.BillId) ?? 0;
+                                //bill_id = finalbillid + 1;
+                            }
+                               
+
+
+                        }
 
                         await this._SALESDBE.OrderItemDetails.AddAsync(new OrderItemDetails()
                         {
                             OrderId = uid,
-                            ItemDesc = _sale.categoryid + "," + _sale.size + "," + _sale.shapeid + "," + _sale.marblecolor,
+                            ItemDesc =BindingListUtillity.UppercaseFirst(_sale.categoryid) + "," + _sale.size + "," + BindingListUtillity.UppercaseFirst(_sale.shapeid) + "," + BindingListUtillity.UppercaseFirst(_sale.marblecolor),
                             StockId = _sale.stockno,
+                            BillId=bill_id,
                             //OrderType = _sale.saletypevalue == "OF" ? (int?)SaleType.OF : (int?)SaleType.CM,
                             OrderType = 2,
                             // OrderTypePrefix = _sale.saletypevalue ,
@@ -1190,7 +1519,7 @@ namespace SalesApp.Repository
                             Category = _sale.categoryid,
                             Shape = _sale.shapeid,
                             Color = _sale.marblecolor,
-                            Unit = 1,
+                            Unit = unitid,
                             CreatedDatetime = DateTime.Now,
                             IsActive = true,
                             CurrencyType = _sale.currencyid,
@@ -1233,217 +1562,329 @@ namespace SalesApp.Repository
             return uid;
         }
 
-        public async Task<NormalSaleVM> Invoice(long orderid)
+        public async Task<NormalSaleVM> Invoice(long orderid,int userid)
         {
-
+            long uid = 0, bill_id = 0;
+            Int32 unitid = 0;
+            bool result = false, innerresult = false;
             NormalSaleVM _cashsaledetails = new NormalSaleVM();
         
         CommonRepository _comm = new CommonRepository(_SALESDBE);
-        _cashsaledetails.cashsaledetails = await(from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
-                                                      join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
-                                                     on m.Id equals od.OrderId
-                                                      join c in this._SALESDBE.CurrencyMaster.Where(c => c.IsActive == true)
-                                                       on od.CurrencyType equals c.Id into currdetails
-                                                      from curr in currdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-                                                      join u in this._SALESDBE.UserLogin.Where(c => c.IsActive == true)
-                                                    on od.CreatedBy equals u.Id into userdetails
-                                                 from user in userdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-                                                 where m.Id == orderid && od.ItemType == 1 
-                                                 select new Ncashsaledetails
-                                                      {
-                                                     
-                                                          itemorderid = od.Id,
-                                                          stockid = od.StockId,
-                                                          orderid=(long)od.OrderId,
-                                                          //  itemdesc = od.category.Concat(",").Concat(st.itemname).Concat(",").Concat(st.marble).Concat(",").Concat(st.size).Concat(",").Concat(st.marblestone).ToString(),
-                                                          itemdesc = od.ItemDesc,
-                                                          ordertype = od.OrderTypePrefix,
-                                                          salevalue = od.Price,
-                                                          salevalueinr =od.PriceInr,
-                                                          conversionrate = od.ConversionRate,
-                                                          symbol = curr.Symbol,
-                                                          currencyid=(int) od.CurrencyType,
-                                                          currency= curr.Type,
-                                                          unitid=(int)od.Unit,
-                                                          username=user.Name,
-                                                          InvoiceID =m.Id
+            using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
+            {
+
+                var entityorder = await this._SALESDBE.OrderItemDetails.Where(i => i.OrderId == orderid).ToListAsync().ConfigureAwait(false);
+
+                var entitiyCM = entityorder.FirstOrDefault(a => a.OrderTypePrefix == "CM");
+                var entitiyOF = entityorder.FirstOrDefault(a => a.OrderTypePrefix == "OF");
+                uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                if (uid > 0)
+                {
+                    string unit1billCM = Configuration.GetSection("BillNo").GetSection("UNIT1CM").Value;
+                    string unit2billCM = Configuration.GetSection("BillNo").GetSection("UNIT2CM").Value;
+                    string unit1billOF = Configuration.GetSection("BillNo").GetSection("UNIT1OF").Value;
+                    string unit2billOF = Configuration.GetSection("BillNo").GetSection("UNIT2OF").Value;
+
+                    if (entitiyOF !=null )
+                    {
+
+                        unitid =(int)entitiyOF.Unit;
+                        long finalbillid = await this._SALESDBE.OrderItemDetails.Where(i => i.OrderTypePrefix == "OF" && i.Unit == unitid && i.IsActive == true).DefaultIfEmpty().MaxAsync(b => (long?)b.BillId) ?? 0;
+                        if (finalbillid == 0)
+                        {
+                            if (unitid == 1 )
+                            {
+                                bill_id = Convert.ToInt64(unit1billOF);
+
+                            }
+                            else if (unitid == 2)
+                            {
+                                bill_id = Convert.ToInt64(unit2billOF);
+
+                            }
+                            //else if (unitid == 1 && _sale.saletypevalue == "CM")
+                            //{
+                            //    bill_id = Convert.ToInt64(unit1billCM);
+                            //}
+                            //else if (unitid == 2 && _sale.saletypevalue == "CM")
+                            //{
+                            //    bill_id = Convert.ToInt64(unit2billCM);
+                            //}
 
 
-                                                      }).ToListAsync();
+                        }
+                        else {
+                            var bill = entityorder.Where(a => a.BillId > 0 && a.OrderTypePrefix=="OF").FirstOrDefault();
+                            if (bill == null)
+                            {
+                              
+                                    bill_id = finalbillid + 1;
+                               
 
-            _cashsaledetails.cashsaledetailsCM = _cashsaledetails.cashsaledetails.Where(a => a.ordertype == "CM").ToList();
-            _cashsaledetails.cashsaledetailsOF = _cashsaledetails.cashsaledetails.Where(a => a.ordertype == "OF").ToList();
-            //_cashsaledetails.cashsaledetailsOF = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
-            //                                          join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
-            //                                         on m.Id equals od.OrderId
-            //                                          join c in this._SALESDBE.CurrencyMaster.Where(c => c.IsActive == true)
-            //                                           on od.CurrencyType equals c.Id into currdetails
-            //                                          from curr in currdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-            //                                          join u in this._SALESDBE.UserLogin.Where(c => c.IsActive == true)
-            //                                        on od.CreatedBy equals u.Id into userdetails
-            //                                          from user in userdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-            //                                          where m.Id == orderid && od.ItemType == 1 && od.OrderType!=1 
-            //                                          select new Ncashsaledetails
-            //                                          {
+                            }
+                            else
+                            { bill_id = bill.BillId; }
+                         //   bill_id = finalbillid + 1; 
+                        
+                        
+                        }
 
-            //                                              itemorderid = od.Id,
-            //                                              stockid = od.StockId,
-            //                                              orderid = (long)od.OrderId,
-            //                                              //  itemdesc = od.category.Concat(",").Concat(st.itemname).Concat(",").Concat(st.marble).Concat(",").Concat(st.size).Concat(",").Concat(st.marblestone).ToString(),
-            //                                              itemdesc = od.ItemDesc,
-            //                                              ordertype = od.OrderTypePrefix,
-            //                                              salevalue = od.Price,
-            //                                              salevalueinr = od.PriceInr,
-            //                                              conversionrate = od.ConversionRate,
-            //                                              symbol = curr.Symbol,
-            //                                              currencyid = (int)od.CurrencyType,
-            //                                              currency = curr.Type,
-            //                                              unitid = (int)od.Unit,
-            //                                              username = user.Name
+                        if (entitiyOF != null)
+                        {
+                            entitiyOF.UpdatedDatetime = DateTime.Now;
+                            entitiyOF.BillId = bill_id;
+                            entitiyOF.UpdatedBy = userid; 
+                           // entitiyOF.BillId = _cashsaledetails.billid;
+                            // entity.UpdatedBy=
+                            this._SALESDBE.OrderItemDetails.Update(entitiyOF);
+                            innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            //if (innerresult)
+                            //{
+                            //    await dbusertrans.CommitAsync().ConfigureAwait(false);
+                            //}
 
+                        }
 
-            //                                          }).ToListAsync();
+                    }
 
-            //_cashsaledetails.cashsaledetailsOF = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
-            //                                            join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
-            //                                           on m.Id equals od.OrderId
-            //                                            join c in this._SALESDBE.CurrencyMaster.Where(c => c.IsActive == true)
-            //                                             on od.CurrencyType equals c.Id into currdetails
-            //                                            from curr in currdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-            //                                            join u in this._SALESDBE.UserLogin.Where(c => c.IsActive == true)
-            //                                          on od.CreatedBy equals u.Id into userdetails
-            //                                            from user in userdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-            //                                            where m.Id == orderid && od.ItemType == 1 && od.OrderType != 1
-            //                                            select new Ncashsaledetails
-            //                                            {
+                    if (entitiyCM != null)
+                    {
 
-            //                                                itemorderid = od.Id,
-            //                                                stockid = od.StockId,
-            //                                                orderid = (long)od.OrderId,
-            //                                                //  itemdesc = od.category.Concat(",").Concat(st.itemname).Concat(",").Concat(st.marble).Concat(",").Concat(st.size).Concat(",").Concat(st.marblestone).ToString(),
-            //                                                itemdesc = od.ItemDesc,
-            //                                                ordertype = od.OrderTypePrefix,
-            //                                                salevalue = od.Price,
-            //                                                salevalueinr = od.PriceInr,
-            //                                                conversionrate = od.ConversionRate,
-            //                                                symbol = curr.Symbol,
-            //                                                currencyid = (int)od.CurrencyType,
-            //                                                currency = curr.Type,
-            //                                                unitid = (int)od.Unit,
-            //                                                username = user.Name
+                        unitid = (int)entitiyCM.Unit;
+                        long finalbillid = await this._SALESDBE.OrderItemDetails.Where(i => i.OrderTypePrefix == "CM" && i.Unit == unitid && i.IsActive == true).DefaultIfEmpty().MaxAsync(b => (long?)b.BillId) ?? 0;
+                        if (finalbillid == 0)
+                        {
+                            if (unitid == 1)
+                            {
+                                bill_id = Convert.ToInt64(unit1billCM);
+
+                            }
+                            else if (unitid == 2)
+                            {
+                                bill_id = Convert.ToInt64(unit2billCM);
+
+                            }
+                            //else if (unitid == 1 && _sale.saletypevalue == "CM")
+                            //{
+                            //    bill_id = Convert.ToInt64(unit1billCM);
+                            //}
+                            //else if (unitid == 2 && _sale.saletypevalue == "CM")
+                            //{
+                            //    bill_id = Convert.ToInt64(unit2billCM);
+                            //}
 
 
-            //                                            }).ToListAsync();
-            _cashsaledetails.standsaledetails = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
-                                                       join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
-                                                      on m.Id equals od.OrderId
+                        }
+                        else {
 
-                                                       where m.Id == orderid && od.ItemType == 2
-                                                       select new Nstanddetails
-                                                       {
-                                                           itemorderid = od.Id,
-                                                           color = od.Color,
-                                                           standdesc = od.ItemDesc,
-                                                           ordertype = od.OrderTypePrefix,
-                                                           height = od.height
+                            var bill = entityorder.Where(a => a.BillId > 0  && a.OrderTypePrefix == "CM").FirstOrDefault();
+                            if (bill ==null)
+                            {
+                               
+                                    bill_id = finalbillid + 1;
+                                
 
-                                                       }).ToListAsync();
+                            }
+                            else
+                            { bill_id = bill.BillId; }
+                           
+                        
+                        
+                        }
 
-          //  _cashsaledetails.standsaledetailsCM= _cashsaledetails.standsaledetails
+                        if (entitiyCM != null)
+                        {
+                            entitiyCM.UpdatedDatetime = DateTime.Now;
+                            entitiyCM.BillId = bill_id;
+                            entitiyCM.UpdatedBy = userid;
+                            // entitiyOF.BillId = _cashsaledetails.billid;
+                            // entity.UpdatedBy=
+                            this._SALESDBE.OrderItemDetails.Update(entitiyCM);
+                            innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                           
 
-                _cashsaledetails.standsaledetailsCM = _cashsaledetails.standsaledetails.Where(a => a.ordertype == "CM").ToList();
-            _cashsaledetails.standsaledetailsOF = _cashsaledetails.standsaledetails.Where(a => a.ordertype == "OF").ToList();
+                        }
 
-            _cashsaledetails.cinfo = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
-                                            join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
-                                           on m.Id equals od.OrderId
-                                            join c in this._SALESDBE.CustomerDetails.Where(c => c.Isactive == true)
-                                             on od.OrderId equals c.OrderId
-                                            join cn in this._SALESDBE.CountriesMaster
-                                            on c.countryid equals cn.Id into countrydetails
-                                            from country in countrydetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-                                            where m.Id == orderid
-                                            select new Ncustomerinfo
-                                            {
-                                                Name = c.Name,
-                                                countryid = c.countryid,
-                                                Country = country.Name,
-                                                Title = c.Title,
-                                                City = c.City,
-                                                Zipcode = c.Zipcode,
-                                                State = c.State,
-                                                TeleCountryCode = c.TeleCountryCode,
-                                                Telephone = c.Telephone,
-                                                MobCountryCode = c.MobCountryCode,
-                                                Mobile = c.Mobile,
-                                                Address = c.Address,
-                                                Email = c.Email,
-                                                PassportNo=m.PassportNo,
-                                                nationality=country.Name
+                    }
+                    if (innerresult)
+                    {
+                        await dbusertrans.CommitAsync().ConfigureAwait(false);
+                    }
+                    _cashsaledetails.cashsaledetails = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
+                                                              join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
+                                                             on m.Id equals od.OrderId
+                                                              join c in this._SALESDBE.CurrencyMaster.Where(c => c.IsActive == true)
+                                                               on od.CurrencyType equals c.Id into currdetails
+                                                              from curr in currdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
+                                                              join u in this._SALESDBE.UserLogin.Where(c => c.IsActive == true)
+                                                            on od.CreatedBy equals u.Id into userdetails
+                                                              from user in userdetails.Where(c => c.IsActive == true).DefaultIfEmpty()
 
-                                            }).FirstOrDefaultAsync();
+                                                              where m.Id == orderid && od.ItemType == 1
+                                                              select new Ncashsaledetails
+                                                              {
 
-            _cashsaledetails.paymentdetails = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
-                                                     join od in this._SALESDBE.OrderPayment.Where(c => c.IsActive == true)
+                                                                  itemorderid = od.Id,
+                                                                  stockid = od.StockId,
+                                                                  orderid = (long)od.OrderId,
+                                                                  //  itemdesc = od.category.Concat(",").Concat(st.itemname).Concat(",").Concat(st.marble).Concat(",").Concat(st.size).Concat(",").Concat(st.marblestone).ToString(),
+                                                                  itemdesc = od.ItemDesc,
+                                                                  additiondesc = od.CustomSpecialAddition,
+                                                                  ordertype = od.OrderTypePrefix,
+                                                                  salevalue = od.Price,
+                                                                  salevalueinr = od.PriceInr,
+                                                                  conversionrate = od.ConversionRate,
+                                                                  symbol = curr.Symbol,
+                                                                  currencyid = (int)od.CurrencyType,
+                                                                  currency = curr.Type,
+                                                                  unitid = (int)od.Unit,
+                                                                  username = user.Name,
+                                                                  InvoiceID = m.Id,
+                                                                  billid = od.BillId,
+                                                                  orderdate = od.CreatedDatetime
+
+
+                                                              }).ToListAsync();
+
+                    _cashsaledetails.cashsaledetailsCM = _cashsaledetails.cashsaledetails.Where(a => a.ordertype == "CM").ToList();
+                    _cashsaledetails.cashsaledetailsOF = _cashsaledetails.cashsaledetails.Where(a => a.ordertype == "OF").ToList();
+                    _cashsaledetails.spaddition = await (from od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
+                                                         join sp in this._SALESDBE.SpecialAdditionDetails.Where(c => c.IsActive == true)
+                                                       on od.Id equals sp.OrderItemId into special
+                                                         from spadd in special.Where(c => c.IsActive == true).DefaultIfEmpty()
+                                                         where od.OrderId == orderid
+                                                         select new NspecialAddition
+                                                         {
+                                                             desc = spadd.SpecialAdditionDesc
+
+                                                         }).ToListAsync();
+
+                    _cashsaledetails.standsaledetails = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
+                                                               join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
+                                                              on m.Id equals od.OrderId
+
+                                                               where m.Id == orderid && od.ItemType == 2
+                                                               select new Nstanddetails
+                                                               {
+                                                                   itemorderid = od.Id,
+                                                                   color = od.Color,
+                                                                   standdesc = od.ItemDesc,
+                                                                   ordertype = od.OrderTypePrefix,
+                                                                   height = od.height
+
+                                                               }).ToListAsync();
+
+                    //  _cashsaledetails.standsaledetailsCM= _cashsaledetails.standsaledetails
+
+                    _cashsaledetails.standsaledetailsCM = _cashsaledetails.standsaledetails.Where(a => a.ordertype == "CM").ToList();
+                    _cashsaledetails.standsaledetailsOF = _cashsaledetails.standsaledetails.Where(a => a.ordertype == "OF").ToList();
+
+                    _cashsaledetails.cinfo = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
+                                                    join od in this._SALESDBE.OrderItemDetails.Where(c => c.IsActive == true)
                                                    on m.Id equals od.OrderId
-                                                     join d in this._SALESDBE.CurrencyMaster
-                                                     on od.CurrencyType equals d.Id into currencydetails
-                                                     from curr in currencydetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-                                                     join e in this._SALESDBE.PayMethodMaster
-                                                     on od.PayMode equals e.Id into paymethoddetails
-                                                     from pm in paymethoddetails.Where(c => c.IsActive == true).DefaultIfEmpty()
-                                                     join f in this._SALESDBE.CardTypeMaster
-                                                   on od.CardType equals f.Id into cardtypedetails
-                                                     from card in cardtypedetails.Where(c => c.IsActive == true).DefaultIfEmpty()
+                                                    join c in this._SALESDBE.CustomerDetails.Where(c => c.Isactive == true)
+                                                     on od.OrderId equals c.OrderId
+                                                    join cn in this._SALESDBE.CountriesMaster
+                                                    on c.countryid equals cn.Id into countrydetails
+                                                    from country in countrydetails.Where(c => c.IsActive == true).DefaultIfEmpty()
+                                                    where m.Id == orderid
+                                                    select new Ncustomerinfo
+                                                    {
+                                                        Name = c.Name,
+                                                        countryid = c.countryid,
+                                                        Country = country.Name,
+                                                        Title = c.Title,
+                                                        City = c.City,
+                                                        Zipcode = c.Zipcode,
+                                                        State = c.State,
+                                                        TeleCountryCode = c.TeleCountryCode,
+                                                        Telephone = c.Telephone,
+                                                        MobCountryCode = c.MobCountryCode,
+                                                        Mobile = c.Mobile,
+                                                        Address = c.Address,
+                                                        Email = c.Email,
+                                                        PassportNo = m.PassportNo,
+                                                        nationality = country.Name
 
-                                                     where m.Id == orderid
-                                                     select new Npaydetails
-                                                     {
-                                                         //itemorderid = od.Id,
-                                                         payid = od.Id,
-                                                         paymode = pm.PayName,
-                                                         payamount = od.Amount,
-                                                         payamountinr = od.AmoutHd,
-                                                         paytype = (string.IsNullOrEmpty(card.CardName) ? curr.Type : card.CardName),
-                                                         symbol = curr.Symbol != null ? curr.Symbol : "$",
-                                                         currencyid = curr.Id
+                                                    }).FirstOrDefaultAsync();
+                    _cashsaledetails.dinfo = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
+                                                    where m.Id == orderid
+                                                    select new Ndeliveryinfo
+                                                    {
+                                                        PortName = m.PortName,
+                                                        Passport = m.PassportNo,
+                                                        DeliveryFrom = m.DeliveryFrom,
+                                                        DeliveryTo = m.DeliveryTo,
+                                                        DelieveryType = m.DelieveryType,
+                                                        PortType = m.PortType
+
+                                                    }).FirstOrDefaultAsync();
+                    _cashsaledetails.paymentdetails = await (from m in this._SALESDBE.OrderMaster.Where(c => c.IsActive == true)
+                                                             join od in this._SALESDBE.OrderPayment.Where(c => c.IsActive == true)
+                                                           on m.Id equals od.OrderId
+                                                             join d in this._SALESDBE.CurrencyMaster
+                                                             on od.CurrencyType equals d.Id into currencydetails
+                                                             from curr in currencydetails.Where(c => c.IsActive == true).DefaultIfEmpty()
+                                                             join e in this._SALESDBE.PayMethodMaster
+                                                             on od.PayMode equals e.Id into paymethoddetails
+                                                             from pm in paymethoddetails.Where(c => c.IsActive == true).DefaultIfEmpty()
+                                                             join f in this._SALESDBE.CardTypeMaster
+                                                           on od.CardType equals f.Id into cardtypedetails
+                                                             from card in cardtypedetails.Where(c => c.IsActive == true).DefaultIfEmpty()
+
+                                                             where m.Id == orderid
+                                                             select new Npaydetails
+                                                             {
+                                                                 //itemorderid = od.Id,
+                                                                 payid = od.Id,
+                                                                 paymode = pm.PayName,
+                                                                 payamount = od.Amount,
+                                                                 payamountinr = od.AmoutHd,
+                                                                 paytype = (string.IsNullOrEmpty(card.CardName) ? curr.Type : card.CardName),
+                                                                 symbol = curr.Symbol != null ? curr.Symbol : "$",
+                                                                 currencyid = curr.Id,
+                                                                 paymodeid = od.PayMode
 
 
-                                                     }).ToListAsync();
 
-           // _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
-            _cashsaledetails.grandtotalinrCM = _cashsaledetails.cashsaledetailsCM.Sum(s => s.salevalueinr);
-            _cashsaledetails.grandtotalinrOF = _cashsaledetails.cashsaledetailsOF.Sum(s => s.salevalueinr);
+                                                             }).ToListAsync();
 
-            // _cashsaledetails.grandtotalcurrency = _cashsaledetails.cashsaledetails.Sum(s => s.salevalue);
+                    // _cashsaledetails.grandtotal = _cashsaledetails.cashsaledetails.Sum(s => s.salevalueinr);
+                    _cashsaledetails.grandtotalinrCM = _cashsaledetails.cashsaledetailsCM.Sum(s => s.salevalueinr);
+                    _cashsaledetails.grandtotalinrOF = _cashsaledetails.cashsaledetailsOF.Sum(s => s.salevalueinr);
 
-            if (_cashsaledetails.paymentdetails.Count > 0)
-            {
-               // _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency - ((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamount));
-                _cashsaledetails.balinr = _cashsaledetails.grandtotalinr - Math.Round(((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamountinr)));
-                _cashsaledetails.PaytmAmount = (decimal)_cashsaledetails.paymentdetails.Sum(s => s.payamountinr);
-                ////if (_cashsaledetails.paymentdetails[0].currencyid != 6)
-                ////{
-                ////    _cashsaledetails.currsymbol = _cashsaledetails.paymentdetails[0].symbol;
-                ////}
-                ////else
-                ////{ _cashsaledetails.currsymbol = "$"; }
+                    // _cashsaledetails.grandtotalcurrency = _cashsaledetails.cashsaledetails.Sum(s => s.salevalue);
 
+                    if (_cashsaledetails.paymentdetails.Count > 0)
+                    {
+                        // _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency - ((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamount));
+                        _cashsaledetails.balinr = _cashsaledetails.grandtotalinr - Math.Round(((decimal)_cashsaledetails.paymentdetails.Sum(p => p.payamountinr)));
+                        _cashsaledetails.PaytmAmount = (decimal)_cashsaledetails.paymentdetails.Sum(s => s.payamountinr);
+                        ////if (_cashsaledetails.paymentdetails[0].currencyid != 6)
+                        ////{
+                        ////    _cashsaledetails.currsymbol = _cashsaledetails.paymentdetails[0].symbol;
+                        ////}
+                        ////else
+                        ////{ _cashsaledetails.currsymbol = "$"; }
+
+                    }
+                    else
+                    {
+                        //  _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency;
+                        _cashsaledetails.balinr = _cashsaledetails.grandtotalinr;
+                        //  _cashsaledetails.currsymbol = "$";
+                    }
+                    if (_cashsaledetails.balcurrency < 0 || _cashsaledetails.balinr < 0)
+                    {
+                        // _cashsaledetails.balcurrency = 0;
+                        _cashsaledetails.balinr = 0;
+
+                    }
+
+                    _cashsaledetails.DelieveryTypeName = Enum.GetName(typeof(DeliveryType), _cashsaledetails.dinfo.DelieveryType);
+                    _cashsaledetails.PortTypeName = Enum.GetName(typeof(PortType), _cashsaledetails.dinfo.PortType);
+                }
             }
-            else
-            {
-              //  _cashsaledetails.balcurrency = _cashsaledetails.grandtotalcurrency;
-                _cashsaledetails.balinr = _cashsaledetails.grandtotalinr;
-              //  _cashsaledetails.currsymbol = "$";
-            }
-            if (_cashsaledetails.balcurrency < 0 || _cashsaledetails.balinr < 0)
-            {
-               // _cashsaledetails.balcurrency = 0;
-                _cashsaledetails.balinr = 0;
-
-            }
-
-
             return _cashsaledetails;
         }
 
@@ -1476,7 +1917,10 @@ namespace SalesApp.Repository
             }
 
         }
-
+        public string ToTitleCase(string str)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
+        }
     }
     
 }

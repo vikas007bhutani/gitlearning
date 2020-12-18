@@ -14,9 +14,9 @@
                 <i class="las la-align-left"></i>
             </button>
 
-            <h1><span class="fbold">Sales</span> <span class="fregular">Application</span></h1>
+            <h1><span class="fbold">Sales</span> <span class="fregular">Application</span><p class="profile-name">Welcome : @User.Identity.Name</p></h1>
 
-            <!--UserAccount / account-wrap-->
+            
         </div>
 
         <div class="main-container">
@@ -65,7 +65,7 @@
                                                     <!-- <a href=""><i class="las la-plus" data-toggle="modal" data-target="#chooseType"></i></a> -->
                                                     @*<a href="../add-cash-sale.html" class="btn btn-primary btn-dark-gray">Add Cash Sale</a>
                         <a href="../add-sale.html" class="btn btn-primary btn-blue">Add Sale</a>*@
-                                                    <a asp-controller="CashSale" asp-action="Index" asp-route-id="@item.mirrorid" class="btn btn-primary btn-dark-gray">Add Cash Sale </a>
+                                                    <a asp-controller="CashSale" asp-action="Index" asp-route-id="@item.mirrorid" class="btn btn-primary" style="background-color:cornflowerblue">Add Cash Sale </a>
 
 
                                                 </td>
@@ -76,7 +76,7 @@
 
                                                 </td>
 
-                                                <td class="text-center action-td"> <a asp-controller="AddSale" asp-action="Index" asp-route-id="@item.mirrorid" class="btn btn-primary btn-dark-gray">Add Sale </a></td>
+                                                <td class="text-center action-td"> <a asp-controller="AddSale" asp-action="Index" asp-route-id="@item.mirrorid" class="btn btn-primary" style="background-color:green">Add Sale </a></td>
                                                 <td>@item.Languageid</td>
                                                 <td class="text-center">@item.Pax</td>
                                                 <td>@item.guide?.FirstOrDefault().name</td>

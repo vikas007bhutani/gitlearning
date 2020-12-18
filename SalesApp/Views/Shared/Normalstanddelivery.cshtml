@@ -4,7 +4,9 @@
     ViewBag.Title = "Stand & Delivery";
 
 }
-
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <div class="container-fluid customer-info-form">
 
     <!-- <div class="row">
@@ -30,87 +32,88 @@
                             <h3><i class="las la-wrench"></i> Stand Details</h3>
                           </div>
                     </div> -->
-                    -
-                    @using (Html.BeginForm("AddStandInfo", "AddSale", FormMethod.Post, new { id = "standinfo" }))
+
+                    @using (Html.BeginForm("AddStandInfo", "AddSale", FormMethod.Post, new { id = "standinfo", onsubmit = "showLoader(this);" }))
                     {
                         @Html.AntiForgeryToken()
-                        <div class="row pad-t-10">
-                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-7 col-7">
+                    <div class="row pad-t-10">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-7 col-7">
 
-                                <div class="form-group">
-                                    <label for="">Stand</label>
-                                    @Html.DropDownListFor(model => model.standcode, Model.standcategory as IEnumerable<SelectListItem>, "Select", new { onchange = "scategory_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
-                                    @Html.ValidationMessageFor(model => model.standcode, "", new { @class = "text-danger" })
-                                    @*<input type="text" class="form-control" id="StandNumber" asp-for="stockno" placeholder="" onblur="GetItemDetails()">
-                                        <input type="hidden" id="standid" />*@
-                                    @*<input type="text" class="form-control" id="" placeholder="">*@
+                            <div class="form-group">
+                                <label for="">Stand</label>
+                                @Html.DropDownListFor(model => model.standcode, Model.standcategory as IEnumerable<SelectListItem>, "Select", new { onchange = "scategory_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
+                                @Html.ValidationMessageFor(model => model.standcode, "", new { @class = "text-danger" })
+                                @*<input type="text" class="form-control" id="StandNumber" asp-for="stockno" placeholder="" onblur="GetItemDetails()">
+                <input type="hidden" id="standid" />*@
+                                @*<input type="text" class="form-control" id="" placeholder="">*@
 
-                                </div>
                             </div>
-                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-5 col-5">
-                                <div class="form-group">
-                                    <label for="">Colour</label>
-                                    @Html.DropDownListFor(model => model.color, Model.standcolordetails as IEnumerable<SelectListItem>, "Select", new { onchange = "scolor_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
-                                    @Html.ValidationMessageFor(model => model.color, "", new { @class = "text-danger" })
-
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
-                                <div class="form-group">
-                                    <label for="">Height(Inch)</label>
-                                    <div>
-                                        @Html.DropDownListFor(model => model.height, Model.sizeinheight as IEnumerable<SelectListItem>, "Select", new { onchange = "sheight_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { } })
-                                        @Html.ValidationMessageFor(model => model.height, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                            </div>
-                            @*<div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6">
-                                    <div class="form-group">
-                                        <label for="">Width</label>
-                                        <div>
-                                            @Html.DropDownListFor(model => model.width, Model.sizeinwidth as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
-                                            @Html.ValidationMessageFor(model => model.width, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                </div>*@
-
-
-
-
-                            <div class="col-lg-4 col-md-5 col-sm-5 col-xs-12 col-12 type-delivery clearfix">
-                                <label for="add" class="lable-head">Type</label>
-                                <div class="type-group">
-                                    <div class="inputGroup">
-                                        @Html.RadioButtonFor(m => m._saletype, SaleType.CM, new { @name = "radio", @type = "radio", @id = "CashMemo1" })
-
-
-                                        <label for="CashMemo1" class="cm-lable">C/M</label>
-                                    </div>
-                                    <div class="inputGroup">
-                                        @Html.RadioButtonFor(m => m._saletype, SaleType.OF, new { @name = "radio", @type = "radio", @id = "OrderForm1" })
-                                        <label for="OrderForm1" class="of-lable">O/F</label>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <input type="hidden" asp-for="orderid" />
-                            <div class="col-lg-3 offset-lg-5 col-md-3 offset-md-4 col-sm-3 col-xs-12 col-12 stand-btn">
-                                <button type="submit" id="btnsubmit" class="btn-blue">Add Stand</button>
-                            </div>
-                            @*<div class="row ">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="description-container desktop-description">
-
-                                            <ul>
-                                                <li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold" id="standdesc"> </span></p></li>
-
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>*@
-
                         </div>
+                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-5 col-5">
+                            <div class="form-group">
+                                <label for="">Colour</label>
+                                @Html.DropDownListFor(model => model.color, Model.standcolordetails as IEnumerable<SelectListItem>, "Select", new { onchange = "scolor_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
+                                @Html.ValidationMessageFor(model => model.color, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
+                            <div class="form-group">
+                                <label for="">Height(Inch)</label>
+                                <div>
+                                    @Html.DropDownListFor(model => model.height, Model.sizeinheight as IEnumerable<SelectListItem>, "Select", new { onchange = "sheight_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { } })
+                                    @Html.ValidationMessageFor(model => model.height, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6">
+            <div class="form-group">
+                <label for="">Width</label>
+                <div>
+                    @Html.DropDownListFor(model => model.width, Model.sizeinwidth as IEnumerable<SelectListItem>, "Select", htmlAttributes: new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(model => model.width, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>*@
+
+
+
+
+                        <div class="col-lg-4 col-md-5 col-sm-5 col-xs-12 col-12 type-delivery clearfix">
+                            <label for="add" class="lable-head">Type</label>
+                            <div class="type-group">
+                                <div class="inputGroup">
+                                    @Html.RadioButtonFor(m => m._saletype, SaleType.CM, new { @name = "radio", @type = "radio", @id = "CashMemo1" })
+
+
+                                    <label for="CashMemo1" class="cm-lable">C/M</label>
+                                </div>
+                                <div class="inputGroup">
+                                    @Html.RadioButtonFor(m => m._saletype, SaleType.OF, new { @name = "radio", @type = "radio", @id = "OrderForm1" })
+                                    <label for="OrderForm1" class="of-lable">O/F</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="orderid" />
+                        <input type="hidden" asp-for="billid" />
+                        <div class="col-lg-3 offset-lg-5 col-md-3 offset-md-4 col-sm-3 col-xs-12 col-12 stand-btn">
+                            <button type="submit" id="btnsubmit" class="btn-blue">Add Stand</button>
+                        </div>
+                        @*<div class="row ">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="description-container desktop-description">
+
+                    <ul>
+                        <li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold" id="standdesc"> </span></p></li>
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>*@
+
+                    </div>
                     }
                     @if (TempData["StandMessage"] != null)
                     {
@@ -142,13 +145,14 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            <p class="table-description">@Html.DisplayFor(modelItem => item.standdesc)</p>
                                                             @if (item.ordertype == "CM")
                                                             {
                                                                 <p class="table-type CM">@Html.DisplayFor(modelItem => item.ordertype)</p>
                                                             }
                                                             else
                                                             { <p class="table-type of">@Html.DisplayFor(modelItem => item.ordertype)</p>}
+                                                            <p class="table-description">@Html.DisplayFor(modelItem => item.standdesc)</p>
+
 
                                                             @*<p class="table-type CM">@Html.DisplayFor(modelItem => item.ordertype)</p>*@
                                                         </td>
@@ -182,95 +186,103 @@
                         @message.msg
                     </div>
                 }
-                <section id="content2" class="text-left">
-                    @using (Html.BeginForm("AddDeliveryInfo", "AddSale", FormMethod.Post, new { id = "deliveryinfo", name = "deliveryinfo" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="container-fluid customer-info-form">
-                            <div class="row pad-t-10">
-                                <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 col-12 customer-type-delivery clearfix">
-                                    <label for="add" class="lable-head">Type</label>
-                                    <div class="customer-type-group">
-                                        @*<div class="inputGroup">
-                                                @Html.RadioButtonFor(m => m._deliverytype, DeliveryType.CashMemo, new { @name = "radio", @type = "radio", @id = "radio-type-01", onclick = "cashSelect();" })
+        <section id="content2" class="text-left">
+            @using (Html.BeginForm("AddDeliveryInfo", "AddSale", FormMethod.Post, new { id = "deliveryinfo", name = "deliveryinfo", onsubmit = "showLoader(this);" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="container-fluid customer-info-form">
+                    <div class="row pad-t-10">
+                        <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 col-12 customer-type-delivery clearfix">
+                            <label for="add" class="lable-head">Type</label>
+                            <div class="customer-type-group">
+                                @*<div class="inputGroup">
+                                @Html.RadioButtonFor(m => m._deliverytype, DeliveryType.CashMemo, new { @name = "radio", @type = "radio", @id = "radio-type-01", onclick = "cashSelect();" })
 
-                                                <label for="radio-type-01" class="cm-lable">Cash Memo</label>
-                                            </div>*@
-                                        <div class="inputGroup">
-                                            @Html.RadioButtonFor(m => m._deliverytype, DeliveryType.HomeDelivery, new { @name = "radio", @type = "radio", @id = "radio-type-02", onclick = "homeSelect();" })
-                                            <label for="radio-type-02" class="of-lable">Home Delivery</label>
-                                        </div>
+                                <label for="radio-type-01" class="cm-lable">Cash Memo</label>
+                            </div>*@
+                                <div class="inputGroup">
+                                    @Html.RadioButtonFor(m => m._deliverytype, DeliveryType.HomeDelivery, new { @name = "radio", @type = "radio", @id = "radio-type-02", onclick = "homeSelect();" })
+                                    <label for="radio-type-02" class="of-lable">Home Delivery</label>
+                                </div>
 
-                                        <div class="inputGroup" id="typePort">
-                                            @Html.RadioButtonFor(m => m._deliverytype, DeliveryType.PortDelivery, new { @name = "radio", @type = "radio", @id = "radio-type-03", onclick = "portSelect();" })
-                                            @*<input id="radio-type-03" name="radio-type" type="radio" onclick="portSelect();">*@
-                                            <label for="radio-type-03" class="pd-lable">Port Delivery</label>
-                                        </div>
-                                    </div>
+                                <div class="inputGroup" id="typePort">
+                                    @Html.RadioButtonFor(m => m._deliverytype, DeliveryType.PortDelivery, new { @name = "radio", @type = "radio", @id = "radio-type-03", onclick = "portSelect();" })
+                                    @*<input id="radio-type-03" name="radio-type" type="radio" onclick="portSelect();">*@
+                                    <label for="radio-type-03" class="pd-lable">Port Delivery</label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-7 col-xs-12 col-12 port-type-delivery" id="port-type-container">
-                                    <label for="add" class="lable-head">Port</label>
-                                    <div class="port-type">
-                                        <div class="inputGroup">
-                                            @Html.RadioButtonFor(m => m._porttype, PortType.Seaport, new { @name = "radio", @type = "radio", @id = "seaport", @class = "las la-plane" })
-                                            <label for="seaport"><i class="las la-ship"></i>Seaport</label>
-                                        </div>
-                                        <div class="inputGroup">
-                                            @Html.RadioButtonFor(m => m._porttype, PortType.Airport, new { @name = "radio", @type = "radio", @id = "airport", @class = "las la-plane" })
-                                            <label for="airport"><i class="las la-plane"></i>Airport</label>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-5 col-xs-12 col-12 port-type-delivery" id="port-type-txt">
-                                    <div class="form-group">
-                                        <label for="">Port Name</label>
-                                        <input asp-for="dinfo.PortName" class="form-control" spellcheck="false" placeholder="" />
-                                        @*<input type="text" class="form-control" id="" spellcheck="false" placeholder="">*@
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-5 col-md-5 col-sm-4">
-                                    <div class="form-group">
-                                        <label for="">Passport Number</label>
-                                        <input asp-for="dinfo.Passport" class="form-control" spellcheck="false" placeholder="" />
-                                        @*<input type="text" class="form-control" id="" spellcheck="false" placeholder="">*@
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-7 col-md-7 col-sm-8 col-xs-12 col-12">
-                                    <div class="form-group mar-b-5">
-                                        <label for="">Delivery Dates</label>
-                                        <div class="row">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12 date-input mar-b-20 pad-r-5 pad-m-r-15">
-                                                @*@Html.EditorFor(model => model.dinfo.DeliveryFrom, new { htmlAttributes = new { @class = "form-control" } })*@
-                                                <input asp-for="dinfo.DeliveryFrom" asp-format="{0:dd/MM/yyyy}" class="form-control" spellcheck="false" />
-
-                                                @*<input type="text" class="form-control" id="datepicker1" placeholder="" class="datepicker" spellcheck="false">*@
-
-                                            </div>
-
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12 date-input mar-b-20 pad-l-5 pad-m-l-15 pad-m-r-15">
-                                                @*<input type="text" class="form-control" id="datepicker2" placeholder="" class="datepicker" spellcheck="false">*@
-                                                <input asp-for="dinfo.DeliveryTo" asp-format="{0:dd/MM/yyyy}" class="form-control" spellcheck="false" />
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="disclaimer">Please select dates 20 days from today.</p>
-                                </div>
-                            </div>
-
-                            <input type="hidden" asp-for="orderid" />
                         </div>
-                    }
-                </section>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-7 col-xs-12 col-12 port-type-delivery" id="port-type-container">
+                            <label for="add" class="lable-head">Port</label>
+                            <div class="port-type">
+                                <div class="inputGroup">
+                                    @Html.RadioButtonFor(m => m._porttype, PortType.Seaport, new { @name = "radio", @type = "radio", @id = "seaport", @class = "las la-plane" })
+                                    <label for="seaport"><i class="las la-ship"></i>Seaport</label>
+                                </div>
+                                <div class="inputGroup">
+                                    @Html.RadioButtonFor(m => m._porttype, PortType.Airport, new { @name = "radio", @type = "radio", @id = "airport", @class = "las la-plane" })
+                                    <label for="airport"><i class="las la-plane"></i>Airport</label>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-5 col-xs-12 col-12 port-type-delivery" id="port-type-txt">
+                            <div class="form-group">
+                                <label for="">Port Name</label>
+                                <input asp-for="dinfo.PortName" class="form-control" spellcheck="false" placeholder="" />
+                                @*<input type="text" class="form-control" id="" spellcheck="false" placeholder="">*@
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-5 col-md-5 col-sm-4">
+                            <div class="form-group">
+                                <label for="">Passport No.</label>
+                                <input asp-for="dinfo.Passport" class="form-control" spellcheck="false" placeholder="" />
+                                @*<input type="text" class="form-control" id="" spellcheck="false" placeholder="">*@
+                            </div>
+                        </div>
+
+                        <div class="col-lg-7 col-md-7 col-sm-8 col-xs-12 col-12">
+                            <div class="form-group mar-b-5">
+                                <label for="">Delivery Dates</label>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12 date-input mar-b-20 pad-r-5 pad-m-r-15">
+                                        @*@Html.EditorFor(model => model.dinfo.DeliveryFrom, new { htmlAttributes = new { @class = "form-control" } })*@
+                                        @Html.TextBoxFor(m => m.dinfo.DeliveryFrom, "{0:dd/MM/yyyy}", new { @class = "form-control", placeholder = "", @type = "text" })
+                                        @*@Html.EditorFor(model => model.dinfo.DeliveryFrom, new { value="", htmlAttributes = new { @class = "form-control", placeholder = "", @readonly = "false "  } })*@
+                                        @*<input asp-for="dinfo.DeliveryFrom" asp-format="{0:dd/MM/yyyy}" class="form-control" spellcheck="false" />*@
+
+                                        @*<input type="text" class="form-control" id="datepicker1" placeholder="" class="datepicker" spellcheck="false">*@
+
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12 date-input mar-b-20 pad-l-5 pad-m-l-15 pad-m-r-15">
+                                        @*<input type="text" class="form-control" id="datepicker2" placeholder="" class="datepicker" spellcheck="false">*@
+                                        @Html.TextBoxFor(m => m.dinfo.DeliveryTo, "{0:dd/MM/yyyy}", new { @class = "form-control", placeholder = "", @type = "text" })
+                                        @*<input asp-for="dinfo.DeliveryTo" asp-format="{0:dd/MM/yyyy}" class="form-control" spellcheck="false" />*@
+
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="disclaimer">Please select dates 20 days from today.</p>
+                            <span style="color:red;font-size:large;font-family:Arial;" id="lbldeliverymsg"></span>
+                        </div>
+
+
+                    </div>
+
+                    <input type="hidden" asp-for="orderid" />
+
+                </div>
+                
+            }
+        </section>
 
             </div>
         </div>
@@ -278,7 +290,7 @@
         <div class="row pad-0 mar-0">
             <div class="col-lg-12 footer-btn text-right pad-rl-20 btns-group">
                 <button class="btn-dark-gray" onclick="manaagetab('2')">Back</button>
-                <button class="btn-blue-light">Reset</button>
+                @*<button class="btn-blue-light">Reset</button>*@
                 <button id="deliverysubmit" class="btn-pink">Continue</button>
                 @*<button onclick="manaagetab('5')" class="btn-dark-gray">Continue</button>*@
             </div>
@@ -286,167 +298,104 @@
 
         @*<input type="hidden" asp-for="orderid" />*@
         <input type="hidden" asp-for="standorderid" />
+       
         <input type="hidden" id="deltypvalue" asp-for="dinfo.DelieveryType" />
         <input type="hidden" id="saletypvalue" asp-for="standsaletype" />
         <input type="hidden" id="hdnsection" value="@ViewBag.section" />
+        @*<input type="hidden" asp-for="billid" />*@
     </div>
-  
-
-    <script type="text/javascript">
-        function scategory_SelectedIndexChanged() {
-            $('#color').focus();
-        }
-        function scolor_SelectedIndexChanged() {
-            $('#height').focus();
-        }
-        function sheight_SelectedIndexChanged() {
-            $('#btnsubmit').focus();
-        }
-
-    function GetItemDetails() {
-        var stockid = $('#StockNumber').val();
-           $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetStandDetails", "AddSale")',
-                //contentType: false,
-                //processData: false,
-               data: { "stockid": stockid},
-               success: function (data) {
-                   if (data != null) {
-                       var response = JSON.stringify(data[0]);
-                       if (response != null) {
-                           $('#standid').val(data[0].stockid);
-                           $('#standdesc').val(data[0].itemname);
-                           //$('#itemcategory').css('color', 'green');
-                           //$('#itemname').text(data[0].itemname);
-                           //$('#itemsize').text(data[0].size);
-                           //$('#itemstone').text(data[0].marblestone);
-                           //$('#itemcolor').text(data[0].marblecolor);
-                           //$('#totalvalue').val(data[0].price);
-                           //$('#hdntotal').val(data[0].price)
-                           //$('#item_desc').val(data[0].category + ',' + data[0].itemname + ',' + data[0].size + ',' + data[0].marblecolor);
-
-                       }
-                       else {
-                           $('#standdesc').text('Not in stock!!!');
-                           $('#standdesc').css('color', 'red');
-                           //$('#itemname').text('');
-                           //$('#itemsize').text('');
-                           //$('#itemstone').text('');
-                           //$('#itemcolor').text('');
-                           //$('#totalvalue').val('');
-                           $('#standid').val('');
-                       }
-                   }
-                   else {
-                       $('#standdesc').text('Not in stock!!!');
-                       $('#standdesc').css('color', 'red');
-                       //$('#itemname').text('');
-                       //$('#itemsize').text('');
-                       //$('#itemstone').text('');
-                       //$('#itemcolor').text('');
-                       //$('#totalvalue').val('');
-                       $('#standid').val('');
-                   }
 
 
-
-                },
-                Error: function (err) {
-                    $('#itemcategory').append(err);
-                  //  debugger;
-                },
-                /* beforeSend: function () {
-                     $(".progress").show();
-                 },
-                 complete: function () {
-                    $(".progress").hide();
-                 }*/
-            });
-
-
+<script type="text/javascript">
+    function scategory_SelectedIndexChanged() {
+        $('#color').focus();
     }
-        $("#tab1").click(function () {
-            document.getElementById('content1').style.display = 'block';
-            document.getElementById('content2').style.display = 'none';
-        });
-        $("#tab2").click(function () {
-            document.getElementById('content1').style.display = 'none';
-            document.getElementById('content2').style.display = 'block';
-        });
+    function scolor_SelectedIndexChanged() {
+        $('#height').focus();
+    }
+    function sheight_SelectedIndexChanged() {
+        $('#btnsubmit').focus();
+    }
+
+    $("#tab1").click(function () {
+        document.getElementById('content1').style.display = 'block';
+        document.getElementById('content2').style.display = 'none';
+    });
+    $("#tab2").click(function () {
+        document.getElementById('content1').style.display = 'none';
+        document.getElementById('content2').style.display = 'block';
+    });
 
 
-        $(document).ready(function () {
-          //  var $j = jQuery.noConflict();
-            //$("#datepicker1").datepicker({
-            //    dateFormat: "dd-mm-yy"
-            //    , duration: "fast"
-            //});
+    $(document).ready(function () {
+        $('#lbldeliverymsg').val('');
+        document.getElementById('content1').style.display = 'block';
+        document.getElementById('content2').style.display = 'none';
+        var sectionAvailable = $('#hdnsection').val();
+        if (sectionAvailable != 'undefined') {
 
-            //$("#datepicker2").datepicker({
-            //    dateFormat: "dd-mm-yy"
-            //    , duration: "fast"
-            //});
-                  document.getElementById('content1').style.display = 'block';
-                    document.getElementById('content2').style.display = 'none';
-            var sectionAvailable = $('#hdnsection').val();
-            if (sectionAvailable != 'undefined') {
-
-                if (sectionAvailable == "1") {
-                    document.getElementById('content1').style.display = 'block';
-                    document.getElementById('content2').style.display = 'none';
-                    //$('#content1').show();
-                    //$('#content2').hide();
-                }
-                else if (sectionAvailable == "2") {
-                    document.getElementById('content1').style.display = 'none';
-                    document.getElementById('content2').style.display = 'block';
-                }
-                else {
-                    document.getElementById('content1').style.display = 'block';
-                    document.getElementById('content2').style.display = 'none';
-                }
+            if (sectionAvailable == "1") {
+                document.getElementById('content1').style.display = 'block';
+                document.getElementById('content2').style.display = 'none';
+                //$('#content1').show();
+                //$('#content2').hide();
             }
+            else if (sectionAvailable == "2") {
+                document.getElementById('content1').style.display = 'none';
+                document.getElementById('content2').style.display = 'block';
+            }
+            else {
+                document.getElementById('content1').style.display = 'block';
+                document.getElementById('content2').style.display = 'none';
+            }
+        }
 
-            $("#deliverysubmit").click(function () {
-                debugger;
-                var sstype = $('#saletypvalue').val();
-                var deliveryval = $('#deltypvalue').val();
-                if ( $('#radio-type-03').is(":checked")) {
-                    if ($('#dinfo_PortName').val() == '') {
+        $("#deliverysubmit").click(function () {
 
-                        alert('Please Enter Port Name.');
-                        return false;
+            var sstype = $('#saletypvalue').val();
+            var deliveryval = $('#deltypvalue').val();
+            if ($('#radio-type-03').is(":checked")) {
+                if ($('#dinfo_PortName').val() == '') {
+                    $("#lbldeliverymsg").text("Please Enter Port Name.")
+                    $('#dinfo_PortName').focus();
+                    // alert('Please Enter Port Name.');
+                    return false;
+
+                }
+                //  $("#dinfo.PortName").submit();
+            }
+            if (sstype != '') {
+
+                if (sstype == 'OF') {
+
+                    if (deliveryval == 0 || deliveryval == '') {
+                        document.getElementById('content1').style.display = 'none';
+                        document.getElementById('content2').style.display = 'block';
+                        if ($('#radio-type-02').is(":checked") || $('#radio-type-03').is(":checked")) {
+
+                            $("#deliveryinfo").submit();
+                        }
+                        else {
+                            // alert('Please enter delivery information.')
+                            $("#lbldeliverymsg").text("Please specify delivery information.")
+                            document.getElementById('content1').style.display = 'none';
+                            document.getElementById('content2').style.display = 'block';
+                            $("#tab2").prop("checked", true);
+                        }
 
                     }
-                  //  $("#dinfo.PortName").submit();
-                }
-                if (sstype != '') {
-
-                    if (sstype == 'OF') {
-
-                            if (deliveryval == 0 || deliveryval == '') {
-                                document.getElementById('content1').style.display = 'none';
-                                document.getElementById('content2').style.display = 'block';
-                                if ($('#radio-type-02').is(":checked") || $('#radio-type-03').is(":checked")) {
-
-                                    $("#deliveryinfo").submit();
-                                }
-                                else {alert('Please enter delivery information.')}
-
-                            }
-                            else {
-                                $("#deliveryinfo").submit();
-                            }
-
-
+                    else {
+                        $("#deliveryinfo").submit();
                     }
-                    else { manaagetab('5') }
+
+
                 }
-                else {
-                    manaagetab('5')
-                }
-                    //$("#deliveryinfo").submit();}
+                else { manaagetab('3') }
+            }
+            else {
+                manaagetab('5')
+            }
+            //$("#deliveryinfo").submit();}
 
 
         });
@@ -457,83 +406,40 @@
             }
             return val;
         }
-        $("#sidebar").mCustomScrollbar({
-            theme: "minimal"
+
+        $("#dinfo_DeliveryFrom").datepicker({
+            dateFormat: "dd-mm-yy",
+            minDate: -0,
+           
+
+        });
+        $("#dinfo_DeliveryTo").datepicker({
+            dateFormat: "dd-mm-yy",
+            minDate: -0,
+
+
         });
 
-        $('#dismiss, .overlay').on('click', function () {
-            $('#sidebar').removeClass('active');
-            $('.overlay-nav').removeClass('active');
-        });
-
-        // $('#sidebarCollapse').on('click', function () {
-        //     $('#sidebar').addClass('active');
-        //     $('.overlay').addClass('active');
-        //     $('.collapse.in').toggleClass('in');
-        //     $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-        // });
-
-        $('#sidebarCollapse').on('click', function () {
-            $('#sidebar, #content').toggleClass('active');
-            $('.overlay-nav').addClass('active');
-            $('.collapse.in').toggleClass('in');
-            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-        });
     });</script>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#sidebar").mCustomScrollbar({
-                theme: "minimal"
-            });
-
-            $('#dismiss, .overlay').on('click', function () {
-                $('#sidebar').removeClass('active');
-                $('.overlay').removeClass('active');
-            });
-
-            // $('#sidebarCollapse').on('click', function () {
-            //     $('#sidebar').addClass('active');
-            //     $('.overlay').addClass('active');
-            //     $('.collapse.in').toggleClass('in');
-            //     $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-            // });
-
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar, #content').toggleClass('active');
-                $('.overlay').addClass('active');
-                $('.collapse.in').toggleClass('in');
-                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-            });
-        });
+<script type="text/javascript">
 
 
-        $(function () {
-            $("#dinfo_DeliveryFrom").datepicker({
-                dateFormat: "dd-mm-yy"
-                , duration: "fast"
-            });
-
-            $("#dinfo_DeliveryTo").datepicker({
-                dateFormat: "dd-mm-yy"
-                , duration: "fast"
-            });
-        });
 
 
-        function portSelect() {
-            document.getElementById('port-type-container').style.display = 'block';
-            document.getElementById('port-type-txt').style.display = 'block';
+    function portSelect() {
+        document.getElementById('port-type-container').style.display = 'block';
+        document.getElementById('port-type-txt').style.display = 'block';
 
-        }
-        function homeSelect() {
-            document.getElementById('port-type-container').style.display = 'none';
-            document.getElementById('port-type-txt').style.display = 'none';
+    }
+    function homeSelect() {
+        document.getElementById('port-type-container').style.display = 'none';
+        document.getElementById('port-type-txt').style.display = 'none';
 
-        }
-        function cashSelect() {
-            document.getElementById('port-type-container').style.display = 'none';
-            document.getElementById('port-type-txt').style.display = 'none';
+    }
+    function cashSelect() {
+        document.getElementById('port-type-container').style.display = 'none';
+        document.getElementById('port-type-txt').style.display = 'none';
 
-        }
-    </script>
+    }
+</script>

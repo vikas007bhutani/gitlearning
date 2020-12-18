@@ -49,30 +49,41 @@ namespace SalesApp.Controllers
             CashSaleVM cashdetails = new CashSaleVM();
             Int64 _orderid = 0;
             ModelState.Clear();
+            int UID;
             try
             {
-                if (string.IsNullOrEmpty(saleetails.stockno))
+               
+                UID = _comm.GetLoggedInUserId();
+                if (UID > 0)
                 {
-                    TempData["CashMessage"] = new MessageVM() { title = "Please enter", msg = "stock no." };
-                    cashdetails = await _csale.GetSales(saleetails.orderid, saleetails);
-
-                }
-                else
-                {
-                    _orderid = await _csale.AddCashSale(saleetails, _comm.GetLoggedInUserId());
-                    if (_orderid == -1)
+                    if (string.IsNullOrEmpty(saleetails.stockno))
                     {
-
-                        TempData["CashMessage"] = new MessageVM() { title = "Please enter", msg = "Stock No. Already Added!!!" };
+                        TempData["CashMessage"] = new MessageVM() { title = "Please enter", msg = "stock no." };
                         cashdetails = await _csale.GetSales(saleetails.orderid, saleetails);
 
                     }
                     else
                     {
-                        cashdetails = await _csale.GetSales(_orderid, saleetails);
+                        _orderid = await _csale.AddCashSale(saleetails, UID);
+                        if (_orderid == -1)
+                        {
+
+                            TempData["CashMessage"] = new MessageVM() { title = "Please enter", msg = "Stock No. Already Added!!!" };
+                            cashdetails = await _csale.GetSales(saleetails.orderid, saleetails);
+
+                        }
+                        else
+                        {
+                            cashdetails = await _csale.GetSales(_orderid, saleetails);
+                        }
                     }
                 }
-             
+                else
+                {
+                    RedirectToAction("Logout", "Account");
+
+                }
+
             }
             catch (Exception ex)
             {
@@ -86,9 +97,19 @@ namespace SalesApp.Controllers
         }
         public async Task<IActionResult> DeleteSale(int orderItemId)
         {
+            int UID;
             try
             {
-                await _csale.DeleteCashSale(orderItemId, _comm.GetLoggedInUserId());
+                UID = _comm.GetLoggedInUserId();
+                if (UID > 0)
+                {
+                    await _csale.DeleteCashSale(orderItemId, UID);
+                }
+                else
+                {
+                    RedirectToAction("Logout", "Account");
+
+                }
             }
             catch (Exception ex)
             {
@@ -103,20 +124,30 @@ namespace SalesApp.Controllers
         public async Task<IActionResult> FinishSale(int orderId)
         {
             bool result;
+            int UID;
             try
             {
-             result=   await _csale.AddOrderPayment(orderId, _comm.GetLoggedInUserId());
-                if (result)
+                UID = _comm.GetLoggedInUserId();
+                if (UID > 0)
                 {
-                    return RedirectToAction("Index", "Mirror");
+                    result = await _csale.AddOrderPayment(orderId, UID);
+                    if (result)
+                    {
+                        return RedirectToAction("Index", "Mirror");
 
+                    }
+                    else
+                    {
+                        CashSaleVM cashdetails = new CashSaleVM();
+                        cashdetails = await _csale.GetSales(orderId, null);
+                        TempData["CashMessage"] = new MessageVM() { title = "Error!", msg = "Error." };
+                        return View("Index", cashdetails);
+
+                    }
                 }
                 else
                 {
-                    CashSaleVM cashdetails = new CashSaleVM();
-                    cashdetails = await _csale.GetSales(orderId, null);
-                    TempData["CashMessage"] = new MessageVM() { title = "Error!", msg = "Error." };
-                     return View("Index", cashdetails);
+                    RedirectToAction("Logout", "Account");
 
                 }
             }

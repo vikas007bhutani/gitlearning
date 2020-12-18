@@ -10,6 +10,9 @@ using SALEERP.Repository.Interface;
 using System.Web.Http;
 using SALEERP.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using Microsoft.Extensions.Configuration;
+
 namespace SALEERP.Controllers
 {
     public class CommissionController : Controller
@@ -17,23 +20,43 @@ namespace SALEERP.Controllers
         IcommissionRepository _commission;
         ICommonRepository _comm;
         private Sales_ERPContext _DBERP;
-        public CommissionController(IcommissionRepository _commissionrepo, ICommonRepository comm, Sales_ERPContext dbcontext)
+        public IConfiguration Configuration { get; }
+        public CommissionController(IcommissionRepository _commissionrepo, ICommonRepository comm, Sales_ERPContext dbcontext,IConfiguration _config)
         {
             this._commission = _commissionrepo;
             this._comm = comm;
             this._DBERP = dbcontext;
+            this.Configuration = _config;
         }
         public IActionResult Index(CommissionVM cm)
         {
+            var addlist = Dns.GetHostEntry(Dns.GetHostName());
+            string unit1ip = Configuration.GetSection("IPSettings").GetSection("UNIT1").Value;
+            string unit2ip = Configuration.GetSection("IPSettings").GetSection("UNIT2").Value;
+            //   string GetHostName = addlist.HostName.ToString();
+            // string GetIPV6 = addlist.AddressList[0].ToString();
+            string clientIP = addlist.AddressList[1].ToString();
+            
 
-            return View(_commission.Init_commission());
+            cm = _commission.Init_commission();
+            if (unit1ip == clientIP)
+            {
+                cm.unitid = 1;
+
+            }
+            else if (unit2ip == clientIP)
+            {
+                cm.unitid = 2;
+
+            }
+            return View(cm);
         }
         public IActionResult GetMirror(string unitid, DateTime fromdate,DateTime Todate)
         {
             CommissionVM _alluser = new CommissionVM();
             _alluser.unitid =Convert.ToInt16( unitid);
-            _alluser.fromdate = fromdate;
-            _alluser.Todate = Todate;
+            _alluser.fromdate = fromdate.AddSeconds(1);
+            _alluser.Todate = Todate.AddHours(23).AddMinutes(59).AddSeconds(59);
             //string userid = HttpContext.User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.PrimarySid)
             //      .Select(c => c.Value).SingleOrDefault();
             //_agntusr.AddUser(_details, Convert.ToInt32(userid));
@@ -49,9 +72,12 @@ namespace SALEERP.Controllers
         public ActionResult ShowEditPartailView(int id)
         {
             CommissionVM result = new CommissionVM();
+            decimal gst = Convert.ToDecimal(Configuration.GetSection("Charges").GetSection("GST").Value);
+            decimal card =Convert.ToDecimal(Configuration.GetSection("Charges").GetSection("CARD").Value);
+           
             if (ModelState.IsValid)
             {
-                result = this._commission.EditCommission(id);
+                result = this._commission.EditCommission(id,gst,card);
                 //   result.bdetails = _comm.getBanks();
 
 

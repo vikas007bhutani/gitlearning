@@ -53,6 +53,7 @@ namespace SALEERP
             services.AddScoped<IMirrorRepository, MirrorRepository>();
             services.AddScoped<ISearchRepository, SearchRepository>();
             services.AddScoped<IcommissionRepository, CommissionRepository>();
+            services.AddScoped<ISaleRepository, SaleRepository>();
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             //services.AddDefaultIdentity<IdentityUser>()

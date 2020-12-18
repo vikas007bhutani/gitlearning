@@ -28,6 +28,7 @@ namespace SALEERP.ViewModel
         public decimal? GST   { get; set; }
         public decimal? NetSaleAmount { get; set; }
         public  int unitid { get; set; }
+        public string ipadress { get; set; }
         public List<SelectListItem> unitdetails { get; set; } = new List<SelectListItem>();
         public List<MirrorDetailVM> Mirrors { get; set; } = new List<MirrorDetailVM>();
 

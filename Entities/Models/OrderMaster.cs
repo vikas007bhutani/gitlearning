@@ -14,10 +14,13 @@ namespace SALEERP.Models
 
         public long Id { get; set; }
         public long? MirrorId { get; set; }
+        public long BillId { get; set; }
+        public int? DelieveryType { get; set; }
         public DateTime? SaleDate { get; set; }
         public string TransactionId { get; set; }
-        public int? DelieveryType { get; set; }
-       
+        public int? Session_Year { get; set; }
+
+        public decimal? SaleValue { get; set; }
         public int? PortType { get; set; }
         public string Description { get; set; }
         public string PortName { get; set; }

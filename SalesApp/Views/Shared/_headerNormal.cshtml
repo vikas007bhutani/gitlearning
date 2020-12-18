@@ -5,60 +5,65 @@
 
 }
 
-<div class="header-container clearfix">
-    <button type="button" id="sidebarCollapse" class="btn btn-info">
-        <i class="las la-align-left"></i>
-    </button>
+    <div class="header-container clearfix">
+        <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <i class="las la-align-left"></i>
+        </button>
 
-    <p class="float-left sale-date-container"><span class="fregular date-head">Sale Date:</span> <span class="fbold date-val">@Html.DisplayFor(model => model.mirrordate)</span></p>
-
-    <div class="account-wrap">
-        <p class="cart-display-top"><span class="clients-cart-info"><i class="las la-shopping-cart"></i><span class="cart-notify">@Html.DisplayFor(model => model.itemcount)</span></span></p>
-        <div class="account-item clearfix js-item-menu">
-            <div class="image">
-                <img src="img/avatar-01.jpg" alt="John Doe" />
-            </div>
-            <div class="content-account">
-                <a class="js-acc-btn" href="#">@User.Identity.Name</a>
-            </div>
-            <div class="account-dropdown js-dropdown">
-                <div class="info clearfix">
-                    <div class="image">
-                        <a href="#">
-                            <img src="img/avatar-01.jpg" alt="John Doe" />
-                        </a>
-                    </div>
-                    <div class="content-account">
-                        <h5 class="name">
-                            <a href="#">@User.Identity.Name</a>
-                        </h5>
-                        <span class="email">Sales executive</span>
-                    </div>
+        <p class="float-left sale-date-container">
+            <span class="fregular date-head">Sale Date:</span> <span class="fbold date-val">@Html.DisplayFor(model => model.mirrordate)</span>
+           <span class="fbold date-val">@Html.DisplayFor(model => model.IPaddress)</span>
+        </p>
+       
+        <div class="account-wrap">
+            <p class="cart-display-top"><span class="clients-cart-info"><i class="las la-shopping-cart"></i><span class="cart-notify">@Html.DisplayFor(model => model.itemcount)</span></span></p>
+            <div class="account-item clearfix js-item-menu">
+                <div class="image">
+                    <img src="img/avatar-01.jpg" alt="John Doe" />
                 </div>
-                <div class="account-dropdown__body">
-                    <div class="account-dropdown__item">
-                        <a href="#">
-                            <i class="zmdi zmdi-account"></i>Account
-                        </a>
-                    </div>
-                    <div class="account-dropdown__item">
-                        <a href="#">
-                            <i class="zmdi zmdi-settings"></i>Setting
-                        </a>
-                    </div>
-                    <div class="account-dropdown__item">
-                        <a href="#">
-                            <i class="zmdi zmdi-money-box"></i>Billing
-                        </a>
-                    </div>
-                </div>
-                <div class="account-dropdown__footer">
-                    <a href="@Url.Action("Index", "Account")">
+                <div class="content-account">
 
-                        <i class="zmdi zmdi-power"></i>Logout
-                    </a>
+                    <a class="js-acc-btn" href="#">@User.Identity.Name</a>
+
+                </div>
+                <div class="account-dropdown js-dropdown">
+                    <div class="info clearfix">
+                        <div class="image">
+                            <a href="#">
+                                <img src="img/avatar-01.jpg" alt="John Doe" />
+                            </a>
+                        </div>
+                        <div class="content-account">
+                            <h5 class="name">
+                                <a href="#">@User.Identity.Name (UNIT:@Model.unitid)</a>
+                            </h5>
+                            <span class="email">Sales executive</span>
+                        </div>
+                    </div>
+                    <div class="account-dropdown__body">
+                        <div class="account-dropdown__item">
+                            <a href="#">
+                                <i class="zmdi zmdi-account"></i>Account
+                            </a>
+                        </div>
+                        <div class="account-dropdown__item">
+                            <a href="#">
+                                <i class="zmdi zmdi-settings"></i>Setting
+                            </a>
+                        </div>
+                        <div class="account-dropdown__item">
+                            <a href="#">
+                                <i class="zmdi zmdi-money-box"></i>Billing
+                            </a>
+                        </div>
+                    </div>
+                    <div class="account-dropdown__footer">
+                        <a href="@Url.Action("Index", "Account")">
+
+                            <i class="zmdi zmdi-power"></i>Logout
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

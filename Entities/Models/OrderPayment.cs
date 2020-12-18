@@ -7,6 +7,7 @@ namespace SALEERP.Models
     {
         public long Id { get; set; }
         public long? OrderId { get; set; }
+        public long BillId { get; set; }
         public int? PayMode { get; set; }
         public int? CardType { get; set; }
         public decimal? Amount { get; set; }

@@ -14,6 +14,7 @@ namespace SALEERP.Models
         public string MARBLETYPE { get; set; }
         public string SizeInch { get; set; }
         public string HeightInch { get; set; }
+        public string ShapeName { get; set; }
 
     }
 }

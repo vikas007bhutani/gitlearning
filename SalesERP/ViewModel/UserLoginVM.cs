@@ -16,6 +16,7 @@ namespace SALEERP.ViewModel
         [Required]
         public string UserName { get; set; }
         //[Required]
+        [Display(Name ="LoginID")]
         public string UserPass { get; set; }
         public string UserPhone { get; set; }
         public string UserEmail { get; set; }
@@ -27,6 +28,7 @@ namespace SALEERP.ViewModel
         public virtual ICollection<RoleclaimVM> Roleclaim { get; set; }
 
         public List<SelectListItem> loginroles { get; set; } 
+        [Required(ErrorMessage = "Please select user role!!!")]
         public int? RoleId { get; set; }
         public string RoleName { get; set; }
         public string searchstring { get; set; }

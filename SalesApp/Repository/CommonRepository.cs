@@ -18,7 +18,10 @@ namespace SalesApp.Repository
     {
         private Sales_ERPContext _DBERP;
         public static int loggedInUserId;
+        public static int loggedUnitId;
+        public static int loggedBillNoUnitWise;
         public static string loggedInUserName;
+        public static string loggedIP;
         public CommonRepository(Sales_ERPContext dbcontext)
         {
 
@@ -39,7 +42,7 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetLenght()
         {
             List<SelectListItem> _getlength = new List<SelectListItem>();          
-            List<Size> _sizemaster = await this._DBERP.Size.Where(a => a.LengthInch >= 15 && a.LengthInch<30 && a.Shapeid==4 ).OrderBy(O=>O.LengthInch).ToListAsync();
+            List<Size> _sizemaster = await this._DBERP.Size.Where(a => a.LengthInch >= 15 && a.LengthInch<30 && a.Shapeid==4 && a.SizeId<890 ).OrderBy(O=>O.LengthInch).ToListAsync();
             _getlength = BindingListUtillity.GenerateSelectListLength(_sizemaster);
             return _getlength;
         }
@@ -75,8 +78,8 @@ namespace SalesApp.Repository
         public async Task<List<SelectListItem>> GetShapes()
         {
             List<SelectListItem> _getshapes = new List<SelectListItem>();
-            List<Shape> allshapes = await this._DBERP.Shape.Where(a=>a.Type !=null).OrderBy(T=>T.ShapeName).ToListAsync();
-           // List<Shape> allshapes = await this._DBERP.Shape.Where(a => a.Type != null).OrderBy(T => T.Type).ToListAsync();
+          //  List<Shape> allshapes = await this._DBERP.Shape.Where(a=>a.Type !=null).OrderBy(T=>T.ShapeName).ToListAsync();
+            List<Shape> allshapes = await this._DBERP.Shape.Where(a => a.Type != null).OrderBy(T => T.Type).ToListAsync();
             _getshapes = BindingListUtillity.GenerateSelectList(allshapes);
             return _getshapes;
            // throw new NotImplementedException();
@@ -84,16 +87,17 @@ namespace SalesApp.Repository
 
         public async Task<List<SelectListItem>> GetMarbleColor()
         {
-            var ids = new List<int?> { 963,  44, 74, 43, 6 };
+            var ids = new List<int?> { 73,43,6,44,74 };
             List<SelectListItem> _getmarble = new List<SelectListItem>();
-            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a=> ids.Contains(a.Id)).OrderBy(a=> ids.Contains(a.Id)).ToListAsync();
+            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a=> ids.Contains(a.Id)).OrderBy(a=> a.Id).ToListAsync();
             _getmarble = BindingListUtillity.GenerateSelectList(allmarblecolor);
             return _getmarble;
         }
         public async Task<List<SelectListItem>> GetStandColor()
         {
+           // var ids = new List<int?> { 73, 44, 74, 43, 6 };
             List<SelectListItem> _getmarble = new List<SelectListItem>();
-            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a => a.TypeId == 13).OrderBy(a => a.Name).ToListAsync();
+            List<DesignIntricacyComponentPlacementMarblecolor> allmarblecolor = await this._DBERP.DesignIntricacyComponentPlacementMarblecolor.Where(a => a.TypeId == 13 && a.OrderType !=null).OrderBy(a => a.OrderType).ToListAsync();
             _getmarble = BindingListUtillity.GenerateSelectListcolor(allmarblecolor);
             return _getmarble;
         }
@@ -158,6 +162,14 @@ namespace SalesApp.Repository
         {
             return loggedInUserId;
         }
+        public void SetUnitId(int UnitId)
+        {
+            loggedUnitId = UnitId;
+        }
+        //public int GetUnitId()
+        //{
+        //    return loggedInUserId;
+        //}
         public void SetLoggedInUserName(string Username)
         {
             loggedInUserName = Username;
@@ -165,6 +177,31 @@ namespace SalesApp.Repository
         public string GetLoggedInUserName()
         {
             return loggedInUserName;
+        }
+
+        public int GetUnitId()
+        {
+            return loggedUnitId;
+        }
+
+        public void SetBillId(int BillId)
+        {
+            loggedBillNoUnitWise = BillId;
+        }
+
+        public int GetBillId()
+        {
+            return loggedBillNoUnitWise;
+        }
+
+        public void SetLoggedIP(string IPAddress)
+        {
+            loggedIP = IPAddress;
+        }
+
+        public string GetLoggedIP()
+        {
+            return loggedIP;
         }
     }
 }

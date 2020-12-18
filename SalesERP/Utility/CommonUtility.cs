@@ -26,4 +26,18 @@ namespace SALEERP.Utility
         ex,
         gu
     }
+    public enum paymethod
+    {
+        Cash = 1,
+        Credit = 2,
+        Debit = 3,
+        Later = 4,
+        Paytm = 5
+    }
+    public enum SaleType
+    {
+
+        CM = 1,
+        OF = 2
+    }
 }

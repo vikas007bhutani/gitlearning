@@ -4,54 +4,7 @@
     ViewBag.Title = "Add Normal Sale Item";
 
 }
-@*<style>
-        /* CSS comes here */
-        #video {
-            border: 1px solid black;
-            width: 320px;
-            height: 240px;
-        }
 
-        #photo {
-            border: 1px solid black;
-            width: 320px;
-            height: 240px;
-        }
-
-        #canvas {
-            display: none;
-        }
-
-        .camera {
-            width: 340px;
-            display: inline-block;
-        }
-
-        .output {
-            width: 340px;
-            display: inline-block;
-        }
-
-        #startbutton {
-            display: block;
-            position: relative;
-            margin-left: auto;
-            margin-right: auto;
-            bottom: 36px;
-            padding: 5px;
-            background-color: #6a67ce;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            color: rgba(255, 255, 255, 1.0);
-            cursor: pointer;
-        }
-
-        .contentarea {
-            font-size: 16px;
-            font-family: Arial;
-            text-align: center;
-        }
-    </style>*@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -64,10 +17,9 @@
 </style>
 <style>
     #preview {
-        width: 500px;
-        height: 200px;
+        width: 800px;
+        height: 300px;
         margin: 0px auto;
-        z-index: 9999999;
     }
 </style>
 
@@ -78,123 +30,7 @@
     $("#normalsale").click(function () {
         $("#camfile").trigger('click');
     });
-    //    function uploadVistingCard() {
 
-    //    var fileUpload = $("#camfile").get(0);
-
-    //    var compnay = $("#company").val();
-    //    var files = fileUpload.files;
-    //    var formData = new FormData();
-    //    formData.append(files[0].name, files[0]);
-    //    $('#loadingmessage').show();
-    //    $.ajax({
-    //        type: "POST",
-    //        url: "http://103.48.50.253/barcode/AddSale/uploadQRcode",
-    //        data: formData,
-    //        processData: false,
-    //        contentType: false,
-    //        success: function (response) {
-    //            if (response != null) {
-    //       // $('#loadingmessage').hide();
-    //               // $('#msg').text("Customer Ref ID : " + response);
-    //                var finalresposne = response.slice(0, response.indexOf("*"));
-    //                $('#StockNumber').val(finalresposne);
-    //               // $('#msg').css({'color': 'green', 'font-size': '100%' });
-    //            }
-    //            else {$('#msg').text(); }
-    //            // $('#msg').css({'color': 'green', 'font-size': '100%' });}
-
-    //        },
-    //        Error: function (err) {
-    //        console.log(err);
-    //            //  debugger;
-    //        },
-
-    //    });
-
-    //}
-
-    /* JS comes here */
-    //(function () {
-
-    //    var width = 320; // We will scale the photo width to this
-    //    var height = 0; // This will be computed based on the input stream
-
-    //    var streaming = false;
-
-    //    var video = null;
-    //    var canvas = null;
-    //    var photo = null;
-    //    var startbutton = null;
-
-    //    function startup() {
-    //        video = document.getElementById('video');
-    //        canvas = document.getElementById('canvas');
-    //        photo = document.getElementById('photo');
-    //        startbutton = document.getElementById('startbutton');
-
-    //        navigator.mediaDevices.getUserMedia({
-    //            video: true,
-    //            audio: false
-    //        })
-    //            .then(function (stream) {
-    //                video.srcObject = stream;
-    //                video.play();
-    //            })
-    //            .catch(function (err) {
-    //                console.log("An error occurred: " + err);
-    //            });
-
-    //        video.addEventListener('canplay', function (ev) {
-    //            if (!streaming) {
-    //                height = video.videoHeight / (video.videoWidth / width);
-
-    //                if (isNaN(height)) {
-    //                    height = width / (4 / 3);
-    //                }
-
-    //                video.setAttribute('width', width);
-    //                video.setAttribute('height', height);
-    //                canvas.setAttribute('width', width);
-    //                canvas.setAttribute('height', height);
-    //                streaming = true;
-    //            }
-    //        }, false);
-
-    //        startbutton.addEventListener('click', function (ev) {
-    //            takepicture();
-    //            ev.preventDefault();
-    //        }, false);
-
-    //        clearphoto();
-    //    }
-
-
-    //    function clearphoto() {
-    //        var context = canvas.getContext('2d');
-    //        context.fillStyle = "#AAA";
-    //        context.fillRect(0, 0, canvas.width, canvas.height);
-
-    //        var data = canvas.toDataURL('image/png');
-    //        photo.setAttribute('src', data);
-    //    }
-
-    //    function takepicture() {
-    //        var context = canvas.getContext('2d');
-    //        if (width && height) {
-    //            canvas.width = width;
-    //            canvas.height = height;
-    //            context.drawImage(video, 0, 0, width, height);
-
-    //            var data = canvas.toDataURL('image/png');
-    //            photo.setAttribute('src', data);
-    //        } else {
-    //            clearphoto();
-    //        }
-    //    }
-
-    //    window.addEventListener('load', startup, false);
-    //})();
 </script>
 
 <div class="row pad-t-10">
@@ -202,31 +38,12 @@
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
 
         <a href="#" id="normalsale" class="scan-btn-n"><i class="las la-qrcode"></i> Scan Item</a>
-
-
-
-
-
-        @*<input type="file" accept="image/*" id="camfile" name="camfile" capture="camera" class="form-control" style="display: none;">*@
-
-
-        @*<div class="contentarea" id="qrcodearea">
-
-                <div class="camera">
-                    <video id="video">Video stream not available.</video>
-                </div>
-                <div><button id="startbutton">Take photo</button></div>
-
-                <canvas id="canvas"></canvas>
-                <div class="output">
-                    <img id="photo" alt="The screen capture will appear in this box.">
-                </div>
-            </div>*@
     </div>
 
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
         @*<a asp-controller="CustomSale" asp-action="Index" asp-route-id="@Model.mirrorid" class="custom-btn-n">Add Custom Sale </a>*@
         @*@Html.ActionLink("Add Custom Sale", "Index", "CustomSale", new { id = Model.mirrorid }, new { @class = "custom-btn-n" })*@
+        <a href="#" onclick="" id="backtocustomsale" class="custom-btn-n">Back</a>
         <a href="#" onclick="" id="customsale" class="custom-btn-n"><i class="las la-plus"></i> Add Custom Item</a>
 
     </div>
@@ -240,7 +57,7 @@
 
         <div class="col-lg-12 col-md-12 full-width-col pad-0">
             <div class="container-fluid pad-0">
-                @using (Html.BeginForm("AddSale", "AddSale", FormMethod.Post, new { id = "addsale", name = "addsale" }))
+                @using (Html.BeginForm("AddSale", "AddSale", FormMethod.Post, new { id = "formaddsale", name = "formaddsale", onsubmit = "showLoader(this);" }))
                 {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -253,9 +70,14 @@
                     </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4">
                         <div class="form-group">
-                            <label for="StockNumber">Stock No.</label>
-                            <input type="text" class="form-control" id="StockNumber" asp-for="stockno" required placeholder="" onforminput="GetItemDetails()" onblur="GetItemDetails()">
+                            @*<label for="StockNumber">Stock No.</label>
+                            <input type="text" class="form-control" asp-for="stockno" required placeholder="" onforminput="GetItemDetails()" onblur="GetItemDetails()">*@
                             <input type="hidden" asp-for="item_desc" />
+                            @Html.LabelFor(model => model.stockno)
+                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                            @Html.EditorFor(model => model.stockno, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ...",onforminput="GetItemDetails()" ,onblur="GetItemDetails()" } })
+                            @Html.ValidationMessageFor(model => model.stockno, "", new { @class = "text-danger" })
+
 
                         </div>
                         @*<div class="description-container mobile-description">*@
@@ -271,29 +93,29 @@
                     <div class="col-lg-8 col-md-8 col-sm-6">
                         <div class="form-group">
                             <label for="Qty">Special Addition</label>
-                            <input type="text" class="form-control" asp-for="customspecialaddition" id="addition" placeholder="">
+                            <input type="text" class="form-control" style="width:320px" asp-for="customspecialaddition" id="addition" placeholder="">
                         </div>
                     </div>
                     @*<div class="col-lg-2 col-md-2 col-sm-4">
-                        <div class="form-group">
-                            <label for="Qty">Quantity</label>
-                            <input type="text" class="form-control" asp-for="quantity" disabled id="Qty" placeholder="">
-                        </div>
-                    </div>*@
+                            <div class="form-group">
+                                <label for="Qty">Quantity</label>
+                                <input type="text" class="form-control" asp-for="quantity" disabled id="Qty" placeholder="">
+                            </div>
+                        </div>*@
                     <div class="col-lg-3 col-md-3 col-sm-4 addition-addon clearfix">
                         @*<label for="add" class="lable-head">Type</label>*@
                         <div class="type-group">
                             <div class="inputGroup">
-                                @Html.RadioButtonFor(m => m._saletype, SaleType.CM, new { @name = "radio", @type = "radio", @id = "CashMemo", required = "required" })
-                                @Html.ValidationMessageFor(model => model._saletype, "", new { @class = "text-danger" })
+                                @Html.RadioButtonFor(m => m._saletype, SaleType.CM, new { @name = "radio", @type = "radio", @id = "CashMemo"})
+                                 @Html.ValidationMessageFor(model => model._saletype, "", new { @class = "text-danger" })
 
                                 <label for="CashMemo" class="cm-lable">C/M</label>
                             </div>
                             <div class="inputGroup">
-                                @Html.RadioButtonFor(m => m._saletype, SaleType.OF, new { @name = "radio", @type = "radio", @id = "OrderForm", required = "required" })
+                                @Html.RadioButtonFor(m => m._saletype, SaleType.OF, new { @name = "radio", @type = "radio", @id = "OrderForm" })
                                 <label for="OrderForm" class="of-lable">O/F</label>
                             </div>
-                            @Html.ValidationMessageFor(model => model._saletype, "", new { @class = "text-danger" })
+                            @*@Html.ValidationMessageFor(m => m._saletype, "", new { @class = "text-danger" })*@
                         </div>
                     </div>
                 </div>
@@ -304,7 +126,7 @@
                             <!-- <h5>Description</h5> -->
                             <!-- <p><span class="fbold product-name">Buddha</span> <span class="fregular product-info">Sitting Buddha</span></p> -->
                             <ul>
-                                <li class="mar-r-5"><p class="pad-r-0"><span class="product-name fbold" id="itemcategory"> </span><span class="fregular" id="itemname"> </span><span class="divide">/</span><span class="fbold" id="itemsize"></span><span class="divide">/</span><span class="fbold" id="itemstone"></span><span class="divide">/</span><span class="fbold" id="itemcolor"></span></p></li>
+                                <li class="mar-r-5"><p class="pad-r-0"><span class="fregular" id="itemname" style="font-size:medium;"> </span></p></li>
 
 
                             </ul>
@@ -375,12 +197,15 @@
 
                             <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
                             <input type="hidden" asp-for="orderid" />
+                            <input type="hidden" asp-for="elephantid" />
+                            <input type="hidden" asp-for="billid" />
+                          
                         </div>
 
                     </div>
 
                     <div class="col-lg-3 text-right col-md-3 col-sm-3 col-xs-6 col-6">
-                        <button id="saveitem" onclick="return checkitem();" class="btn-blue">Add Item</button>
+                        <button id="saveitem"  class="btn-blue">Add Item</button>
                     </div>
                 </div>
                 }
@@ -389,7 +214,7 @@
     </div>
 </div>
 <div id="CSale" style="display:none">
-    @using (Html.BeginForm("AddCustomSale", "AddSale", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("AddCustomSale", "AddSale", FormMethod.Post, new { enctype = "multipart/form-data",onsubmit = "showLoader(this);" }))
     {
     @Html.AntiForgeryToken()
 
@@ -402,10 +227,10 @@
                 <div class="row">
 
                     <!--  <div class="col-lg-12 hide-desktop text-right">
-                      <div class="scanner-image">
-                        <img src="img/scan.png"/>
-                      </div>
-                    </div> -->
+          <div class="scanner-image">
+            <img src="img/scan.png"/>
+          </div>
+        </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4">
                         <div>
                             <div class=" main-photo-container">
@@ -441,14 +266,14 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
                                     <label for="inputState">Category</label>
-                                    @Html.DropDownListFor(model => model.categoryid, Model.categorydetails as IEnumerable<SelectListItem>, "Select",new{ onchange = "category_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
+                                    @Html.DropDownListFor(model => model.categoryid, Model.categorydetails as IEnumerable<SelectListItem>, "Select", new { onchange = "category_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
                                     @Html.ValidationMessageFor(model => model.categoryid, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
                                     <label for="inputState">Shape</label>
-                                    @Html.DropDownListFor(model => model.shapeid, Model.shapesdetails as IEnumerable<SelectListItem>, "Select",new { onchange = "shape_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new {  required = "required" } })
+                                    @Html.DropDownListFor(model => model.shapeid, Model.shapesdetails as IEnumerable<SelectListItem>, "Select", new { onchange = "shape_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
                                     @Html.ValidationMessageFor(model => model.shapeid, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -463,7 +288,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
                                     <label for="inputState">Marble Colour</label>
-                                    @Html.DropDownListFor(model => model.marblecolor, Model.marblecolordetails as IEnumerable<SelectListItem>, "Select",new { onchange = "marblecolor_SelectedIndexChanged()", @class = "form-control", htmlAttributes= new { required = "required" } })
+                                    @Html.DropDownListFor(model => model.marblecolor, Model.marblecolordetails as IEnumerable<SelectListItem>, "Select", new { onchange = "marblecolor_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
                                     @Html.ValidationMessageFor(model => model.marblecolor, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -476,7 +301,7 @@
                 <div class="row mar-b-10">
                     <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-6 col-6">
                         <label for="inputState">Fx</label>
-                        @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", new { onchange = "curr_SelectedIndexChanged()", @class = "form-control", htmlAttributes= new { required = "required" } })
+                        @Html.DropDownListFor(model => model.currencyid, Model.currencydetails as IEnumerable<SelectListItem>, "Select", new { onchange = "curr_SelectedIndexChanged()", @class = "form-control", htmlAttributes = new { required = "required" } })
                         @Html.ValidationMessageFor(model => model.currencyid, "", new { @class = "text-danger" })
 
                     </div>
@@ -490,11 +315,12 @@
                     <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-6 col-6">
                         @*<input asp-for="conversionrate" type="number" min="0" step="0.1" required placeholder="Enter....." />*@
                         @Html.LabelFor(model => model.totalvalue)
-                        @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "0", step = "1", @class = "form-control", required = "required", placeholder = "Enter ..." })
+                        <div class="total-inra">
+                            @Html.TextBoxFor(model => model.totalvalue, new { type = "number", min = "0", step = "1", @class = "form-control", required = "required", placeholder = "Enter ..." })
+                        </div>
                         @Html.ValidationMessageFor(model => model.totalvalue, "", new { @class = "text-danger" })
 
-                        <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
-                        <input type="hidden" asp-for="orderid" />
+
 
                     </div>
 
@@ -502,6 +328,9 @@
                         <button class="btn-blue">Add</button>
                     </div>
                 </div>
+                <input type="hidden" id="hdntotal" value="@Model.totalvalue" />
+                <input type="hidden" asp-for="orderid" />
+                <input type="hidden" asp-for="billid" />
             </div>
         </div>
     </div>
@@ -558,7 +387,7 @@
                                 }
                                 }
                             </p>
-                            <p class="table-description-item">@Html.DisplayFor(modelItem => item.itemdesc)</p>
+                            <p class="table-description-item" style="text-transform:capitalize">@Html.DisplayFor(modelItem => item.itemdesc)</p>
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.symbol)&nbsp; @Html.DisplayFor(modelItem => item.salevalue)</td>
                         <td><i class="las la-rupee-sign"></i> @Html.DisplayFor(modelItem => item.salevalueinr)</td>
@@ -619,7 +448,13 @@
 
 
     <div class="col-lg-12 text-right">
-        <p class="grand-total"><span class="fregular head">Grand Total:</span> <span class="fbold val"><i class="las la-rupee-sign"> @Html.DisplayFor(model => model.grandtotal)</i></span></p>
+        <p class="grand-total"><span class="fregular head">Grand Total:</span> <span class="fbold val"> @Html.DisplayFor(model => model.grandtotal)</span></p>
+        @*<input type="hidden" id="hdngrand" value="@Model.grandtotal" />*@
+        @if (Model.grandtotal > 0)
+{
+        <p class="info-txt"><!-- <i class="las la-info"></i>  -->Swipe Card Now !!</p>
+
+        }
     </div>
 
 
@@ -633,7 +468,6 @@
 </div>
 
 
-<script src="https://103.48.50.253/sale/instascan_cdn.min.js"></script>
 @*<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js" rel="nofollow"></script>*@
 <script type="text/javascript">
     function category_SelectedIndexChanged() {
@@ -641,31 +475,33 @@
     }
     function shape_SelectedIndexChanged() {
         $('#marblecolor').focus();
-       
+
     }
     function marblecolor_SelectedIndexChanged() {
         $('#currencyid').focus();
-       
+
     }
     function curr_SelectedIndexChanged() {
         $('#conversionrate').focus();
-       
+
     }
     function SelectedIndexChanged() {
         $('#conversionrate').focus();
     }
     function showcamera() {
-        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+        let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
         scanner.addListener('scan', function (content) {
             //  console.log(content);
-            $('#StockNumber').val(content);
+            $('#stockno').val(content);
             scanner.stop();
             $('#preview').hide();
-            $('#StockNumber').focus();
+            $('#stockno').focus();
         });
         Instascan.Camera.getCameras().then(function (cameras) {
             if (cameras.length > 0) {
                 scanner.start(cameras[1]);
+                cameras.setDisplayOrientation(90);
+
             } else {
                 console.error('No cameras found.');
             }
@@ -673,80 +509,58 @@
             console.error(e);
         });
     }
-    //var scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 5, mirror: false });
-    //scanner.addListener('scan', function (content) {
-    //    $('#StockNumber').val(content);
-    //    scanner.stop();
-    //    scanner.hide();
-
-    //    //window.location.href=content;
-    //});
-    //Instascan.Camera.getCameras().then(function (cameras) {
-    //    if (cameras.length > 0) {
-    //        scanner.start(cameras[0]);
-    //        //if (cameras[0] != "") {
-    //        //    scanner.start(cameras[0]);
-    //        //} else {
-    //        //    alert('No Front camera found!');
-    //        //}
-    //        //if (cameras[1] != "") {
-    //        //    scanner.start(cameras[1]);
-    //        //} else {
-    //        //    alert('No Back camera found!');
-    //        //}
-    //        //$('[name="options"]').on('change', function () {
-    //        //    if ($(this).val() == 1) {
-    //        //        if (cameras[0] != "") {
-    //        //            scanner.start(cameras[0]);
-    //        //        } else {
-    //        //            alert('No Front camera found!');
-    //        //        }
-    //        //    } else if ($(this).val() == 2) {
-    //        //        if (cameras[1] != "") {
-    //        //            scanner.start(cameras[1]);
-    //        //        } else {
-    //        //            alert('No Back camera found!');
-    //        //        }
-    //        //    }
-    //        //});
-    //    } else {
-    //        console.error('No Back cameras found.');
-    //        alert('No cameras found.');
-    //    }
-    //}).catch(function (e) {
-    //    console.error(e);
-    //    alert(e);
-    //  });
+   
 </script>
 <script type="text/javascript">
 
 
     $(document).ready(function () {
-        $("StockNumber").focus(function () {
+        //debugger;
+        //var total = Number($("hdngrand")).toLocaleString('en');
+
+        //$("hdngrand").val(total);
+        $("stockno").focus(function () {
             //code code and more code
         }).blur();
         //$('#saveitem').click(function () {
         //    debugger;
         //    if (checkitem()) {
-        //        $('#addsale').submit();
+        //        $('#formaddsale').submit();
         //    }
+        //    else {alert('Please select sale type')}
 
         //});
+        //$("#CSale").hide();
+        //$("#NSale").show();
+        //$("#qrcodearea").hide();
+        //$("#camfile").hide();
+        //$("#preview").hide();
+        //$("#backtocustomsale").hide();
+        //$("#normalsale").click(function () {
+        //    $("#camfile").trigger('click');
+        //});
+    });
+
+    $("#customsale").click(function () {
+        $("#CSale").show();
+        $("#backtocustomsale").show();
+        $("#customsale").hide();
+        $("#NSale").hide();
+        $("#NSale").hide();
+        $("#qrcodearea").hide();
+        $("#preview").hide();
+    });
+    $("#backtocustomsale").click(function () {
         $("#CSale").hide();
         $("#NSale").show();
         $("#qrcodearea").hide();
         $("#camfile").hide();
         $("#preview").hide();
+        $("#backtocustomsale").hide();
+        $("#customsale").show();
         $("#normalsale").click(function () {
             $("#camfile").trigger('click');
         });
-    });
-
-    $("#customsale").click(function () {
-        $("#CSale").show();
-        $("#NSale").hide();
-        $("#qrcodearea").hide();
-        $("#preview").hide();
     });
     $("#normalsale").click(function () {
         $("#CSale").hide();
@@ -756,13 +570,12 @@
         showcamera();
     });
     function checkitem() {
-        var oid = $('#hdntotal').val();
-        if (oid == '') {
-
-            alert("Please enter Stock Details,Before Adding.");
-            return false;
+        debugger;
+        if (($("#OrderForm").prop("checked")) || ($("#CashMemo").prop("checked")))
+        {
+            return true;
         }
         else
-            return true;
+            return false;
     }
 </script>

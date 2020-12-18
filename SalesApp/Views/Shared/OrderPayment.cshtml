@@ -6,11 +6,6 @@
 }
 <div class="main-container">
     <div class="container-bg clearfix">
-
-
-
-       
-
         <div class="container-fluid customer-info-form">
 
             @using (Html.BeginForm("AddOrderPayment", "CustomSale", FormMethod.Post, new { id = "paymentinfo" }))
@@ -39,7 +34,7 @@
                                 </div>
                                 <div class="inputGroup">
                                     @Html.RadioButtonFor(model => model._paymethod, paymethod.Later, new { @name = "radio", @type = "radio", @id = "radio4", onclick = "paylater();" })
-                                    @*<input id="radio4" name="radio" type="radio" onclick="paylater();">*@,
+                                    @*<input id="radio4" name="radio" type="radio" onclick="paylater();">*@
                                     <label for="radio4">Pay Later</label>
                                 </div>
 
@@ -54,7 +49,7 @@
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12 summary-container">
-                        <div class="">
+                        <div style="padding-bottom:136px;">
                             <!-- <p><span class="fbold fdark conversion-head">Conversion Rate:</span> <span class="fbold conversion-val">USD 76</span></p> -->
                             <p><span class="fbold fdark conversion-head">Balance:</span> <span class="fbold conversion-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.balinr)/@Html.DisplayFor(model => model.currsymbol)@Html.DisplayFor(model => model.balcurrency)</span></p>
                             <p><span class="fbold fdark grand-total-head">Grand Total:</span> <span class="fbold grand-total-val"><i class="las la-rupee-sign"></i> @Html.DisplayFor(model => model.grandtotalinr)/@Html.DisplayFor(model => model.currsymbol)/@Html.DisplayFor(model => model.grandtotalcurrency)</span></p>

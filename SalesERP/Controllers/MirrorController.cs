@@ -10,6 +10,8 @@ using SALEERP.Repository.Interface;
 using System.Web.Http;
 using SALEERP.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace SALEERP.Controllers
 {
@@ -19,12 +21,14 @@ namespace SALEERP.Controllers
         ICommonRepository _comm;
         ISearchRepository _srch;
         private Sales_ERPContext _DBERP;
-        public MirrorController(IMirrorRepository _seriesrepo, ICommonRepository comm,ISearchRepository _search, Sales_ERPContext dbcontext)
+        public IConfiguration Configuration { get; }
+        public MirrorController(IMirrorRepository _seriesrepo, ICommonRepository comm,ISearchRepository _search, Sales_ERPContext dbcontext, IConfiguration _config)
         {
             this._mir = _seriesrepo;
             this._comm = comm;
             this._srch = _search;
             this._DBERP = dbcontext;
+            this.Configuration = _config;
         }
         public async Task<IActionResult> Index()
         {
@@ -35,6 +39,29 @@ namespace SALEERP.Controllers
         public async Task<IActionResult> Add(MirrorDetailsVM _details)
         {
             MirrorDetailsVM _allmirror = new MirrorDetailsVM();
+            var addlist = Dns.GetHostEntry(Dns.GetHostName());
+            string unit1ip = Configuration.GetSection("IPSettings").GetSection("UNIT1").Value;
+            string unit2ip = Configuration.GetSection("IPSettings").GetSection("UNIT2").Value;
+            string unit12ip = Configuration.GetSection("IPSettings").GetSection("UNIT21").Value;
+            string unit21ip = Configuration.GetSection("IPSettings").GetSection("UNIT12").Value;
+            //   string GetHostName = addlist.HostName.ToString();
+            // string GetIPV6 = addlist.AddressList[0].ToString();
+            string clientIP = addlist.AddressList[1].ToString();
+
+
+          
+            if (unit1ip == clientIP || unit12ip==clientIP)
+            {
+                _details.UnitId = 2;
+
+            }
+            else if (unit2ip == clientIP || unit21ip == clientIP)
+            {
+                _details.UnitId = 2;
+
+            }
+            else
+            { _details.UnitId = 1; }
             try
             {
             string userid = HttpContext.User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.PrimarySid)
@@ -284,6 +311,24 @@ namespace SALEERP.Controllers
             {
                 return null;
             }
+        }
+
+        public ActionResult GetMirrorDeleted(int id)
+        {
+            bool result;
+            if (ModelState.IsValid)
+            {
+                string userid = HttpContext.User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.PrimarySid)
+                   .Select(c => c.Value).SingleOrDefault();
+                result = this._mir.DeleteMirror(id,Convert.ToInt32(userid));
+                if (!result)
+                {
+                    ModelState.AddModelError(string.Empty, "Mirrorid not found!Contact Administrator");
+                }
+
+            }
+            //return View(staff);
+            return RedirectToAction("Index", _mir.getAllMirrors());
         }
 
         public int GenerateRandomNo()

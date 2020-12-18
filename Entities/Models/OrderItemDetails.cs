@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SALEERP.Models
 {
@@ -9,11 +10,14 @@ namespace SALEERP.Models
         public string TransId { get; set; }
         public string StockId { get; set; }
         public long? OrderId { get; set; }
+        public long BillId { get; set; }
         public int? OrderType { get; set; }
         public string OrderTypePrefix { get; set; }
+        public string CustomSpecialAddition { get; set; }
         public int? SaleType { get; set; }
         public int? Qty { get; set; }
         public int? CurrencyType { get; set; }
+      
         public decimal? Price { get; set; }
         public decimal? PriceInr { get; set; }
         public decimal? ConversionRate { get; set; }

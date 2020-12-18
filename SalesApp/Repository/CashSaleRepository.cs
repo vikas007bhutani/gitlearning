@@ -52,7 +52,7 @@ namespace SalesApp.Repository
 
         #region Add Sale, Delete Sale, Finish Sale Region
         //#To DO:Remove Hard coded values and fetch from DB/Enums
-        public async Task<Int64> AddCashSale([Bind("orderid")] CashSaleVM _sale, int userid)
+        public async Task<Int64> AddCashSale([Bind("orderid,elephantid")] CashSaleVM _sale, int userid)
         {
             bool result = false, innerresult = false;
             long uid = 0;
@@ -63,9 +63,13 @@ namespace SalesApp.Repository
             {
                 using (var dbusertrans = await this._SALESDBE.Database.BeginTransactionAsync().ConfigureAwait(false))
                 {
-                    var entitystock = await this._SALESDBE.OrderItemDetails.FirstOrDefaultAsync(i => i.StockId == _sale.stockno && i.IsActive==true).ConfigureAwait(false);
-                    if (entitystock == null )
+                    if (!string.IsNullOrEmpty(_sale.elephantid))
                     {
+                        _sale.stockno = _sale.elephantid;
+                    }
+                    var entitystock = await this._SALESDBE.OrderItemDetails.FirstOrDefaultAsync(i => i.StockId == _sale.stockno && i.IsActive==true).ConfigureAwait(false);
+                    //if (entitystock == null )
+                    //{
                         var entityorder = await this._SALESDBE.OrderMaster.FirstOrDefaultAsync(i => i.Id == _sale.orderid).ConfigureAwait(false);
                         INRvalue = Math.Round((decimal)(_sale.totalvalue * _sale.conversionrate), MidpointRounding.AwayFromZero);
                         if (INRvalue > 10)
@@ -140,18 +144,28 @@ namespace SalesApp.Repository
                             }).ConfigureAwait(false);
                             result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
                             long oid = await this._SALESDBE.OrderItemDetails.MaxAsync(p => p.Id).ConfigureAwait(false);
-                            foreach (var item in _sale.specialadditions)
+                            //foreach (var item in _sale.specialadditions)
+                            //{
+                            //    if (item.Selected)
+                            //    {
+                            //        if (item != null)
+                            //        {
+                            //            await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
+                            //            innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                            //        }
+                            //    }
+                            //}
+                            var entitycarpet = await _SALESDBE.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == _sale.stockno).ConfigureAwait(false);
+                            if (entitycarpet != null && entitycarpet.StockNo > 0)
                             {
-                                if (item.Selected)
-                                {
-                                    if (item != null)
-                                    {
-                                        await this._SALESDBE.SpecialAdditionDetails.AddAsync(new SpecialAdditionDetails() { OrderItemId = oid, SpecialAdditionDesc = item.Text, SpecialAdditionId = Convert.ToInt32(item.Value), CreatedBy = userid, CreatedDatetime = DateTime.Now, IsActive = true }).ConfigureAwait(false);
-                                        innerresult = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
-                                    }
-                                }
+                                entitycarpet.PackDate = DateTime.Now;
+                                entitycarpet.Pack = 2;
+                                entitycarpet.PackSource = "SALEADDED";
+                                entitycarpet.PackingDetailId = (Int32)oid;
+                             //   entitycarpet.PackingId = (Int32)item.OrderId;
+                                this._SALESDBE.CarpetNumber.Update(entitycarpet);
+                                result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
                             }
-
                             if (oid > 0)
                             {
                                 await dbusertrans.CommitAsync().ConfigureAwait(false);
@@ -161,8 +175,8 @@ namespace SalesApp.Repository
 
 
                         }
-                    }
-                    else { return -1; }
+                    //}
+                    //else { return -1; }
                 }
             }
             catch (Exception ex)
@@ -313,7 +327,7 @@ namespace SalesApp.Repository
                                                           currency = curr.Type
 
 
-                                                      }).ToListAsync();
+                                                      }).OrderByDescending(a=>a.itemorderid).ToListAsync();
 
 
             _cash.currencydetails = await _comm.GetCurrency();
@@ -328,7 +342,7 @@ namespace SalesApp.Repository
           //  _cash.stockno = string.Empty;
             _cash.grandtotal = 0;
 
-
+            string stockno = string.Empty;
             if (_cash.cashsaledetails.Count > 0)
             {
                 _cash.mirrorid = _cash.cashsaledetails[0].mirrorid;
@@ -340,9 +354,20 @@ namespace SalesApp.Repository
                     _cash.itemcount = _cash.cashsaledetails.Count();
 
                     _cash.grandtotal = _cash.cashsaledetails.Sum(s => s.salevalueinr);
-                    //_cash.stockno = _cash.cashsaledetails.OrderByDescending(a => a.itemorderid).FirstOrDefault().stockid;
-                    //_cash.item_desc = _cash.cashsaledetails.OrderByDescending(a => a.itemorderid).FirstOrDefault().itemdesc;
-                }
+                    // _cash.item_desc = _cash.cashsaledetails.AsEnumerable().Where(a => a.stockid == stockno).FirstOrDefault().itemdesc;
+                    _cash.item_desc = _cash.cashsaledetails[0].itemdesc;
+                    stockno = _cash.cashsaledetails.OrderByDescending(a => a.itemorderid).FirstOrDefault().stockid;
+                    if (stockno.Substring(0, 2) == "EG" || stockno.Substring(0, 2) == "EW")
+                    {
+                        _cash.stockno = stockno.Substring(0, 2);
+                    }
+                    else
+                    {
+                        _cash.stockno = stockno;
+                    }
+                     //   _cash.stockno = _cash.cashsaledetails.OrderByDescending(a => a.itemorderid).FirstOrDefault().stockid;
+                        //_cash.item_desc = _cash.cashsaledetails.OrderByDescending(a => a.itemorderid).FirstOrDefault().itemdesc;
+                    }
                
             }
             else {
@@ -358,22 +383,49 @@ namespace SalesApp.Repository
             List<StockDetailVM> _list;
             try
             {
-                _list = await (from c in this._ERPDB.CarpetNumber
-                               join vf in this._ERPDB.V_FinishedItemDetail
-                               on c.item_finished_id equals vf.ITEM_FINISHED_ID
-                               where c.TStockNo == stockid && c.Pack==0
-                               select new StockDetailVM
-                               {
-                                   stockid = c.TStockNo,
-                                   category = vf.CATEGORY_NAME,
-                                   itemname = vf.ITEM_NAME,
-                                   marblecolor = vf.MARBLECOLOR,
-                                   price = c.Price,
-                                   size = vf.SizeInch+"x"+Convert.ToString(vf.HeightInch),
-                                   marblestone = vf.MARBLETYPE
+                if (stockid.ToUpper() == "EW" || stockid.ToUpper() == "EG")
+                {
+                    _list = await (from c in this._ERPDB.CarpetNumber
+                                   join vf in this._ERPDB.V_FinishedItemDetail
+                                   on c.item_finished_id equals vf.ITEM_FINISHED_ID
+                                   where c.Prefix == stockid && c.Pack == 0
+                                   select new StockDetailVM
+                                   {
+                                       stockid = c.TStockNo,
+                                       category = vf.CATEGORY_NAME,
+                                       marblecolor = vf.MARBLECOLOR,
+                                       size = Convert.ToString(vf.HeightInch) + "''",
+                                   }).ToListAsync();
+                    if (_list != null)
+                    {
+                        if (_list.Count > 0)
+                        {
+                            _list = _list.Take(1).ToList();
+                        }
+                        
+                    }
+                   
+
+                }
+                else
+                {
+                    _list = await (from c in this._ERPDB.CarpetNumber
+                                   join vf in this._ERPDB.V_FinishedItemDetail
+                                   on c.item_finished_id equals vf.ITEM_FINISHED_ID
+                                   where c.TStockNo == stockid && c.Pack == 0
+                                   select new StockDetailVM
+                                   {
+                                       stockid = c.TStockNo,
+                                       category = vf.CATEGORY_NAME,
+                                       itemname = vf.ITEM_NAME,
+                                       marblecolor = vf.MARBLECOLOR,
+                                       price = c.Price,
+                                       size = vf.SizeInch + "x" + Convert.ToString(vf.HeightInch),
+                                       marblestone = vf.MARBLETYPE
 
 
-                               }).ToListAsync();
+                                   }).ToListAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -491,39 +543,39 @@ namespace SalesApp.Repository
                     if (result)
                     {
                         
-                        var query = _cashsaledetails.cashsaledetails;
-                        foreach (var data in query)
-                        {
-                            var entitystock = await this._SALESDBE.CarpetNumber.FirstOrDefaultAsync(i => i.TStockNo == data.stockid).ConfigureAwait(false);
-                            if (entitystock != null && entitystock.StockNo > 0)
-                            {
-                                entitystock.Pack = 1;
-                                entitystock.PackDate = DateTime.Now;
-                                entitystock.PackingDetailId = orderItemId;
-                                entitystock.PackSource = "SALES";
-                                entitystock.Userid = userid;
-                                this._SALESDBE.CarpetNumber.Update(entitystock);
-                             //   result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        //var query = _cashsaledetails.cashsaledetails;
+                        //foreach (var data in query)
+                        //{
+                        //    var entitystock = await this._SALESDBE.CarpetNumber.FirstOrDefaultAsync(i => i.TStockNo == data.stockid).ConfigureAwait(false);
+                        //    if (entitystock != null && entitystock.StockNo > 0)
+                        //    {
+                        //        entitystock.Pack = 1;
+                        //        entitystock.PackDate = DateTime.Now;
+                        //        entitystock.PackingDetailId = orderItemId;
+                        //        entitystock.PackSource = "SALES";
+                        //        entitystock.Userid = userid;
+                        //        this._SALESDBE.CarpetNumber.Update(entitystock);
+                        //     //   result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
 
-                                //   uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
-                            }
-                            await this._SALESDBE.Directstockpack.AddAsync(new Directstockpack()
-                            {
-                                Stockno = entitystock.StockNo,
-                                Remark = "SALES",
-                                Dateadded = DateTime.Now,
-                            }).ConfigureAwait(false);
-                            result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        //        //   uid = await this._SALESDBE.OrderMaster.MaxAsync(p => p.Id).ConfigureAwait(false);
+                        //    }
+                        //    await this._SALESDBE.Directstockpack.AddAsync(new Directstockpack()
+                        //    {
+                        //        Stockno = entitystock.StockNo,
+                        //        Remark = "SALES",
+                        //        Dateadded = DateTime.Now,
+                        //    }).ConfigureAwait(false);
+                        //    result = await this._SALESDBE.SaveChangesAsync().ConfigureAwait(false) > 0;
 
                            
 
-                        }
+                        //}
 
-                        if (result)
-                        {
+                        //if (result)
+                        //{
                             await dbusertrans.CommitAsync().ConfigureAwait(false);
-                        }
-                        else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
+                        //}
+                        //else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }
 
                     }
                     else { await dbusertrans.RollbackAsync().ConfigureAwait(false); }

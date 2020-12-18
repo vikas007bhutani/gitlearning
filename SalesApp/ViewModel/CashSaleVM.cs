@@ -20,6 +20,7 @@ namespace SalesApp.ViewModel
         public int  specialaddition { get; set; }
         public string customspecialaddition { get; set; }
         public string stockno { get; set; }
+        public string elephantid { get; set; }
         public string currsymbol { get; set; }
         public string item_desc { get; set; }
         [DisplayName("Conv. Rate")]
@@ -27,8 +28,10 @@ namespace SalesApp.ViewModel
         public int currencyid { get; set; }
         public int quantity { get; set; }
         public int sale_type { get; set; }
-        [DisplayName("Sale Value(Fx)")]
+        [DisplayName("Sale Value")]
         public decimal? totalvalue { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal? grandtotal { get; set; }
         public int userid { get; set; }
         public int itemcount { get; set; }
@@ -52,9 +55,9 @@ namespace SalesApp.ViewModel
         public string symbol { get; set; }
         public string stockid { get; set; }
         public string itemdesc { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? salevalue { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? salevalueinr { get; set; }
         public long mirrorid { get; set; }
 

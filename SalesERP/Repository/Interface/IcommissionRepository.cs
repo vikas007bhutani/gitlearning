@@ -13,7 +13,7 @@ namespace SALEERP.Repository.Interface
         CommissionVM getAllMirorforCommission(CommissionVM cm);
         CommissionVM Init_commission();
         PayCommissionVM Init_paycommission();
-        CommissionVM EditCommission(Int64 uid);
+        CommissionVM EditCommission(Int64 uid,decimal gst,decimal card);
         bool AddCommission(CommissionVM _comm, int userid);
         PayCommissionVM getAllAgentCommission(PayCommissionVM pcm);
         PayCommissionVM PayCommission(Int64 uid);

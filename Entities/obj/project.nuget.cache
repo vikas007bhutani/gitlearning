@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Vr57xgGhM+087Lz8KfmWhTvhHw3h0NWKavIk8RtkgK7KM2wH6Si7XvAgEO2cqVr5BsALOgAPcflg0nhrWMpYrg==",
+  "dgSpecHash": "18xS565VpoQo+l9XQ/Zg5M5tRvh5Km5Hyr84qLEJfmbhMxuMALroURw7ei5BQ874JHVNzB+rzcdBNCBe78ubeg==",
   "success": true,
   "projectFilePath": "G:\\enableIT\\SALEERP_OLD\\SALEERP\\Entities\\Entities.csproj",
   "expectedPackageFiles": [
@@ -91,8 +91,7 @@
     "C:\\Users\\dell\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\dell\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\dell\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\dell\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
-    "C:\\Users\\dell\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+    "C:\\Users\\dell\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }

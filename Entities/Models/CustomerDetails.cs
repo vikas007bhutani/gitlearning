@@ -7,6 +7,7 @@ namespace SALEERP.Models
     {
         public long Id { get; set; }
         public long? OrderId { get; set; }
+        public long BillId { get; set; }
         public string Title { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }

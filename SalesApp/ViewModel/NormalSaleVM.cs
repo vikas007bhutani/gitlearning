@@ -15,23 +15,29 @@ namespace SalesApp.ViewModel
 
         public long mirrorid { get; set; }
         public long? orderid { get; set; }
+        public long billid { get; set; }
+        public long standbillid { get; set; }
         public long standorderid { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? mirrordate { get; set; }
         public int specialaddition { get; set; }
-        [DisplayFormat(DataFormatString = "{0:G29}")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        // [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? balinr { get; set; }
         public decimal? balcurrency { get; set; }
-        [DisplayFormat(DataFormatString = "{0:G29}")]
-
+        //  [DisplayFormat(DataFormatString = "{0:G29}")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal? grandtotalinr { get; set; }
-        [DisplayFormat(DataFormatString = "{0:G29}")]
+        // [DisplayFormat(DataFormatString = "{0:G29}")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal? grandtotalinrCM { get; set; }
-        [DisplayFormat(DataFormatString = "{0:G29}")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        // [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? grandtotalinrOF { get; set; }
         public decimal? grandtotalcurrency { get; set; }
         public string customspecialaddition { get; set; }
         public string currsymbol { get; set; }
+        public string elephantid { get; set; }
         public string passport { get; set; }
         [Required]
         public string stockno { get; set; }
@@ -47,10 +53,10 @@ namespace SalesApp.ViewModel
         public int paylaterid { get; set; }
         public int quantity { get; set; }
         public int title_type { get; set; }
-        [DisplayName("Sale Value (Fx)")]
+        [DisplayName("Sale Value")]
         public decimal? totalvalue { get; set; }
         public decimal totalvalueinr { get; set; }
-        [DisplayFormat(DataFormatString = "{0:G29}")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal? grandtotal { get; set; }
         public int userid { get; set; }
         public string shapeid { get; set; }
@@ -67,13 +73,16 @@ namespace SalesApp.ViewModel
         public string standsaletype { get; set; }
 
         public int itemcount { get; set; }
+        public int unitid { get; set; }
         public int? saletype { get; set; }
 
         public string width { get; set; }
         public string height { get; set; }
         public string size { get; set; }
+        public string DelieveryTypeName { get; set; }
+        public string PortTypeName { get; set; }
         //  public string username { get; set; }
-
+        public string IPaddress { get; set; }
         public List<Ncashsaledetails> cashsaledetails { get; set; }
         public List<Ncashsaledetails> cashsaledetailsCM { get; set; }
 
@@ -94,10 +103,12 @@ namespace SalesApp.ViewModel
         public List<SelectListItem> categorydetails { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> marblecolordetails { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> standcolordetails { get; set; } = new List<SelectListItem>();
+
         public List<SelectListItem> sizeinwidth { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> sizeinheight { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> standcategory { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> countrydetails { get; set; } = new List<SelectListItem>();
+        public List<NspecialAddition> spaddition { get; set; }
         public List<SelectListItem> specialadditions { get; set; } = new List<SelectListItem>();
         //public List<SelectListItem> specialadditions { get; set; } = new List<SelectListItem>();
         public TitleType _titletype { get; set; }
@@ -143,18 +154,22 @@ namespace SalesApp.ViewModel
     {
         public long itemorderid { get; set; }
         public long orderid { get; set; }
+        public long billid { get; set; }
         public string ordertype { get; set; }
         public string symbol { get; set; }
         public string stockid { get; set; }
         public string itemdesc { get; set; }
+        public string additiondesc { get; set; }
         public long InvoiceID { get; set; }
+        [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? salevalue { get; set; }
         [DisplayFormat(DataFormatString = "{0:G29}")]
         public decimal? salevalueinr { get; set; }
         public long mirrorid { get; set; }
         public int unitid { get; set; }
         public int? saletype { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime? orderdate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? mirrordate { get; set; }
@@ -177,6 +192,7 @@ namespace SalesApp.ViewModel
         public string width { get; set; }
 
         public string height { get; set; }
+        public long standbillid { get; set; }
 
     }
     public class Npaydetails
@@ -191,6 +207,7 @@ namespace SalesApp.ViewModel
         public string symbol { get; set; }
         public string mainsymbol { get; set; }
         public int currencyid { get; set; }
+        public int? paymodeid { get; set; }
 
     }
     public class Ncustomerinfo
@@ -215,27 +232,32 @@ namespace SalesApp.ViewModel
         public string Email { get; set; }
         public string PassportNo { get; set; }
         public string Airport { get; set; }
+        public int? titlevalue { get; set; }
+
 
     }
     public class Ndeliveryinfo
     {
         public string Passport { get; set; }
         public string PortName { get; set; }
-       // [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+
+
         [DataType(DataType.Date)]
-       
         public DateTime? DeliveryFrom { get; set; }
         [DataType(DataType.Date)]
-      
+
         public DateTime? DeliveryTo { get; set; }
         public int? DelieveryType { get; set; }
-      
+
+
         public int? PortType { get; set; }
+
     }
     public class Ncalucation
     {
         public long? mirrorid { get; set; }
         public long orderid { get; set; }
+        public long billid { get; set; }
         public long itemorderid { get; set; }
         public decimal? conversionrate { get; set; }
 
@@ -245,5 +267,10 @@ namespace SalesApp.ViewModel
 
         public decimal TotalAmountINR { get; set; }
 
+    }
+    public class NspecialAddition
+    {
+       
+        public string desc { get; set; }
     }
 }

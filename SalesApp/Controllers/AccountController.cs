@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using SalesApp.Repository.Interface;
 using SalesApp.ViewModel;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace SalesApp.Controllers
 {
@@ -16,10 +19,14 @@ namespace SalesApp.Controllers
        
             IAccountRepository _acc;
             ICommonRepository _comm;
-            public AccountController(IAccountRepository _accrepo, ICommonRepository comm)
+        private readonly ILogger _logger;
+        public IConfiguration Configuration { get; }
+        public AccountController(IAccountRepository _accrepo, ICommonRepository comm, IConfiguration _config, ILogger<AccountController> logger)
             {
                 this._acc = _accrepo;
                 this._comm = comm;
+                this.Configuration = _config;
+            this._logger = logger;
 
             }
             public async Task<IActionResult> Index()
@@ -45,7 +52,32 @@ namespace SalesApp.Controllers
                 int userid = 0;
                 try
                 {
-                    if (ModelState.IsValid)
+                var addlist = Dns.GetHostEntry(Dns.GetHostName());
+                var ip = HttpContext.Connection.RemoteIpAddress.ToString();
+                string unit1ip = Configuration.GetSection("IPSettings").GetSection("UNIT1").Value;
+                string unit2ip = Configuration.GetSection("IPSettings").GetSection("UNIT2").Value;
+                string unit12ip = Configuration.GetSection("IPSettings").GetSection("UNIT21").Value;
+                string unit21ip = Configuration.GetSection("IPSettings").GetSection("UNIT12").Value;
+                string GetHostName = addlist.AddressList.ToString();
+                // string GetIPV6 = addlist.AddressList[0].ToString();
+                string clientIP = ip.ToString();
+
+
+                _comm.SetLoggedIP(clientIP);
+                if (unit1ip == clientIP || unit12ip == clientIP)
+                {
+                    _comm.SetUnitId(1);
+
+                }
+                else if (unit2ip == clientIP || unit21ip == clientIP)
+                {
+                    _comm.SetUnitId(2);
+
+                }
+                else
+                { _comm.SetUnitId(1); }
+
+                if (ModelState.IsValid)
                     {
                         bool result = this._acc.ManageUser(_usr, out userid);
                         if (result)
