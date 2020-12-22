@@ -38,7 +38,7 @@ namespace SalesApp.Repository
                                 on sc.item_finished_id equals view.ITEM_FINISHED_ID into view
                                 from finish in view.DefaultIfEmpty()
 
-                                where m.IsActive == true && m.CreatedBy == userid && m.ItemType==1 
+                                where m.IsActive == true && m.CreatedBy == userid && m.ItemType==1 && master.salestatus==1
                                 select new itemprintdeatils
                                 {
                                     orderid = m.OrderId,
@@ -53,11 +53,11 @@ namespace SalesApp.Repository
                                 }).ToList().GroupBy(m => m.orderid)
     .Select(g => new itemprintdeatils
     {
-        orderid = g.Key,
+        orderid = g.FirstOrDefault().orderid,
         customername = g.FirstOrDefault().customername,
         stockvalue=g.Sum(a=>a.stockvalue),
         desc = g.Select(a=>a.stockdesc).ToList(),
-        bills=g.Select(a=>a.billdesc).Distinct().ToList(),
+        bills=g.Where(a=>a.billid>0).Select(a=>a.billdesc).Distinct().ToList(),
         unit= g.FirstOrDefault().unit,
         // p= g.Where(c => c.agentcode == "pi").SelectMany(a=>a.name).SingleOrDefault().ToString()
     }).ToList();

@@ -11,5 +11,6 @@ namespace SALEERP.Repository.Interface
    public interface ISaleRepository
     {
         SaleVM Init_commission();
+        CommissionVM getAllMirorforCommission(CommissionVM cm);
     }
 }

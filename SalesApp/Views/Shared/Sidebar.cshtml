@@ -1,7 +1,7 @@
 ﻿<nav id="sidebar">
     <div class="sidebar-header">
-        <a href="" class="big-logo"><img src=@Url.Content("~/img/big-logo.png") /></a>
-        <a href="" class="small-logo"><img src=@Url.Content("~/img/small-logo.png") /></a>
+        <a asp-action="Index" asp-controller="Mirror" class="big-logo"><img src=@Url.Content("~/img/big-logo.png") /></a>
+        <a asp-action="Index" asp-controller="Mirror" class="small-logo"><img src=@Url.Content("~/img/small-logo.png") /></a>
     </div>
 
     <div class="sidebar-content">
@@ -32,7 +32,7 @@
 
             </li>
             <li>
-                <a href="@Url.Action("Temp", "Edit")"><i class="las la-print"></i>Temp. Sale</a>
+                <a href="@Url.Action("Temp", "Edit")"><i class="las la-print"></i>Resume Sale</a>
 
             </li>
             <li>

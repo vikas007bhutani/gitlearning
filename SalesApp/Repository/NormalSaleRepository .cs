@@ -97,7 +97,6 @@ namespace SalesApp.Repository
                                     MirrorId = _sale.mirrorid,
                                     SaleDate = DateTime.Now,
                                     DelieveryType = 0,
-
                                     PortType = 0,
                                     Unit = 1,
                                     Description = "NormalSale",
@@ -105,7 +104,7 @@ namespace SalesApp.Repository
                                     CreatedDatetime = DateTime.Now,
                                     CreatedBy = userid,
                                     IsActive = true,
-                                    // salestatus = 1
+                                     salestatus = 0
 
                                 }).ConfigureAwait(false);
 
@@ -1416,7 +1415,7 @@ namespace SalesApp.Repository
                             TransactionId = Common.GetUnique(),
                             CreatedDatetime = DateTime.Now,
                             IsActive = true,
-                            //  salestatus = 1
+                            salestatus = 0
 
 
                         });

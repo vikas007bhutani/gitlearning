@@ -220,12 +220,13 @@
                         }
                         if (inputEmail != '') {
 
-                            if (IsEmail(inputEmail) == false) {
-                                $('#lblmsg').text('Invalid Email.');
-                                //   alert("Invalid Email.");
-                                $('#cinfo_Email').focus();
-                                return false;
-                            }
+                            //if (IsEmail(inputEmail) == false) {
+                            //    $('#lblmsg').text('Invalid Email.');
+                            //    //   alert("Invalid Email.");
+                            //    $('#cinfo_Email').focus();
+                            //    return false;
+                            //}
+                            $('#customerinfo').submit();
                         }
                         else { $('#customerinfo').submit(); }
 

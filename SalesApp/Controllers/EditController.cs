@@ -49,7 +49,7 @@ namespace SalesApp.Controllers
 
                 throw;
             }
-            return View("Index", _edt.getAllOrders());
+            return View("Temp", _edt.getAllTempOrders());
 
         }
     }

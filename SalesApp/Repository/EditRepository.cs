@@ -40,7 +40,7 @@ namespace SalesApp.Repository
                                 on sc.item_finished_id equals view.ITEM_FINISHED_ID into view
                                 from finish in view.DefaultIfEmpty()
 
-                                where m.IsActive == true && m.CreatedBy == userid && m.ItemType == 1 && m.BillId>0
+                                where m.IsActive == true && m.CreatedBy == userid && m.ItemType == 1 && master.salestatus == 1
                                 select new Edititemprintdeatils
                                 {
                                     orderid = m.OrderId,
@@ -59,7 +59,7 @@ namespace SalesApp.Repository
         customername = g.FirstOrDefault().customername,
         stockvalue = g.Sum(a => a.stockvalue),
         desc = g.Select(a => a.stockdesc).ToList(),
-        bills = g.Select(a => a.billdesc).Distinct().ToList(),
+        bills = g.Where(a => a.billid > 0).Select(a => a.billdesc).Distinct().ToList(),
         unit = g.FirstOrDefault().unit,
         // p= g.Where(c => c.agentcode == "pi").SelectMany(a=>a.name).SingleOrDefault().ToString()
     }).ToList();
@@ -84,7 +84,7 @@ namespace SalesApp.Repository
                                 on sc.item_finished_id equals view.ITEM_FINISHED_ID into view
                                 from finish in view.DefaultIfEmpty()
 
-                                where m.IsActive == true && m.CreatedBy == userid && m.ItemType == 1 && m.BillId==0
+                                where m.IsActive == true && m.CreatedBy == userid && m.ItemType == 1 && m.BillId==0 &&  master.salestatus==0
                                 select new Edititemprintdeatils
                                 {
                                     orderid = m.OrderId,
@@ -104,7 +104,7 @@ namespace SalesApp.Repository
         customername = g.FirstOrDefault().customername,
         stockvalue = g.Sum(a => a.stockvalue),
         desc = g.Select(a => a.stockdesc).ToList(),
-        bills = g.Select(a => a.billdesc).Distinct().ToList(),
+        bills = g.Where(a => a.billid > 0).Select(a => a.billdesc).Distinct().ToList(),
         unit = g.FirstOrDefault().unit,
         itemorderid= g.FirstOrDefault().itemorderid
         // p= g.Where(c => c.agentcode == "pi").SelectMany(a=>a.name).SingleOrDefault().ToString()
@@ -125,32 +125,64 @@ namespace SalesApp.Repository
                 {
 
 
-                    var entity = await _DBERP.OrderItemDetails.FirstOrDefaultAsync(item => item.Id == orderid).ConfigureAwait(false);
+                    var entity = await _DBERP.OrderItemDetails.FirstOrDefaultAsync(item => item.OrderId == orderid).ConfigureAwait(false);
+                    var entitymaster = await _DBERP.OrderMaster.FirstOrDefaultAsync(item => item.Id == orderid).ConfigureAwait(false);
 
                     if (entity != null)
                     {
 
-                        entity.CreatedDatetime = DateTime.Now;
+                        entity.UpdatedDatetime = DateTime.Now;
                         entity.IsActive = false;
                         entity.UpdatedBy = userid;
                         this._DBERP.OrderItemDetails.Update(entity);
                         innerresult = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
-
-                        if (entity.StockId != null || entity.StockId != "")
+                        if(entitymaster !=null)
                         {
-                            var entitycarpet = await _DBERP.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == entity.StockId).ConfigureAwait(false);
+
+                            entitymaster.UpdatedDatetime = DateTime.Now;
+                            entitymaster.IsActive = false;
+                            entitymaster.UpdatedBy = userid;
+                            this._DBERP.OrderMaster.Update(entitymaster);
+                            innerresult = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+
+                        }
+                        var entityorderitem = await _DBERP.OrderItemDetails.Where(item => item.OrderId == orderid).ToListAsync().ConfigureAwait(false);
+
+                        foreach (var item in entityorderitem)
+                        {
+                            var entitycarpet = await _DBERP.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == item.StockId).ConfigureAwait(false);
                             if (entitycarpet != null && entitycarpet.StockNo > 0)
                             {
                                 entitycarpet.PackDate = null;
                                 entitycarpet.Pack = 0;
                                 entitycarpet.PackSource = "";
                                 entitycarpet.PackingDetailId = 0;
-                                //   entitycarpet.PackingId = (Int32)item.OrderId;
                                 this._DBERP.CarpetNumber.Update(entitycarpet);
-                                innerresult = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                                //await this._DBERP.Directstockpack.AddAsync(new Directstockpack()
+                                //{
+                                //    Stockno = entitycarpet.StockNo,
+                                //    Remark = "SALES",
+                                //    Dateadded = DateTime.Now,
+                                //}).ConfigureAwait(false);
+                                //result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
                             }
                         }
-                        if (innerresult)
+                        //    if (entity.StockId != null || entity.StockId != "")
+                        //{
+                        //    var entitycarpet = await _DBERP.CarpetNumber.FirstOrDefaultAsync(c => c.TStockNo == entity.StockId).ConfigureAwait(false);
+                        //    if (entitycarpet != null && entitycarpet.StockNo > 0)
+                        //    {
+                        //        entitycarpet.PackDate = null;
+                        //        entitycarpet.Pack = 0;
+                        //        entitycarpet.PackSource = "";
+                        //        entitycarpet.PackingDetailId = 0;
+                        //        //   entitycarpet.PackingId = (Int32)item.OrderId;
+                        //        this._DBERP.CarpetNumber.Update(entitycarpet);
+                        //        result = await this._DBERP.SaveChangesAsync().ConfigureAwait(false) > 0;
+                        //    }
+                        //}
+                        if (result)
                         {
                             await dbusertrans.CommitAsync().ConfigureAwait(false);
                             _orderid = entity.OrderId;

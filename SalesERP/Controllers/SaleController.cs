@@ -56,5 +56,18 @@ namespace SALEERP.Controllers
             }
             return View(_salevm);
         }
+        public IActionResult GetMirror(string unitid, DateTime fromdate, DateTime Todate)
+        {
+            CommissionVM _filter = new CommissionVM();
+            _filter.unitid = Convert.ToInt16(unitid);
+            _filter.fromdate = fromdate.AddSeconds(1);
+            _filter.Todate = Todate.AddHours(23).AddMinutes(59).AddSeconds(59);
+            //string userid = HttpContext.User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.PrimarySid)
+            //      .Select(c => c.Value).SingleOrDefault();
+            //_agntusr.AddUser(_details, Convert.ToInt32(userid));
+
+            //_alluser = _agntusr.getAllAgentUsers();
+            return View("Index", _sale.getAllMirorforCommission(_filter));
+        }
     }
 }
