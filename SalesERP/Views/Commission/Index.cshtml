@@ -1,0 +1,312 @@
+﻿@model SALEERP.ViewModel.CommissionVM;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Add Commission";
+    if (this.ViewContext.FormContext == null)
+    {
+        this.ViewContext.FormContext = new FormContext();
+    }
+}
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card card-info">
+                        <div class="card-body">
+                            @using (Html.BeginForm("GetMirror", "Commission"))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <table id="dataTabledriver" class="">
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <input id="radio1" name="radio" type="radio" />
+                                                <label for="radio1" class="cm-lable">Add HD </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <input id="radio2" name="radio" type="radio" />
+                                                <label for="radio2" class="cm-lable">Add Commission</label>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="">
+                                            <div class="form-group">
+                                                <select asp-for="unitid" asp-items="Model.unitdetails" required class="form-control">
+                                                    <option value="">--Please select--</option>
+                                                </select>
+
+                                            </div>
+                                        </td>
+                                        <td class="">
+                                            <div class="form-group">
+                                                <label asp-for="fromdate" control-label"></label>
+                                                <input asp-for="fromdate" style="color:red" />
+                                                <span asp-validation-for="fromdate" class="text-danger"></span>
+                                            </div>
+                                        </td>
+                                        <td class="">
+                                            <div class="form-group">
+                                                <label asp-for="Todate" control-label"></label>
+                                                <input asp-for="Todate" style="color:red" />
+                                                <span asp-validation-for="Todate" class="text-danger"></span>
+                                            </div>
+                                        </td>
+                                        <td class="">
+                                            <div class="form-group">
+                                                <span class="input-group-append">
+
+                                                    <button type="submit" class="btn btn-info btn-flat" style="background-color:mediumseagreen;">Show</button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            }
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+                    @*<h3 class="card-title">DataTable with minimal features & hover style</h3>*@
+
+                    <div class="col-md-10">
+
+                    </div>
+                </div>
+                @*<div class="form-group">
+                       Agent Type
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.AgentDetails.FirstOrDefault().AgentCode , Model._agentuser as IEnumerable<SelectListItem>, "Select")
+                            @Html.ValidationMessageFor(model =>  model.AgentDetails.FirstOrDefault().AgentCode, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+                <form asp-page="/Pool" method="get" class="form-inline ml-3">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" name="searchstring" value="" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="card-body">
+                    <div class="text-center w-full p-t-25 p-b-80">
+                        <span class="text-danger">@Html.ValidationSummary(false)</span>
+                        <span asp-validation-summary="All" class="text-danger"></span>
+                        @*<a href="#" class="txt1">
+                                Forgot Username / Password?
+                            </a>*@
+                    </div>
+
+                    <div style="height: 200px; overflow: auto;">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+
+                                <tr style="background-color:aquamarine;">
+                                    <th>
+                                        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> @Html.DisplayNameFor(model => model.Mirrors.FirstOrDefault().mirrorid)</a>
+
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Mirrors.FirstOrDefault().mirrordate)
+                                    </th>
+                                    <th>
+                                        Unit
+                                    </th>
+                                    <th>
+                                        Principle
+                                    </th>
+                                    <th>
+                                        Driver
+                                    </th>
+                                    <th>
+                                        Escort
+                                    </th>
+                                    <th>
+                                        Guide
+                                    </th>
+                                    <th>
+                                        Team Lead
+                                    </th>
+                                    <th>
+                                        SaleValue
+                                    </th>
+                                </tr>
+
+                                @foreach (var item in Model.Mirrors)
+                                {
+                                    string p_names = string.Empty, d_names = string.Empty, e_names = string.Empty, t_names = string.Empty, g_names = string.Empty,tl_names=string.Empty;
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.mirrorid)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.mirrordate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Unit)
+                                </td>
+                                @*@foreach (var item1 in item.principle)
+                                {
+                                    p_names += item1.name + "," + item1.mob;
+
+                                }*@
+                            <td>
+                                @*@Html.Raw(p_names)*@
+                                @if (item.principle.Count > 0)
+                                {
+                                @Html.Raw(item.principle.FirstOrDefault().name)
+                                }
+                            </td>
+                                @*@foreach (var item1 in item.driver)
+                                {
+                                    d_names += item1.name + "," + item1.mob + "," + item1.vehicle + "," + item1.vehicleNo;
+
+                                }*@
+                            <td>
+                                @*@Html.Raw(d_names)*@
+                                @if (item.driver.Count > 0)
+                                {
+                                    @Html.Raw(item.driver.FirstOrDefault().name + "," + item.driver.FirstOrDefault().mob + "," + item.driver.FirstOrDefault().vehicle + "," + item.driver.FirstOrDefault().vehicleNo)
+                                }
+                                </td>
+                                @*@foreach (var item1 in item.excursion)
+                                {
+                                    e_names += item1.name + ",";
+
+                                }*@
+                            <td>
+                                @*@Html.Raw(e_names)*@
+                                @if (item.excursion.Count > 0)
+                                {
+                                    @Html.Raw(item.excursion.FirstOrDefault().name)
+                                }
+                                </td>
+                                @*@foreach (var item1 in item.guide)
+                                {
+                                    g_names += item1.name + ",";
+
+                                }*@
+                            <td>
+                                @*@Html.Raw(g_names)*@
+                                @if (item.guide.Count > 0)
+                                {
+                                    @Html.Raw(item.guide.FirstOrDefault().name)
+                                }
+                                </td>
+                                @*@foreach (var item1 in item.teamlead)
+                                {
+                                    tl_names += item1.name + ",";
+
+                                }*@
+                            <td>
+                                @*@Html.Raw(tl_names)*@
+                                @if (item.teamlead.Count > 0)
+                                {
+                                    @Html.Raw(item.teamlead.FirstOrDefault().name)
+                                }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SaleValue)
+                                </td>
+                                @*@foreach (var item1 in Model.Mirrors.Select(a => a.g.FirstOrDefault().name))
+        {
+            e_names += item1 + ",";
+
+        }
+        <td>
+            @Html.Raw(e_names)
+        </td>*@
+                                <td>
+                                    <a onclick="getEditView(@item.mirrorid)" href="javascript:void(0)">Add Commission</a>
+                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.StaffID })*@ |
+
+                                    @*@Html.ActionLink("Delete", "GetMirrorDeleted", new { id = item.mirrorid })*@
+                                </td>
+                            </tr>
+                                }
+                        </table>
+
+
+
+                        @*<div id="pagingDiv">@Html.Raw(ViewBag.Paging)</div>*@
+                    </div>
+                    @*<br />
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Html.pa PagedListPager(Model, Page_No => Url.Action("Index",
+                            new { Page_No, Sorting_Order = ViewBag.CurrentSortOrder, Filter_Value = ViewBag.FilterValue }))*@
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<section>
+    <div style="background-color:mediumseagreen;">
+        <div id="CDiv">
+
+        </div>
+
+        <div id="EditDiv">
+
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    function CreateView() {
+
+        console.log($("#AgentCode option:selected").val());
+
+            $.post("@Url.Action("GetMirrorDetails", "Commission")", { mirrorid: $("#AgentCode option:selected").val() }, function (data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#CDiv').append(data);
+                }
+            });
+
+
+        }
+
+        function getEditView(id) {
+            $.post("@Url.Action("ShowEditPartailView", "Commission")", {id: id}, function(data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#EditDiv').append(data);
+                }
+            });
+        }
+</script>

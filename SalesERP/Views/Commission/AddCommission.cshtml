@@ -1,0 +1,524 @@
+﻿@model SALEERP.ViewModel.CommissionVM;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Add Commission";
+    if (this.ViewContext.FormContext == null)
+    {
+        this.ViewContext.FormContext = new FormContext();
+    }
+}
+
+@using (Html.BeginForm("AddCommission", "Commission"))
+{
+    @Html.AntiForgeryToken()
+    <section class="content">
+        <div class="container-fluid">
+            <div >
+
+                <!-- right column -->
+                <div class="col-md-12">
+
+                    <!-- general form elements disabled -->
+
+                    <div class="card card-warning">
+                        @if (Model != null)
+                        {
+                            <div class="col-sm-2" style="float:left;width:300px;padding-left:10px;">
+                                <div class="form-group">
+                                    <input type="hidden" asp-for="MirrorId" />
+                                    <span>MirrorId : </span>@Model.MirrorId
+                                    <span style="padding-left:150px"></span>
+                                    <span>Mirror Date : </span>@Model.MirrorDate
+
+                                </div>
+                            </div>
+
+
+                            <!-- /.card-header -->
+
+                            int z = 0;
+                            <div class="card-body">
+
+                                <table id="dataTablesale" class="">
+                                    <tr style="background-color:aquamarine;">
+                                        <td>
+                                            @Html.LabelFor(model => model.cashamount)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.cashamount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.cashamount, "", new { @class = "text-danger" })
+
+                                        </td>
+                                        <td>
+                                            @Html.LabelFor(model => model.cardamount)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.cardamount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.cardamount, "", new { @class = "text-danger" })
+
+                                        </td>
+                                        <td>
+                                            @Html.LabelFor(model => model.Instoreamount)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.Instoreamount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.Instoreamount, "", new { @class = "text-danger" })
+
+                                        </td>
+                                        <td>
+                                            @Html.LabelFor(model => model.paylateramount)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.paylateramount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.paylateramount, "", new { @class = "text-danger" })
+
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Html.LabelFor(model => model.HDamount)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.HDamount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.HDamount, "", new { @class = "text-danger" })
+
+                                        </td>
+                                        <td>
+                                            @Html.LabelFor(model => model.CardCharges)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.CardCharges, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.CardCharges, "", new { @class = "text-danger" })
+
+                                        </td>
+                                        <td>
+                                            @Html.LabelFor(model => model.GST)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.GST, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.GST, "", new { @class = "text-danger" })
+
+                                        </td>
+                                        <td>
+                                            @Html.LabelFor(model => model.NetSaleAmount)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.NetSaleAmount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.NetSaleAmount, "", new { @class = "text-danger" })
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label control-label">Final Sale Amount</label>
+                                        </td>
+                                        <td>
+                                            @Html.LabelFor(model => model.NetSaleAmount)
+                                            @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                            @Html.EditorFor(model => model.NetSaleAmount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                            @Html.ValidationMessageFor(model => model.NetSaleAmount, "", new { @class = "text-danger" })
+
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                @*<div class="col-sm-2">
+                    <div class="form-group">
+                        <label></label>
+                        <span class="input-group-append">
+                            <button type="button" id="addNewdriver" href="javascript:void(0)" class="btn btn-info btn-flat">ADD DRIVER +</button>
+                        </span>
+                    </div>
+                </div>*@
+                                <br />
+                                <br />
+                                <table id="dataTableagent" class="">
+                                    <tr style="background-color:aquamarine;">
+                                        <th>
+                                            AgentType
+
+                                        </th>
+                                        <th>
+                                            Name
+                                        </th>
+                                        <th>
+                                            Commission(%)
+                                        </th>
+                                        <th>
+                                            CommissionAmount
+                                        </th>
+
+
+
+                                    </tr>
+
+                                    @foreach (var i in Model.agent_List)
+                                    {
+
+                                        int j = 0;
+                                        @foreach (var driver in i.driver)
+                                        {
+
+                                            <tr>
+                                                <td class="">
+
+                                                    <div class="form-group">
+                                                        @* <input type="hidden" id="agentid" value="" />*@
+                                                        @Html.HiddenFor(model => model.agent_List[0].driver[j].AgentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+
+
+
+                                                        <label control-label">Driver</label>
+                                                        @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                        @*@Html.EditorFor(model => model.agent_List[0].driver[j].Name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                            @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].Name, "", new { @class = "text-danger" })*@
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Model.agent_List[0].driver[j].Name
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Html.EditorFor(model => model.agent_List[0].driver[j].commission_percentage, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].commission_percentage, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        <div class="">
+                                                            @Html.EditorFor(model => model.agent_List[0].driver[j].commission_amount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                            @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].commission_amount, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+                                            j++;
+                                        }
+                                        j = 0;
+                                        @foreach (var princi in i.principle)
+                                        {
+
+                                            <tr>
+                                                <td class="">
+
+                                                    <div class="form-group">
+                                                        @* <input type="hidden" id="agentid" value="" />*@
+                                                        @Html.HiddenFor(model => model.agent_List[0].principle[j].AgentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+
+
+
+                                                        <label control-label">Principle</label>
+                                                        @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                        @*@Html.EditorFor(model => model.agent_List[0].driver[j].Name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                            @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].Name, "", new { @class = "text-danger" })*@
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Model.agent_List[0].principle[j].Name
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Html.EditorFor(model => model.agent_List[0].principle[j].commission_percentage, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.ValidationMessageFor(model => model.agent_List[0].principle[j].commission_percentage, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        <div class="">
+                                                            @Html.EditorFor(model => model.agent_List[0].principle[j].commission_amount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                            @Html.ValidationMessageFor(model => model.agent_List[0].principle[j].commission_amount, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+                                            j++;
+                                        }
+                                        j = 0;
+                                        @foreach (var gud in i.guide)
+                                        {
+
+                                            <tr>
+                                                <td class="">
+
+                                                    <div class="form-group">
+                                                        @* <input type="hidden" id="agentid" value="" />*@
+                                                        @Html.HiddenFor(model => model.agent_List[0].guide[j].AgentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+
+
+
+                                                        <label control-label">Guide</label>
+                                                        @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                        @*@Html.EditorFor(model => model.agent_List[0].driver[j].Name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                            @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].Name, "", new { @class = "text-danger" })*@
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Model.agent_List[0].guide[j].Name
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Html.EditorFor(model => model.agent_List[0].guide[j].commission_percentage, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.ValidationMessageFor(model => model.agent_List[0].guide[j].commission_percentage, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        <div class="">
+                                                            @Html.EditorFor(model => model.agent_List[0].guide[j].commission_amount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                            @Html.ValidationMessageFor(model => model.agent_List[0].guide[j].commission_amount, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+                                            j++;
+                                        }
+                                        j = 0;
+                                        @foreach (var gud in i.excursion)
+                                        {
+
+                                            <tr>
+                                                <td class="">
+
+                                                    <div class="form-group">
+                                                        @* <input type="hidden" id="agentid" value="" />*@
+                                                        @Html.HiddenFor(model => model.agent_List[0].excursion[j].AgentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+
+
+
+                                                        <label control-label">Excursion</label>
+                                                        @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                        @*@Html.EditorFor(model => model.agent_List[0].driver[j].Name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                            @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].Name, "", new { @class = "text-danger" })*@
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Model.agent_List[0].excursion[j].Name
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Html.EditorFor(model => model.agent_List[0].excursion[j].commission_percentage, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.ValidationMessageFor(model => model.agent_List[0].excursion[j].commission_percentage, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        <div class="">
+                                                            @Html.EditorFor(model => model.agent_List[0].excursion[j].commission_amount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                            @Html.ValidationMessageFor(model => model.agent_List[0].excursion[j].commission_amount, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+                                            j++;
+                                        }
+                                        j = 0;
+                                        @foreach (var gud in i.teamescort)
+                                        {
+
+                                            <tr>
+                                                <td class="">
+
+                                                    <div class="form-group">
+                                                        @* <input type="hidden" id="agentid" value="" />*@
+                                                        @Html.HiddenFor(model => model.agent_List[0].teamescort[j].AgentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+
+
+
+                                                        <label control-label">Team Escort</label>
+                                                        @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                        @*@Html.EditorFor(model => model.agent_List[0].driver[j].Name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                            @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].Name, "", new { @class = "text-danger" })*@
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Model.agent_List[0].teamescort[j].Name
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Html.EditorFor(model => model.agent_List[0].teamescort[j].commission_percentage, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.ValidationMessageFor(model => model.agent_List[0].teamescort[j].commission_percentage, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        <div class="">
+                                                            @Html.EditorFor(model => model.agent_List[0].teamescort[j].commission_amount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                            @Html.ValidationMessageFor(model => model.agent_List[0].teamescort[j].commission_amount, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+                                            j++;
+                                        }
+                                        j = 0;
+                                        @foreach (var gud in i.teamlead)
+                                        {
+
+                                            <tr>
+                                                <td class="">
+
+                                                    <div class="form-group">
+                                                        @* <input type="hidden" id="agentid" value="" />*@
+                                                        @Html.HiddenFor(model => model.agent_List[0].teamlead[j].AgentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+
+
+
+                                                        <label control-label">Team Lead</label>
+                                                        @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                        @*@Html.EditorFor(model => model.agent_List[0].driver[j].Name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                            @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].Name, "", new { @class = "text-danger" })*@
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Model.agent_List[0].teamlead[j].Name
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Html.EditorFor(model => model.agent_List[0].teamlead[j].commission_percentage, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.ValidationMessageFor(model => model.agent_List[0].teamlead[j].commission_percentage, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        <div class="">
+                                                            @Html.EditorFor(model => model.agent_List[0].teamlead[j].commission_amount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                            @Html.ValidationMessageFor(model => model.agent_List[0].teamlead[j].commission_amount, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+                                            j++;
+                                        }
+                                        j = 0;
+                                        @foreach (var gud in i.demo)
+                                        {
+
+                                            <tr>
+                                                <td class="">
+
+                                                    <div class="form-group">
+                                                        @* <input type="hidden" id="agentid" value="" />*@
+                                                        @Html.HiddenFor(model => model.agent_List[0].demo[j].AgentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+
+
+
+                                                        <label control-label">Demo</label>
+                                                        @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                        @*@Html.EditorFor(model => model.agent_List[0].driver[j].Name, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                            @Html.ValidationMessageFor(model => model.agent_List[0].driver[j].Name, "", new { @class = "text-danger" })*@
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Model.agent_List[0].demo[j].Name
+
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        @Html.EditorFor(model => model.agent_List[0].demo[j].commission_percentage, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                        @Html.ValidationMessageFor(model => model.agent_List[0].demo[j].commission_percentage, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </td>
+                                                <td class="">
+                                                    <div class="form-group">
+
+                                                        <div class="">
+                                                            @Html.EditorFor(model => model.agent_List[0].demo[j].commission_amount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                            @Html.ValidationMessageFor(model => model.agent_List[0].demo[j].commission_amount, "", new { @class = "text-danger" })
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+
+
+                                            </tr>
+                                            j++;
+                                        }
+
+                                    }
+
+                                </table>
+
+
+
+
+
+
+                            </div>
+                        }
+                        <!-- /.card-body -->
+                        <div style="float:right;align-content:center;margin-left:460px;">
+                            <button type="submit" style="background-color:orangered" class="btn btn-info btn-flat">Finish</button>
+                            <button type="button" href="javascript:void(0)" style="background-color:orangered" class="btn btn-info btn-flat">Cancel</button>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                    <!-- general form elements disabled -->
+                    <!-- /.card -->
+                </div>
+                <!--/.col (right) -->
+            
+            </div>
+        </div>
+    </section>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

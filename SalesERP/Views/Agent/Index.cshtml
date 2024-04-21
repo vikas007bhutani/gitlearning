@@ -1,0 +1,133 @@
+﻿@model IEnumerable<SALEERP.ViewModel.AgentMasterVM>;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Agent Type";
+
+}
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <button type="button" onclick="CreateView()" href="javascript:void(0)" class="btn btn-info btn-flat" style="background-color:indianred;">Create New </button>
+                    @*<h3 class="card-title">DataTable with minimal features & hover style</h3>*@
+                </div>
+
+                <form asp-page="/Pool" method="get" class="form-inline ml-3">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" name="searchstring" value="@Model.FirstOrDefault()?.searchstring" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="card-body">
+                    <div class="text-center w-full p-t-25 p-b-80">
+                        <span class="text-danger">@Html.ValidationSummary(false)</span>
+                        <span asp-validation-summary="All" class="text-danger"></span>
+                        @*<a href="#" class="txt1">
+                                Forgot Username / Password?
+                            </a>*@
+                    </div>
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+
+                            <tr style="background-color:indianred;">
+                                <th>
+                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> @Html.DisplayNameFor(model => model.AgentType)</a>
+
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.AgentCode)
+                                </th>
+                                <th></th>
+                            </tr>
+
+                            @foreach (var item in Model)
+                            {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AgentType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AgentCode)
+                            </td>
+
+                            <td>
+                                <a onclick="getEditView(@item.AgentId)" href="javascript:void(0)">Edit</a>
+                                @*@Html.ActionLink("Edit", "Edit", new { id = item.StaffID })*@ |
+
+                                @Html.ActionLink("Delete", "GetAgentDeleted", new { id = item.AgentId })
+                            </td>
+                        </tr>
+                            }
+                    </table>
+
+
+
+                    <div id="pagingDiv">@Html.Raw(ViewBag.Paging)</div>
+                    @*<br />
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Html.pa PagedListPager(Model, Page_No => Url.Action("Index",
+                            new { Page_No, Sorting_Order = ViewBag.CurrentSortOrder, Filter_Value = ViewBag.FilterValue }))*@
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<section>
+    <div style="background-color:indianred;">
+        <div id="CDiv" class="col-md-6">
+
+        </div>
+
+        <div id="EditDiv" class="col-md-6">
+
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+</script>
+
+<script type="text/javascript">
+        function CreateView() {
+            $.post("@Url.Action("ShowCreatePartailView", "Agent")", function (data) {
+                if (data) {
+                    $('#CDiv').append(data);
+                }
+            });
+
+        }
+
+        function getEditView(id) {
+            $.post("@Url.Action("ShowEditPartailView", "Agent")", {id: id}, function(data) {
+                if (data) {
+                    $('#EditDiv').append(data);
+                }
+            });
+        }
+</script>
+
+

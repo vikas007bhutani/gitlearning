@@ -1,0 +1,326 @@
+﻿@model SALEERP.ViewModel.PayCommissionVM;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Pay Commission";
+
+}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    @*function findname(id) {
+        debugger;
+        $(id).on('autocomplete', function (event, ui) {
+            source:  '@Url.Action("Search")'
+        });
+
+    }*@
+    @*$(document).ready(function () {
+       $('#dataTabledriver').find('input[id^="Driver_List"]').on("keydown", function()
+        {
+                debugger;
+             $('#dataTabledriver').find('input[id^="Driver_List"]').autocomplete( function (event, ui) {
+            source:  '@Url.Action("Search")'
+        });
+            });
+    });*@
+    $(document).ready(function () {
+
+
+        $('body').on('focus', 'input[id^="Name"] ', function () {
+
+            $(this).autocomplete({
+                source: '@Url.Action("Demo_Search","Commission")?agentcode=' + $("#AgentCode option:selected").val() +'',
+                select: function (event, ui) {
+
+                //set tagids to save
+                    $(this).val(ui.item.value);
+                    $(this).parent().find('input[type=hidden]').val(ui.item.id);
+                    //Tags for display
+                    // this.value = ui.value;
+                    return false;
+                }
+                });
+        });
+
+    });
+</script>
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card card-info">
+                        <div class="card-body">
+                            @using (Html.BeginForm("GetCommission", "Commission"))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <table id="dataTabledriver" class="">
+                                    <tr>
+                                        <td class="">
+                                            <div class="form-group">
+                                                @Html.DropDownListFor(model => model.AgentCode, Model._agentuser as IEnumerable<SelectListItem>, "Select")
+                                                @Html.ValidationMessageFor(model => model.AgentCode, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </td>
+                                        <td class="">
+
+                                            <div class="form-group">
+                                                @* <input type="hidden" id="agentid" value="" />*@
+                                                @Html.HiddenFor(model => model.AgentId, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+
+
+
+
+                                                @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                @*@Html.LabelFor(model => model.Name)*@
+                                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter ..." } })
+                                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+                                            </div>
+                                        </td>
+                                        <td class="">
+                                            <div class="form-group">
+                                                <label asp-for="fromdate" control-label"></label>
+                                                <input asp-for="fromdate" style="color:red" />
+                                                <span asp-validation-for="fromdate" class="text-danger"></span>
+                                            </div>
+                                        </td>
+                                        <td class="">
+                                            <div class="form-group">
+                                                <label asp-for="Todate" control-label"></label>
+                                                <input asp-for="Todate" style="color:red" />
+                                                <span asp-validation-for="Todate" class="text-danger"></span>
+                                            </div>
+                                        </td>
+                                        @*<td class="">
+                                                <div class="form-group">
+                                                    @Html.DropDownListFor(model => model.AgentCode, Model._agentuser as IEnumerable<SelectListItem>, "Select")
+                                                    @Html.ValidationMessageFor(model => model.AgentCode, "", new { @class = "text-danger" })
+
+                                                </div>
+                                            </td>*@
+                                        <td class="">
+                                            <div class="form-group">
+                                                <span class="input-group-append">
+
+                                                    <button type="submit" class="btn btn-info btn-flat" style="background-color:mediumseagreen;">Show</button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            }
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+                    @*<h3 class="card-title">DataTable with minimal features & hover style</h3>*@
+
+                    <div class="col-md-10">
+
+                    </div>
+                </div>
+                @*<div class="form-group">
+                       Agent Type
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.AgentDetails.FirstOrDefault().AgentCode , Model._agentuser as IEnumerable<SelectListItem>, "Select")
+                            @Html.ValidationMessageFor(model =>  model.AgentDetails.FirstOrDefault().AgentCode, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+                <form asp-page="/Pool" method="get" class="form-inline ml-3">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" name="searchstring" value="" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="card-body">
+                    <div class="text-center w-full p-t-25 p-b-80">
+                        <span class="text-danger">@Html.ValidationSummary(false)</span>
+                        <span asp-validation-summary="All" class="text-danger"></span>
+                        @*<a href="#" class="txt1">
+                                Forgot Username / Password?
+                            </a>*@
+                    </div>
+
+                    <div style="height: 200px; overflow: auto;">
+                        <table id="example3" class="table table-bordered table-hover">
+                            <thead>
+
+                                <tr style="background-color:aquamarine;">
+                                    <th>
+                                        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> @Html.DisplayNameFor(model => model.pay_list[0].MirrorId)</a>
+
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.pay_list[0].MirrorDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.pay_list[0].Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.pay_list[0].AgentType)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.pay_list[0].commission_amount)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.pay_list[0].tds)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.pay_list[0].paid)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.pay_list[0].balance)
+                                    </th>
+                                    @*<th>
+                                            Guide
+                                        </th>
+                                        <th>
+                                            Team Lead
+                                        </th>*@
+                                </tr>   
+
+                                @foreach (var item in Model.pay_list)
+                                {
+                                    string p_names = string.Empty, d_names = string.Empty, e_names = string.Empty, t_names = string.Empty, g_names = string.Empty;
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.MirrorId)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.MirrorDate)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.AgentType)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.commission_amount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tds)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.paid)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.balance)
+                                        </td>
+                                        @*@foreach (var item1 in Model.Mirrors.Select(a => a.g.FirstOrDefault().name))
+                                            {
+                                                e_names += item1 + ",";
+
+                                            }
+                                            <td>
+                                                @Html.Raw(e_names)
+                                            </td>*@
+                                        <td>
+                                            <a onclick="getEditView(@item.AgentId)" href="javascript:void(0)">Pay Commission</a>
+                                            @*@Html.ActionLink("Edit", "Edit", new { id = item.StaffID })*@ |
+
+
+                                        </td>
+                                    </tr>
+                                }
+                        </table>
+
+
+
+                        @*<div id="pagingDiv">@Html.Raw(ViewBag.Paging)</div>*@
+                    </div>
+                    @*<br />
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Html.pa PagedListPager(Model, Page_No => Url.Action("Index",
+                            new { Page_No, Sorting_Order = ViewBag.CurrentSortOrder, Filter_Value = ViewBag.FilterValue }))*@
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<section>
+    <div style="background-color:mediumseagreen;">
+        <div id="CDiv">
+
+        </div>
+
+        <div id="EditDiv">
+
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+</script>
+
+<script>
+    $("#submit").click(function () {
+        var form = $("form")
+            .removeData("validator") /* added by the raw jquery.validate plugin */
+            .removeData("unobtrusiveValidation");  /* added by the jquery unobtrusive plugin*/
+
+        $.validator.unobtrusive.parse(form);
+
+        form.data('unobtrusiveValidation');
+    });
+
+
+</script>
+<script type="text/javascript">
+    function CreateView() {
+
+
+
+            $.post("@Url.Action("GetMirrorDetails", "Commission")", { mirrorid: $("#AgentCode option:selected").val() }, function (data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#CDiv').append(data);
+                }
+            });
+
+
+        }
+
+        function getEditView(id) {
+            $.post("@Url.Action("ShowEditPartailPayView", "Commission")", {id: id}, function(data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#EditDiv').append(data);
+                }
+            });
+        }
+</script>

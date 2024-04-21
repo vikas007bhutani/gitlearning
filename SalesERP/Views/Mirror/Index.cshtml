@@ -1,0 +1,187 @@
+﻿@model SALEERP.ViewModel.MirrorDetailsVM;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Agent Type";
+
+}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#drname').autocomplete({
+            source:  '@Url.Action("Search")'
+        });
+    });
+</script>
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+
+
+                    @*<h3 class="card-title">DataTable with minimal features & hover style</h3>*@
+
+                    <div class="col-md-10">
+
+                    </div>
+                </div>
+                @*<div class="form-group">
+                       Agent Type
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.AgentDetails.FirstOrDefault().AgentCode , Model._agentuser as IEnumerable<SelectListItem>, "Select")
+                            @Html.ValidationMessageFor(model =>  model.AgentDetails.FirstOrDefault().AgentCode, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+                <form asp-page="/Pool" method="get" class="form-inline ml-3">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" name="searchstring" value="@Model.Mirrors.FirstOrDefault()?.searchstring" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="card-body">
+                    <div class="text-center w-full p-t-25 p-b-80">
+                        <span class="text-danger">@Html.ValidationSummary(false)</span>
+                        <span asp-validation-summary="All" class="text-danger"></span>
+                        @*<a href="#" class="txt1">
+                                Forgot Username / Password?
+                            </a>*@
+                    </div>
+
+                    <div style="height: 200px; overflow: auto;">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead >
+
+                                <tr  style="background-color:aquamarine;">
+                                    <th>
+                                        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"> @Html.DisplayNameFor(model => model.Mirrors.FirstOrDefault().mirrorid)</a>
+
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Mirrors.FirstOrDefault().mirrordate)
+                                    </th>
+                                    <th>
+                                        Principle
+                                    </th>
+                                    <th>
+                                        Driver
+                                    </th>
+                                    <th>
+                                        Escort
+                                    </th>
+                                    <th>
+                                        Language
+                                    </th>
+                                    @*<th>
+                                        Team Lead
+                                    </th>*@
+                                </tr>
+
+                                @foreach (var item in Model.Mirrors)
+                                {
+                                    string p_names = string.Empty, d_names = string.Empty,e_names=string.Empty,t_names=string.Empty,g_names=string.Empty ;
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.mirrorid)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.mirrordate)
+                                </td>
+                                @foreach (var item1 in item.principle)
+                                {
+                                    p_names += item1.name + ",";
+
+                                }
+                                <td>
+                                    @Html.Raw(p_names)
+                                </td>
+                                @foreach (var item1 in item.driver)
+                                {
+                                    d_names += item1.name + ",";
+
+                                }
+                                <td>
+                                    @Html.Raw(d_names)
+                                </td>
+                                @foreach (var item1 in item.excursion)
+                                {
+                                    e_names += item1.name + ",";
+
+                                }
+                                <td>
+                                    @Html.Raw(e_names)
+                                </td>
+                                @*@foreach (var item1 in Model.Mirrors.Select(a => a.g.FirstOrDefault().name))
+        {
+            e_names += item1 + ",";
+
+        }
+        <td>
+            @Html.Raw(e_names)
+        </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.language)
+                                </td>
+                                <td>
+                                    <a onclick="getEditView(@item.mirrorid)" href="javascript:void(0)">Edit</a>
+                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.StaffID })*@ |
+
+                                    @Html.ActionLink("Delete", "GetMirrorDeleted", new { id = item.mirrorid })
+                                </td>
+                                <td>
+                                    @*<a onclick="getEditView(@item.mirrorid)" href="javascript:void(0)">Edit</a>*@
+                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.StaffID })*@ |
+
+                                    @*@Html.ActionLink("View Sale", "Index", "Sale", new { id = item.mirrorid })*@
+                                </td>
+                            </tr>
+                                }
+                        </table>
+
+
+
+                        <div id="pagingDiv">@Html.Raw(ViewBag.Paging)</div>
+                    </div>
+                    @*<br />
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Html.pa PagedListPager(Model, Page_No => Url.Action("Index",
+                            new { Page_No, Sorting_Order = ViewBag.CurrentSortOrder, Filter_Value = ViewBag.FilterValue }))*@
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<section>
+    <div>
+        <div id="CDiv">
+
+            <partial name="AddMirror.cshtml" />
+
+        </div>
+
+        <div id="EditDiv" class="col-md-12">
+
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+   
+
+        function getEditView(id) {
+            $.post("@Url.Action("ShowEditPartailView", "Mirror")", {id: id}, function(data) {
+                if (data) {
+                    $('#CDiv').html('');
+                    $('#EditDiv').html('');
+                    $('#EditDiv').append(data);
+                }
+            });
+        }
+</script>

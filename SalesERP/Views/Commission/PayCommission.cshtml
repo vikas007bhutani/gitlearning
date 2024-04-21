@@ -1,0 +1,144 @@
+﻿@model SALEERP.ViewModel.PayCommissionVM;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Add Commission";
+    if (this.ViewContext.FormContext == null)
+    {
+        this.ViewContext.FormContext = new FormContext();
+    }
+}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+@using (Html.BeginForm("UpdateCommission", "Commission"))
+{
+    @Html.AntiForgeryToken()
+    <section class="content">
+        <div class="container-fluid">
+            <div>
+
+                <!-- right column -->
+                <div class="col-md-12">
+
+                    <!-- general form elements disabled -->
+
+                    <div class="card card-warning">
+                        @if (Model != null)
+                        {
+                            <div class="col-sm-2" style="float:left;width:300px;padding-left:10px;">
+                                <div class="form-group">
+                                    <input type="hidden" asp-for="@Model.pay_list[0].MirrorId" />
+                                    <span>MirrorId : </span>@Model.pay_list[0].MirrorId
+                                    <span style="padding-left:150px"></span>
+                                    <span>Mirror Date : </span>@Model.pay_list[0].MirrorDate
+
+                                </div>
+                            </div>
+
+
+                            <!-- /.card-header -->
+
+
+                            <div class="card-body">
+
+
+
+                                <table id="dataTablesale" class="">
+                                    @foreach (var i in Model.pay_list)
+                                    {
+                                        int j = 0;
+                                        <input type="hidden" asp-for="@Model.pay_list[0].MirrorId" />
+                                        <input type="hidden" asp-for="@Model.pay_list[0].OrderId" />
+                                        <input type="hidden" asp-for="@Model.pay_list[0].AgentId" />
+                                        <tr style="background-color:aquamarine;">
+                                            <td>
+                                                @Html.LabelFor(model => model.pay_list[j].commission_amount)
+                                                @Model.pay_list[0].commission_amount
+                                                @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                @*@Html.EditorFor(model => model.cashamount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                    @Html.ValidationMessageFor(model => model.cashamount, "", new { @class = "text-danger" })*@
+
+                                            </td>
+                                            <td>
+                                                @Html.LabelFor(model => model.pay_list[j].paid)
+                                                @Model.pay_list[0].paid
+                                                @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                @*@Html.EditorFor(model => model.cardamount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                    @Html.ValidationMessageFor(model => model.cardamount, "", new { @class = "text-danger" })*@
+
+                                            </td>
+                                            <td>
+                                                @Html.LabelFor(model => model.pay_list[j].tds)
+                                                @Model.pay_list[0].tds
+                                                @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                @*@Html.EditorFor(model => model.Instoreamount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                    @Html.ValidationMessageFor(model => model.Instoreamount, "", new { @class = "text-danger" })*@
+
+                                            </td>
+                                            <td>
+                                                @Html.LabelFor(model => model.pay_list[j].balance)
+                                                @Model.pay_list[0].balance
+                                                @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                @*@Html.EditorFor(model => model.paylateramount, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                    @Html.ValidationMessageFor(model => model.paylateramount, "", new { @class = "text-danger" })*@
+
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.DropDownListFor(model => model.modeId, Model.paymodes as IEnumerable<SelectListItem>, "Select")
+                                                @Html.ValidationMessageFor(model => model.modeId, "", new { @class = "text-danger" })
+
+
+                                            </td>
+                                            <td>
+                                                @Html.LabelFor(model => model.pay_list[j].amounttopay)
+                                                @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                @Html.EditorFor(model => model.pay_list[j].amounttopay, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.ValidationMessageFor(model => model.pay_list[j].amounttopay, "", new { @class = "text-danger" })
+
+                                            </td>
+                                            <td>
+                                                @Html.LabelFor(model => model.pay_list[j].payby)
+                                                @*<input asp-for="Driver_List[0].Drivername"  onblur="findname(this.name)" />*@
+                                                @Html.EditorFor(model => model.pay_list[j].payby, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Enter ..." } })
+                                                @Html.ValidationMessageFor(model => model.pay_list[j].payby, "", new { @class = "text-danger" })
+
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </table>
+
+                                @*<div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label></label>
+                                            <span class="input-group-append">
+                                                <button type="button" id="addNewdriver" href="javascript:void(0)" class="btn btn-info btn-flat">ADD DRIVER +</button>
+                                            </span>
+                                        </div>
+                                    </div>*@
+
+
+
+                            </div>
+                        }
+                        <!-- /.card-body -->
+                        <div style="float:right;align-content:center;margin-left:460px;">
+                            <button type="submit" style="background-color:orangered" class="btn btn-info btn-flat">Finish</button>
+                            <button type="button" href="javascript:void(0)" style="background-color:orangered" class="btn btn-info btn-flat">Cancel</button>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                    <!-- general form elements disabled -->
+                    <!-- /.card -->
+                </div>
+                <!--/.col (right) -->
+
+            </div>
+        </div>
+    </section>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

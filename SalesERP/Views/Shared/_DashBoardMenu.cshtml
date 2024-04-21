@@ -1,0 +1,122 @@
+﻿@*<ul class="sidebar-menu" data-widget="tree">
+    <li class="header">SALES-ERP</li>
+  
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-user"></i> <span>Manage User</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li> <a asp-area="" asp-controller="User" asp-action="Index">Users</a></li>
+            
+        </ul>
+    </li>
+</ul>*@
+
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+    with font-awesome or any other icon font library -->
+
+
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>
+                        Manage Users
+                        <i class="fas fa-angle-left right"></i>
+
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a asp-area="" asp-controller="User" asp-action="Index" class="nav-link">
+
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Login Users</p>
+                        </a>
+                    </li>
+                    @*<li class="nav-item">
+                    <a asp-area="" asp-controller="User" asp-action="Index" class="nav-link">
+
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Agent Users</p>
+                    </a>
+                </li>*@
+
+                </ul>
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>
+                        Manage Agent
+                        <i class="fas fa-angle-left right"></i>
+
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a asp-area="" asp-controller="Agent" asp-action="Index" class="nav-link">
+
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Agent Type</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-area="" asp-controller="AgentUser" asp-action="Index" class="nav-link">
+
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Agent Users</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+            <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>
+                        Manage Commission
+                        <i class="fas fa-angle-left right"></i>
+
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a asp-area="" asp-controller="Commission" asp-action="Index" class="nav-link">
+
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Add Commission</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-area="" asp-controller="Commission" asp-action="Pay" class="nav-link">
+
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Pay Commission</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Pool" asp-action="Index" class="nav-link">Add Pool</a>
+
+            </li>
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Series" asp-action="Index" class="nav-link">Add Series</a>
+
+            </li>
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Vehicle" asp-action="Index" class="nav-link">Add Vehicle</a>
+
+            </li>
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Mirror" asp-action="Index" class="nav-link">Manage Mirror</a>
+
+            </li>
+        </ul>
+    </nav>
