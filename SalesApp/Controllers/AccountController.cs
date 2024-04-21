@@ -40,10 +40,10 @@ namespace SalesApp.Controllers
                     _init.loginroles =await this._comm.getroles();
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
-                    throw;
+                    throw ex;
                 }
                 return View(_init);
             }
